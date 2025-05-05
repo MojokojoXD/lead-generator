@@ -1,5 +1,4 @@
-'use client'
-import { usePathname } from 'next/navigation';
+
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
@@ -13,7 +12,7 @@ const NAV_LINKS_DATA = {
     {
       id: 1,
       label: 'Meet the Pros',
-      href: '/meet-the-prosd'
+      href: '/pros'
     },
     {
       id: 2,
@@ -38,16 +37,14 @@ const NAV_LINKS_DATA = {
 }
 
 const linkClx = 'hover:text-rose-500';
-export function Navlinks()
+export function Navlinks({ path }: { path: string })
 {
-
-  const path = usePathname();
 
   return (
 
     <>
       <div>
-        <ul className='[&>li]:inline space-x-5 text-sm tracking-wide'>
+        <ul className='[&>li]:inline space-x-5 tracking-wide'>
           {
             NAV_LINKS_DATA.main.map( l => ( 
               <li key={l.id}>
@@ -62,7 +59,7 @@ export function Navlinks()
         </ul>
       </div>
       <div>
-        <ul className='[&>li]:inline space-x-4 text-sm tracking-wide'>
+        <ul className='[&>li]:inline space-x-4 tracking-wide'>
           {
             NAV_LINKS_DATA.auth.map( l => (
               <li key={ l.id }>
