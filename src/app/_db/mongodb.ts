@@ -10,8 +10,21 @@ const client = new MongoClient(MONGO_URI, {
     strict: true,
     deprecationErrors: true,
   },
-}).connect();
+} );
 
+
+enum DBs
+{ 
+  METADATA = 'metadata',
+  CLIENT_DATA = 'client-data'
+}
+
+enum COLLECTIONS
+{
+  ZIPCODES = 'location-cluster',
+  ACCOUNTS = 'client-account',
+  LISTINGS = 'marketplace-listings'
+}
 
 const dbs = {
   metadata: {
@@ -29,4 +42,4 @@ const dbs = {
   }
 }
 
-export { client, dbs };
+export { client, dbs, DBs, COLLECTIONS };

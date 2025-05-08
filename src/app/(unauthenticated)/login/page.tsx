@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeft } from 'lucide-react';
-import { AdminLogin } from '../../components/forms/login-form';
+import { LoginForm } from '../../components/forms/login-form';
 import { Button } from '../../components/button';
 import { useRouter } from 'next/navigation';
 export default function Login()
@@ -34,7 +34,7 @@ export default function Login()
             <h1 className='font-medium text-2xl text-center text-slate-800'>Welcome back!</h1>
             <p className='text-center text-sm'>Please enter your credentials to sign in.</p>
           </header>
-          <AdminLogin/>
+          <LoginForm/>
         </div>
         <div className='w-1/2 border bg-login_landing bg-cover bg-center rounded-xl shadow'></div>
       </div>

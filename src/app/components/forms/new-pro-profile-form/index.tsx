@@ -8,10 +8,15 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 
-export interface NewProProfilePayload
+export interface NewVendorPayload
 {
   firstName: string;
   lastName: string;
+
+  pwd: {
+    content: string;
+    salt: string;
+  };
 
   email: string;
   phone: {
@@ -31,11 +36,15 @@ export interface NewProProfilePayload
 export function NewProProfileForm()
 {
   const [ isFetching, setIsFetching ] = useState( false );
-  const { register, handleSubmit } = useForm<NewProProfilePayload>( {
+  const { register, handleSubmit } = useForm<NewVendorPayload>( {
     defaultValues: {
       businessName: '',
       firstName: '',
       lastName: '',
+      pwd: {
+        content: '',
+        salt: ''
+      },
       email: '',
       phone: {
         business: '',
@@ -47,13 +56,13 @@ export function NewProProfileForm()
   } );
 
 
-  const submitHandler: SubmitHandler<NewProProfilePayload> = async ( data ) =>
+  const submitHandler: SubmitHandler<NewVendorPayload> = async ( data ) =>
   {
     setIsFetching( true );
 
     try
     {
-      const res = await fetch( '/dashboard/pro-listing', {
+      const res = await fetch( '/dashboard/vendor-sign-up', {
         method: 'POST',
         body: JSON.stringify( data )
       } );
@@ -80,6 +89,18 @@ export function NewProProfileForm()
 
   return (
     <form className='max-w-md space-y-6' onSubmit={ handleSubmit( submitHandler ) }>
+      <Input
+        label='Email'
+        id='__listing-email'
+        { ...register( 'email' ) }
+      />
+      <Input
+        label='Password'
+        id='new-password'
+        autoComplete='new-password'
+        { ...register( 'pwd.content' ) }
+      />
+      <hr className='w-full' />
       <div className='grid grid-cols-2 gap-2.5'>
         <Input
           label='First Name'
@@ -97,17 +118,12 @@ export function NewProProfileForm()
         id='__listing-business'
         { ...register( 'businessName' ) }
       />
-      <Input
-        label='Email'
-        id='__listing-email'
-        { ...register( 'email' ) }
-      />
       <div>
         <label htmlFor="__listing-category" className='text-sm px-4 peer-focus:text-rose-500 order-1 font-medium block'>Category</label>
         <select
           id="__listing-category"
           className='w-full py-3 px-4 rounded-full border border-slate-300 focus:outline-rose-400 bg-slate-50 peer order-2 mt-3'
-          { ...register('category') }
+          { ...register( 'category' ) }
         >
           <option value="security">Security</option>
           <option value="pest control">Pest Control</option>
@@ -137,7 +153,7 @@ export function NewProProfileForm()
       />
       <hr />
       <Button variant={ 'secondary' }>
-        { isFetching ? <Loader2 className='animate-spin' /> : 'Add Client' }
+        { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }
       </Button>
     </form>
   );

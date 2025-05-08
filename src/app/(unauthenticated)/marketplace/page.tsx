@@ -9,9 +9,12 @@ type Listing = ListingPayload & { _id: ObjectId; };
 
 const getAllListings = async () =>
 {
+  const connection = await client.connect();
+
+    
+
   try
   {
-    const connection = await client;
 
     const collection = connection.db( dbs.client.dbName ).collection( dbs.client.collections.listings );
 
@@ -26,7 +29,7 @@ const getAllListings = async () =>
   {
 
     console.log( error );
-  }
+  } 
 };
 
 
@@ -51,9 +54,9 @@ export default async function Marketplace()
 
   return (
     <Suspense fallback={ <p>Loading...</p> }>
-      <div className='px-20 py-10 space-y-12'>
+      <div className='px-20 py-10 space-y-12 bg-white min-h-screen'>
         <h1 className='text-2xl font-2xl tracking-wide text-slate-800'>Marketplace</h1>
-        <div className='grid grid-cols-4 gap-8 w-fit	'>
+        <div className='grid grid-cols-3 auto-cols-fr gap-8 w-full'>
           {
             listings.map( l =>
             {

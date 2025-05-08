@@ -1,6 +1,8 @@
-
+'use client'
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
+import { signOut, useSession } from 'next-auth/react';
+import { Fragment } from 'react';
 
 const NAV_LINKS_DATA = {
   main: [
@@ -20,7 +22,7 @@ const NAV_LINKS_DATA = {
       href: '/marketplace'
     }
   ],
-  auth: [
+  unauth: [
     
       {
         id: 0,
@@ -33,12 +35,21 @@ const NAV_LINKS_DATA = {
         href: '/sign-up'
       }
     
+  ],
+  auth: [
+    {
+      id: 0,
+      label: 'Dashboard',
+      href: '/dashboard'
+    }
   ]
 }
 
 const linkClx = 'hover:text-rose-500';
 export function Navlinks({ path }: { path: string })
 {
+
+  const { status } = useSession();
 
   return (
 
@@ -60,8 +71,8 @@ export function Navlinks({ path }: { path: string })
       </div>
       <div>
         <ul className='[&>li]:inline space-x-4 tracking-wide'>
-          {
-            NAV_LINKS_DATA.auth.map( l => (
+          {status === 'unauthenticated' ?
+            NAV_LINKS_DATA.unauth.map( l => (
               <li key={ l.id }>
                 <Link
                   href={ l.href }
@@ -69,6 +80,21 @@ export function Navlinks({ path }: { path: string })
                   { l.label }
                 </Link>
               </li>
+            ) ) :
+
+            NAV_LINKS_DATA.auth.map( l => (
+              <Fragment key={ l.id }>
+                <li >
+                  <Link
+                    href={ l.href }
+                    className={ twMerge( linkClx, path === l.href && 'text-rose-500' ) }>
+                    { l.label }
+                  </Link>
+                </li>
+                <li>
+                    <Button onClick={ () => signOut({ callbackUrl: 'http://localhost' }) }>Sign Out</Button>
+                </li>
+              </Fragment>
             ) )
           }
         </ul>

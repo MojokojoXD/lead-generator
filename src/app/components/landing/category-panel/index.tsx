@@ -33,7 +33,7 @@ const catInfo = [
 export function CategoryPanel()
 {
   return (
-    <div className='grid grid-cols-4 gap-8 h-full max-w-7xl mx-auto items-center px-24'>
+    <div className='grid grid-cols-4 gap-8 h-fit max-w-7xl mx-auto items-center px-24KW'>
       { catInfo.map( b => (
         <div key={ b.id } className='h-full flex items-center'>
           <CategoryButton name={ b.name } destination={ b.href }>

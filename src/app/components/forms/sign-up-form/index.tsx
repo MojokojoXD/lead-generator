@@ -5,14 +5,13 @@ import { Input } from '../../input';
 import { Button } from '../../button';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
-import { signIn } from 'next-auth/react';
 
 interface LoginPayload
 {
   user: string;
   pwd: string;
 }
-export function LoginForm()
+export function SignUpForm()
 {
   const { register, handleSubmit } = useForm<LoginPayload>( {
     reValidateMode: 'onChange',
@@ -22,46 +21,44 @@ export function LoginForm()
     }
   } );
   const router = useRouter();
-
   const [ isFetching, setIsFetching ] = useState( false );
-  const [ loginError, setLoginError ] = useState<string | null>('Invalid username or password')
 
   const submitHandler: SubmitHandler<LoginPayload> = async( data ) =>
   {
 
     setIsFetching( true )
 
-    const result = await signIn( 'credentials', {
-      user: data.user,
-      pwd: data.pwd,
-      redirect: false,
-      callbackUrl: 'http://localhost:3000/dashboard'
-    })
-    
-
-    setIsFetching( false );
-
-    if ( result?.ok )
+    try
     {
-      router.push('/dashboard')
-      return;
+      
+      const res = await fetch( '/admin/login', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      } )
+      
+      if ( res.ok )
+      {
+        router.push( '/dashboard' );
+        return;
+      };
+
+      throw res;
+      
+    } catch ( error )
+    {
+      setIsFetching( false );
+      console.log( error )
+      
     }
-
-    setLoginError( result?.error ?? 'Invalid email or password' );
-
-    
   }
 
   return (
     <form className='w-full space-y-3 px-5' onSubmit={handleSubmit( submitHandler )}>
 
       
-      
-      <Input { ...register( 'user' ) } id='__username/email' label='Email' type={'email'} />
-      <Input { ...register( 'pwd' ) } id='current-password' label='Password' autoComplete='current-password' type={'password'} />
+      <Input { ...register( 'user' ) } id='__username/email' label='Username or Email' />
+      <Input { ...register( 'pwd' ) } id='__pwd' label='Password' />
 
-      {/* login feedback */ }
-      <p className='text-red-500 text-center'>{ loginError }</p>
 
       <div className='pt-6'>
         <Button >

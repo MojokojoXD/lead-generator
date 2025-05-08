@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 
 
-const HIDE_NAV_ON_ROUTES = [ '/login', '/dashboard' ]
+const HIDE_NAV_ON_ROUTES = [ '/login', '/dashboard','/sign-up' ]
 
 export default function Navbar()
 {
@@ -17,9 +17,9 @@ export default function Navbar()
       {/* logo */ }
       <div className='flex items-center w-full space-x-5'>
         <div>
-          <div className='font-black text-2xl text-zinc-700'>
+          <span className='font-black text-2xl text-zinc-700'>
             ProsFindr
-          </div>
+          </span>
         </div>
         <div className='grow flex justify-between'>
           <Navlinks path={ path } />

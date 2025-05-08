@@ -13,7 +13,7 @@ export function Input( { className,label,wrapperClx, ...props }: InputProps )
 
   if ( label && !props.id ) throw new Error( 'element id must be provided if a label is provided' );
 
-  const defaultStyles = 'w-full py-3 px-4 rounded-full border border-slate-300 focus:outline-rose-400 bg-slate-50 peer order-2 mt-3'
+  const defaultStyles = 'w-full py-3 px-4 rounded-full border border-slate-300 focus-visible:outline-rose-400 bg-slate-50 peer order-2 mt-3'
 
   return (
     <div className={twMerge('w-full flex flex-col', wrapperClx && wrapperClx)}>

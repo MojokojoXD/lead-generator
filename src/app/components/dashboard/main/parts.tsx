@@ -49,14 +49,16 @@ function Main( { children }: MainProps )
   const renderPortal = () => Array.isArray( childrenElements ) ? childrenElements.filter( e => e.props.name === portal ) : childrenElements;
 
   return (
-    <div className='h-full grid grid-cols-6'>
+    <div className='h-full grid grid-cols-6 bg-white overflow-hidden'>
       <Menu
         portalNames={ portalNames }
         currentPortal={ portal }
         onPortalChange={ handlePortalChange }
       />
-      <div className='col-start-2 col-span-full px-24 py-10'>
+      <div className='col-start-2 col-span-full px-24 overflow-y-auto'>
+        <div className='py-20'>
           { renderPortal() }
+        </div>
       </div>
     </div>
    )
