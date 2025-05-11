@@ -15,7 +15,7 @@ export async function POST( req: NextRequest )
   newVendor.pwd.content = hash;
   newVendor.pwd.salt = salt;
 
-  newVendor.role = 'vendor';
+  newVendor.role = 'admin';
 
   try {
     const connection = await client;

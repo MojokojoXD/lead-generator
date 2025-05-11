@@ -1,15 +1,16 @@
 'use client';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { Input } from '../../input';
-import { Textarea } from '../../textarea';
-import { Button } from '../../button';
+import { Input } from '../../ui/input';
+import { Textarea } from '../../ui/textarea';
+import { Button } from '../../ui/button';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 
 export interface NewVendorPayload
 {
+  role?: 'vendor' | 'admin';
   firstName: string;
   lastName: string;
 

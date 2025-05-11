@@ -1,8 +1,10 @@
-'use client'
+'use client';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
-import { signOut, useSession } from 'next-auth/react';
 import { Fragment } from 'react';
+import { SignOut } from '@/app/components/auth/sign-out';
+import { useSession } from 'next-auth/react';
+import { Button } from '@/app/components/ui/button';
 
 const NAV_LINKS_DATA = {
   main: [
@@ -23,18 +25,18 @@ const NAV_LINKS_DATA = {
     }
   ],
   unauth: [
-    
-      {
-        id: 0,
-        label: 'Login',
-        href: '/login'
-      },
-      {
-        id: 1,
-        label: 'Sign Up',
-        href: '/sign-up'
-      }
-    
+
+    {
+      id: 0,
+      label: 'Login',
+      href: '/login'
+    },
+    {
+      id: 1,
+      label: 'Sign Up',
+      href: '/sign-up'
+    }
+
   ],
   auth: [
     {
@@ -43,10 +45,10 @@ const NAV_LINKS_DATA = {
       href: '/dashboard'
     }
   ]
-}
+};
 
 const linkClx = 'hover:text-rose-500';
-export function Navlinks({ path }: { path: string })
+export function Navlinks( { path }: { path: string; } )
 {
 
   const { status } = useSession();
@@ -57,21 +59,21 @@ export function Navlinks({ path }: { path: string })
       <div>
         <ul className='[&>li]:inline space-x-5 tracking-wide'>
           {
-            NAV_LINKS_DATA.main.map( l => ( 
-              <li key={l.id}>
+            NAV_LINKS_DATA.main.map( l => (
+              <li key={ l.id }>
                 <Link
                   href={ l.href }
                   className={ twMerge( linkClx, path === l.href && 'text-rose-500' ) }>
                   { l.label }
                 </Link>
               </li>
-             ) )
+            ) )
           }
         </ul>
       </div>
       <div>
         <ul className='[&>li]:inline space-x-4 tracking-wide'>
-          {status === 'unauthenticated' ?
+          { status === 'unauthenticated' ?
             NAV_LINKS_DATA.unauth.map( l => (
               <li key={ l.id }>
                 <Link
@@ -87,12 +89,14 @@ export function Navlinks({ path }: { path: string })
                 <li >
                   <Link
                     href={ l.href }
-                    className={ twMerge( linkClx, path === l.href && 'text-rose-500' ) }>
-                    { l.label }
+                  >
+                    <Button variant={ 'primary' } size={ 'sm' }>
+                      { l.label }
+                    </Button>
                   </Link>
                 </li>
                 <li>
-                    <Button onClick={ () => signOut({ callbackUrl: 'http://localhost' }) }>Sign Out</Button>
+                  <SignOut />
                 </li>
               </Fragment>
             ) )
@@ -100,5 +104,5 @@ export function Navlinks({ path }: { path: string })
         </ul>
       </div>
     </>
-  )
+  );
 }

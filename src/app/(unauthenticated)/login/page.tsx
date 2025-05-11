@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from 'lucide-react';
 import { LoginForm } from '../../components/forms/login-form';
-import { Button } from '../../components/button';
+import { Button } from '../../components/ui/button';
 import { useRouter } from 'next/navigation';
 export default function Login()
 {
@@ -18,14 +18,14 @@ export default function Login()
         <div className='relative w-1/2 flex flex-col justify-center items-center px-10 space-y-10'>
           <div className='absolute top-5 px-10 w-full'>
             <Button
-              onClick={ router.back } 
+              onClick={ router.back }
               variant={ 'ghost' }
               size={ 'icon' }>
               <ArrowLeft />
             </Button>
             <Button
               variant={ 'link' }
-              size={'sm'}
+              size={ 'sm' }
               className='block float-right'>
               Admin
             </Button>
@@ -34,7 +34,7 @@ export default function Login()
             <h1 className='font-medium text-2xl text-center text-slate-800'>Welcome back!</h1>
             <p className='text-center text-sm'>Please enter your credentials to sign in.</p>
           </header>
-          <LoginForm/>
+          <LoginForm />
         </div>
         <div className='w-1/2 border bg-login_landing bg-cover bg-center rounded-xl shadow'></div>
       </div>

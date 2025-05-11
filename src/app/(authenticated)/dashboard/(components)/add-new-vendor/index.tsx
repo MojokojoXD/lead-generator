@@ -1,5 +1,5 @@
 
-import { NewProProfileForm } from '../../forms/new-pro-profile-form';
+import { NewProProfileForm } from '../../../../components/forms/new-pro-profile-form';
 
 export function AddNewVendorForm()
 {

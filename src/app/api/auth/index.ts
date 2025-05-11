@@ -18,6 +18,13 @@ interface AuthCredential {
 // You'll need to import and pass this
 // to `NextAuth` in `app/api/auth/[...nextauth]/route.ts`
 export const config = {
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/sign-up',
+    signOut: '/',
+  },
   callbacks: {
     jwt( { token,  user } )
     {
@@ -41,6 +48,8 @@ export const config = {
         session.user.firstName = token.firstName;
         //@ts-expect-error I have no way to modify the session type
         session.user.lastName = token.lastName;
+        //@ts-expect-error I have no way to modify the session type
+        session.user.id = token.sub
       }
 
       return session;
@@ -64,6 +73,8 @@ export const config = {
           
           if ( !result ) return null;
 
+          if ( result ) await connection.close();
+
           const [ pwd ] = hashPWD( cred.pwd, result.pwd.salt );
 
           const inputPwdBuffer = Buffer.from( pwd, 'hex' );
@@ -74,7 +85,7 @@ export const config = {
           if ( !isEqual ) return null;
 
           return {
-            id: result._id.toHexString(),
+            id: result._id.toString(),
             email: result.email,
             firstName: result.firstName,
             lastName: result.lastName,

@@ -3,6 +3,7 @@
 import { Navlinks } from './Navlinks';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import { DashboardNavbar } from '../DashboardNavbar';
 
 
 
@@ -12,8 +13,10 @@ export default function Navbar()
 {
   const path = usePathname();
 
+  if( path === '/dashboard' ) return <DashboardNavbar/>
+
   return (
-    <div className={twMerge('fixed top-0 inset-x-0 bg-white z-10 flex h-28 border-b border-zinc-200 px-20 justify-between', HIDE_NAV_ON_ROUTES.includes(path) && 'hidden')}>
+    <div className={twMerge('relative bg-white flex h-28 border-b border-zinc-200 px-20 justify-between', HIDE_NAV_ON_ROUTES.includes(path) && 'hidden')}>
       {/* logo */ }
       <div className='flex items-center w-full space-x-5'>
         <div>

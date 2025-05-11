@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import Navbar from './components/layout/Navbar';
 import { ClientSessionProvider } from './components/layout/sessionProvider';
-import { getServerSession } from 'next-auth';
-import { config } from './api/auth';
+import { auth } from './api/auth';
 import "./globals.css";
 
 
 const lato = Lato( {
-  weight: [ '100', '300', '400', '700', '900' ],
+  weight: [  '300', '400', '700' ],
   subsets: [ 'latin' ],
 })
 
@@ -24,7 +23,7 @@ export default async function RootLayout({
 }> )
 {
   
-  const session = await getServerSession( config )
+  const session = await auth();
 
   return (
     <ClientSessionProvider session={session}>
@@ -32,12 +31,12 @@ export default async function RootLayout({
         <body
           className={`${lato.className} antialiased text-slate-500`}
         >
-          <main className='relative'>
+          <div className='relative h-screen overflow-hidden'>
             <Navbar />
-            <div className='mt-28 inset-x-0 h-[calc(100vh-112px)]'>
+            <div className='w-full h-[calc(100vh-112px)] overflow-auto'>
               {children}
             </div>
-          </main>
+          </div>
         </body>
       </html>
     </ClientSessionProvider>

@@ -1,27 +1,35 @@
 import { Suspense } from 'react';
-import { client, dbs } from '@/app/_db/mongodb';
+import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ListingCard } from '@/app/components/marketplace/listing-card';
 import type { ListingPayload } from '@/app/components/forms/marketplace-listing-form';
-import type { ObjectId } from 'mongodb';
+import type { WithId } from 'mongodb';
+import { generatePromoImgURL } from '@/app/(authenticated)/dashboard/storage/_lib/s3';
 
-
-type Listing = ListingPayload & { _id: ObjectId; };
 
 const getAllListings = async () =>
 {
   const connection = await client.connect();
 
-    
-
   try
   {
 
-    const collection = connection.db( dbs.client.dbName ).collection( dbs.client.collections.listings );
+    const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.LISTINGS );
 
-    const cursor = await collection.find();
+    const cursor = await collection.find<WithId<ListingPayload>>( {} );
 
 
-    const data = cursor.toArray();
+    let data = await cursor.toArray();
+
+    const transformedData = data.map( async l =>
+    {
+      const url = await generatePromoImgURL( `promo-images/${ l.promo_img.filename }` );
+
+      l.promo_img.filename = url;
+
+      return l;
+    } );
+
+    data = await Promise.all( transformedData );
 
     return data;
 
@@ -29,28 +37,15 @@ const getAllListings = async () =>
   {
 
     console.log( error );
-  } 
+    return [];
+  }
 };
-
-
-const twinPines: ListingPayload & { cardImgUrl?: string; } = {
-  'businessName': 'Twin Pines',
-  'cardImgUrl': '/twin-pines.jpg',
-  'desc': 'Some desc',
-  'discount': '10',
-  'period': {
-    'from': 'random date',
-    'to': 'random to'
-  },
-  'title': 'Some title',
-  'url_website': '#'
-}
 
 
 export default async function Marketplace()
 {
 
-  const listings = await getAllListings() as Listing[];
+  const listings = await getAllListings();
 
   return (
     <Suspense fallback={ <p>Loading...</p> }>
@@ -63,14 +58,12 @@ export default async function Marketplace()
               const { _id, ...other } = l;
 
               return (
-                
-                  <ListingCard key={ _id.toString() } { ...other } />
-              
+
+                <ListingCard key={ _id.toString() } { ...other } />
+
               );
             } )
           }
-
-          <ListingCard { ...twinPines } />
         </div>
       </div>
     </Suspense>

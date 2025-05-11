@@ -1,11 +1,8 @@
 import type { ListingPayload } from '../../forms/marketplace-listing-form';
-import { Badge } from '../../badge';
+import { Badge } from '../../ui/badge';
 import Image from 'next/image';
 
-type ListingCardProps = ListingPayload & {
-
-  cardImgUrl?: string;
-};
+type ListingCardProps = ListingPayload;
 
 
 export function ListingCard( {
@@ -15,14 +12,14 @@ export function ListingCard( {
   desc,
   url_website,
   discount,
-  cardImgUrl
+  promo_img
 }: ListingCardProps )
 {
   return (
-    <a href={'http://' + url_website} target='_blank'>
+    <a href={ 'http://' + url_website } target='_blank'>
       <div className='relative shadow rounded-2xl flex flex-col bg-white h-[22.75rem] w-[25rem] text-zinc-700 overflow-hidden'>
         <div className='relative basis-1/3 shadow-inner border-b'>
-            <Image src={cardImgUrl || '/lawn.jpeg'} alt='random image' fill className='object-cover object-position-center'/>
+          <Image src={ promo_img.filename } alt='random image' fill className='object-cover object-position-center' />
         </div>
         <div className='p-5 space-y-2.5'>
           <div className='relative'>

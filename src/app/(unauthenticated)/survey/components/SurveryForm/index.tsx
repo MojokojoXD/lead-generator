@@ -1,6 +1,6 @@
 'use client';
 import { ChangeEvent, FormEventHandler, JSX, useState } from 'react';
-import { Input } from '@/app/components/input';
+import { Input } from '@/app/components/ui/input';
 import { Loader2 } from 'lucide-react';
 
 enum STEPS
@@ -115,7 +115,7 @@ export function SurveyForm()
       throw result;
     } catch ( error )
     {
-      setIsFetching( false )
+      setIsFetching( false );
       console.log( error );
     }
 
@@ -152,7 +152,7 @@ export function SurveyForm()
           className='min-w-[10rem] h-10 px-4 bg-rose-500 text-white font-medium text-lg rounded'
           onClick={ handleNext }
         >
-          {isFetching ? <Loader2 className='h-5 aspect-square animate-spin mx-auto'/> : 'Get Quote'}
+          { isFetching ? <Loader2 className='h-5 aspect-square animate-spin mx-auto' /> : 'Get Quote' }
         </button> }
       </div>
     </form>

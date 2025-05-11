@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
         { status: 400, statusText: 'invalid coordinates' }
       );
 
-    const dbConnection = await client;
+    const dbConnection = await client.connect();
 
     const { dbName, collections } = dbs.metadata;
 
@@ -45,6 +45,8 @@ export async function GET(req: NextRequest) {
       .limit(1);
 
     const result = await cursor.toArray();
+
+    if ( result ) await dbConnection.close();
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {

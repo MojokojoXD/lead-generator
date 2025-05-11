@@ -1,10 +1,8 @@
 import { Suspense } from 'react';
 import { client, dbs } from '@/app/_db/mongodb';
-import type { ObjectId } from 'mongodb';
-import { NewProProfilePayload } from '@/app/components/forms/new-pro-profile-form';
+import { NewVendorPayload } from '@/app/components/forms/new-pro-profile-form';
 import { ClientCard } from '@/app/components/pros/client-card';
-
-type Client = NewProProfilePayload & { _id: ObjectId; };
+import { WithId } from 'mongodb';
 
 
 const getAllClients = async () =>
@@ -15,7 +13,7 @@ const getAllClients = async () =>
 
     const collection = connection.db( dbs.client.dbName ).collection( dbs.client.collections.account );
 
-    const cursor = await collection.find();
+    const cursor = await collection.find<WithId<NewVendorPayload>>({ role: 'vendor' });
 
 
     const data = cursor.toArray();
@@ -26,6 +24,8 @@ const getAllClients = async () =>
   {
 
     console.log( error );
+
+    return [];
   }
 };
 
@@ -33,7 +33,7 @@ const getAllClients = async () =>
 export default async function Marketplace()
 {
 
-  const allClient = await getAllClients() as Client[]
+  const allClient = await getAllClients()
 
   return (
     <Suspense fallback={ <p>Loading...</p> }>
