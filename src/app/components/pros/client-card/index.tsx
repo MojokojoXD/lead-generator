@@ -1,8 +1,8 @@
 import { Badge } from '../../ui/badge';
-import { NewProProfilePayload } from '../../forms/new-pro-profile-form';
+import { NewVendorPayload } from '../../forms/new-vendor-form';
 
 
-type ListingCardProps = NewProProfilePayload & {};
+type ListingCardProps = NewVendorPayload & {};
 
 
 export function ClientCard( {

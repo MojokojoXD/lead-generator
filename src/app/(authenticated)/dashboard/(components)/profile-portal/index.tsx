@@ -2,13 +2,13 @@ import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/app/api/auth';
 import type { DefaultUser } from 'next-auth';
-import { NewVendorPayload } from '../../../../components/forms/new-pro-profile-form';
+import { NewVendorPayload } from '../../../../components/forms/new-vendor-form';
 import { DashboardParts } from '../layout/main';
 import
-  {
-    Phone,
-    Mail
-  } from 'lucide-react';
+{
+  Phone,
+  Mail
+} from 'lucide-react';
 
 
 interface UserWithId extends DefaultUser
@@ -37,7 +37,7 @@ const getProfile = async ( id: string ) =>
   {
 
     console.log( error );
-  } 
+  }
 };
 
 export async function ProfilePortal()
@@ -52,9 +52,9 @@ export async function ProfilePortal()
 
   if ( !profile ) return <div>Profile not found</div>;
 
-  const iconStyles = 'size-4 stroke-2 mr-1.5'
+  const iconStyles = 'size-4 stroke-2 mr-1.5';
 
-  console.log( profile )
+  console.log( profile );
   return (
     <DashboardParts.PortalView title='Profile'>
       <ul className='text-slate-700 space-y-6 font-bold'>

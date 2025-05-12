@@ -1,4 +1,4 @@
-import type { ListingPayload } from '../../forms/marketplace-listing-form';
+import type { ListingPayload } from '@/app/(authenticated)/dashboard/(components)/forms/add-marketplace-listing-form';
 import { Badge } from '../../ui/badge';
 import Image from 'next/image';
 
