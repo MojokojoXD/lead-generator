@@ -14,11 +14,11 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 
 const client = new S3Client( {
-  region: process.env.AWS_REGION,
+  region: process.env.AWS__REGION,
   credentials: {
-    accessKeyId: <string>process.env.AWS_ACCESS_KEY,
-    secretAccessKey: <string>process.env.AWS_ACCESS_SECRET,
-    accountId: process.env.AWS_ACCOUNTID
+    accessKeyId: <string>process.env.AWS__ACCESS_KEY,
+    secretAccessKey: <string>process.env.AWS__ACCESS_SECRET,
+    accountId: process.env.AWS__ACCOUNTID
   }
 } );
 
@@ -27,7 +27,7 @@ export async function uploadFileToAWS( filename: string, file: Buffer)
 {
   const input: PutObjectCommandInput = {
     Body: file,
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.AWS__BUCKET_NAME,
     Key: filename
   }
   
@@ -53,7 +53,7 @@ async function isFileAvailable( fileName: string )
     // Check if the object exists
     await client.send(
       new HeadObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.AWS__BUCKET_NAME,
         Key: fileName,
       })
     );
@@ -82,7 +82,7 @@ export async function generatePromoImgURL( fileName: string )
     {
        
       const command = new GetObjectCommand( {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.AWS__BUCKET_NAME,
         Key: fileName
        })
       
