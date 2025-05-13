@@ -117,7 +117,7 @@ export function AddMarketplaceListingForm()
 
       if ( res.ok )
       {
-        alert( 'Listing added successfully' );
+        alert( 'Listing added! Approval pending' );
         return;
       };
 

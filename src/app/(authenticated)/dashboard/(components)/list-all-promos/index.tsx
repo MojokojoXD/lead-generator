@@ -1,6 +1,6 @@
 import { PromosTable } from './PromosTable';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
-import type { ListingPayload } from '../../forms/marketplace-listing-form';
+import type { ListingPayload } from '../forms/add-marketplace-listing-form';
 import { WithId } from 'mongodb';
 
 

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { client, dbs } from '@/app/_db/mongodb';
+import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { NewVendorPayload } from '@/app/components/forms/new-vendor-form';
 import { ClientCard } from '@/app/components/pros/client-card';
 import { WithId } from 'mongodb';
@@ -9,14 +9,16 @@ const getAllClients = async () =>
 {
   try
   {
-    const connection = await client;
+    const connection = await client.connect();
 
-    const collection = connection.db( dbs.client.dbName ).collection( dbs.client.collections.account );
+    const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.ACCOUNTS );
 
     const cursor = await collection.find<WithId<NewVendorPayload>>( { role: 'vendor' } );
 
 
-    const data = cursor.toArray();
+    const data = await cursor.toArray();
+
+    if ( data ) await connection.close();
 
     return data;
 

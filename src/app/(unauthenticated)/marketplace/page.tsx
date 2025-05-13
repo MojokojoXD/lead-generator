@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ListingCard } from '@/app/components/marketplace/listing-card';
-import type { ListingPayload } from '@/app/components/forms/marketplace-listing-form';
+import type { ListingPayload } from '@/app/(authenticated)/dashboard/(components)/forms/add-marketplace-listing-form';
 import type { WithId } from 'mongodb';
 import { generatePromoImgURL } from '@/app/(authenticated)/dashboard/storage/_lib/s3';
 
@@ -15,10 +15,12 @@ const getAllListings = async () =>
 
     const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.LISTINGS );
 
-    const cursor = await collection.find<WithId<ListingPayload>>( {} );
+    const cursor = await collection.find<WithId<ListingPayload>>( {'_metadata.isApproved': true} );
 
 
     let data = await cursor.toArray();
+    
+    if ( data ) await connection.close();
 
     const transformedData = data.map( async l =>
     {
@@ -35,7 +37,7 @@ const getAllListings = async () =>
 
   } catch ( error )
   {
-
+    await connection.close();
     console.log( error );
     return [];
   }

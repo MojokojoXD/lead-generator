@@ -55,23 +55,23 @@ export function Navlinks( { path }: { path: string; } )
 
   return (
 
-    <>
-      <div>
-        <ul className='[&>li]:inline space-x-5 tracking-wide'>
-          {
-            NAV_LINKS_DATA.main.map( l => (
-              <li key={ l.id }>
-                <Link
-                  href={ l.href }
-                  className={ twMerge( linkClx, path === l.href && 'text-rose-500' ) }>
-                  { l.label }
-                </Link>
-              </li>
-            ) )
-          }
-        </ul>
-      </div>
-      <div>
+     
+      <div className='flex items-center space-x-5'>
+        <div>
+          <ul className='[&>li]:inline space-x-5 tracking-wide'>
+            {
+              NAV_LINKS_DATA.main.map( l => (
+                <li key={ l.id }>
+                  <Link
+                    href={ l.href }
+                    className={ twMerge( linkClx, path === l.href && 'text-rose-500' ) }>
+                    { l.label }
+                  </Link>
+                </li>
+              ) )
+            }
+          </ul>
+        </div>
         <ul className='[&>li]:inline space-x-4 tracking-wide'>
           { status === 'unauthenticated' ?
             NAV_LINKS_DATA.unauth.map( l => (
@@ -103,6 +103,5 @@ export function Navlinks( { path }: { path: string; } )
           }
         </ul>
       </div>
-    </>
   );
 }

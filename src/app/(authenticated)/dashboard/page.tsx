@@ -37,7 +37,7 @@ export default async function Dashboard()
           )
 
         }
-        <DashboardParts.Portal name='Marketplace'>
+        <DashboardParts.Portal name='Add Promo'>
           <MarketplacePortal />
         </DashboardParts.Portal>
       </DashboardParts.Main>

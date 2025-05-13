@@ -14,7 +14,7 @@ export function DashboardNavbar()
           <div>
             <Link href={ '/' }>
               <span className='font-black text-2xl text-zinc-700'>
-                ProsFindr
+                Pros<span className='text-rose-500'>Findr</span>
               </span>
             </Link>
           </div>

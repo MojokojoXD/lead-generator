@@ -17,7 +17,7 @@ export function Textarea( { className, label, ...props }: TextareaProps )
   return (
     <div className='relative w-full flex flex-col'>
       <textarea { ...props } className={ twMerge( defaultStyles, className ) } rows={6}/>
-      { label && <label htmlFor={ props.id } className='absolute top-1.5 text-[10px] px-4 peer-focus:text-rose-500 order-1 font-bold text-slate-500 uppercase tracking-wide'>{ label }</label> }
+      { label && <label htmlFor={ props.id } className='absolute top-1.5 text-[12px] px-4 peer-focus:text-rose-500 order-1 font-medium text-slate-500'>{ label }</label> }
     </div>
   );
 }

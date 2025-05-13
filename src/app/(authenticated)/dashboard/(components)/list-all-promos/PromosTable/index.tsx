@@ -1,4 +1,4 @@
-import type { ListingPayload } from '@/app/components/forms/marketplace-listing-form';
+import type { ListingPayload } from '../../forms/add-marketplace-listing-form';
 import type { WithId } from 'mongodb';
 import { PromoActions } from '../PromoActions';
 

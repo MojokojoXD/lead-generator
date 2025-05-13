@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   newVendor.pwd.content = hash;
   newVendor.pwd.salt = salt;
 
-  newVendor.role = 'admin';
+  newVendor.role = 'vendor';
 
   try {
     const connection = await client;

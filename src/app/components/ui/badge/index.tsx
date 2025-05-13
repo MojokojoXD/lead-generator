@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 
-const baseClx = 'w-fit rounded-full px-2.5 text-[12px] text-white font-bold h-5 flex justify-center items-center';
+const baseClx = 'w-fit rounded-full px-2.5 text-lg text-white font-bold h-10 flex justify-center items-center';
 
 const badgeVariants = cva( baseClx, {
   variants: {

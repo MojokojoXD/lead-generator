@@ -21,10 +21,10 @@ export default function Navbar()
       <div className='flex items-center w-full space-x-5'>
         <div>
           <span className='font-black text-2xl text-zinc-700'>
-            ProsFindr
+            Pros<span className='text-rose-500'>Findr</span>
           </span>
         </div>
-        <div className='grow flex justify-between'>
+        <div className='grow flex justify-end'>
           <Navlinks path={ path } />
         </div>
       </div>
