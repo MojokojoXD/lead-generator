@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
+import { Libre_Franklin } from "next/font/google";
 import Navbar from './components/layout/Navbar';
 import { ClientSessionProvider } from './components/layout/sessionProvider';
 import { auth } from './api/auth';
 import "./globals.css";
 
 
-const lato = Lato( {
-  weight: [  '300', '400', '700' ],
+const libreFranklin = Libre_Franklin( {
+  weight: [  '300', '400', '700','500','800','600' ],
   subsets: [ 'latin' ],
 })
 
@@ -29,7 +29,7 @@ export default async function RootLayout({
     <ClientSessionProvider session={session}>
       <html lang="en">
         <body
-          className={`${lato.className} antialiased text-slate-500`}
+          className={`${libreFranklin.className} antialiased text-slate-500`}
         >
           <div className='relative h-screen overflow-hidden'>
             <Navbar />

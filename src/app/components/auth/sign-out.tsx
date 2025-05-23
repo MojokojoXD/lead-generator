@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { Button } from '../ui/button';
+import { Button } from '../shadcnUI/button';
 
 const SIGN_OUT_REDIRECT_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:3000' : 'https://prosfindr.com';
@@ -30,6 +30,6 @@ export function SignOut()
   };
 
   return (
-    <Button variant={ 'ghost' } size={ 'sm' } onClick={ handleSignOut }>Sign Out</Button>
+    <Button variant={ 'link' } size={ 'lg' } onClick={ handleSignOut } className='text-inherit px-4 max-w-[3.5rem] w-full'>Sign Out</Button>
   );
 }
