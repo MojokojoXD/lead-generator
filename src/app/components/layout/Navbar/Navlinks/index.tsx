@@ -45,21 +45,22 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 {
 
   const emphasizedBtnClsx = clsx( isOnSideMenu && 'max-w-[6.5rem] w-full' );
-  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit max-w-[3.5rem] w-full' )
+  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit max-w-[3.5rem] w-full' );
 
-  const handleClick:MouseEventHandler<HTMLButtonElement> = (ev) =>
+  const handleClick: MouseEventHandler<HTMLButtonElement> = ( ev ) =>
   {
     const id = ( ev.target as HTMLButtonElement ).id;
 
     if ( id === '__sign-out-btn' )
     {
       signOut();
-      closeMenu?.call(undefined);
+      closeMenu?.call( undefined );
       return;
     }
 
-    closeMenu?.call(undefined);
-  }
+    closeMenu?.call( undefined );
+  };
+
 
   return status === 'unauthenticated' ?
     <>
@@ -69,9 +70,11 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           variant={ 'default' }
           size={ isOnSideMenu ? 'default' : 'lg' }
           className={ emphasizedBtnClsx }
-          onClick={handleClick}
+          onClick={ handleClick }
         >
-          <Link href={ '/sign-up' }> Sign Up </Link>
+          <Link href={ '/sign-up' }>
+            Sign Up
+          </Link>
         </Button>
       </li>
       <li >
@@ -80,9 +83,11 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           variant={ 'link' }
           size={ 'lg' }
           className={ unemphasizedBtnClsx }
-          onClick={handleClick}
+          onClick={ handleClick }
         >
-          <Link href={ '/login' }> Login </Link>
+          <Link href={ '/login' }>
+            Login
+          </Link>
         </Button>
       </li>
     </>
@@ -95,21 +100,21 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           variant={ 'default' }
           size={ isOnSideMenu ? 'default' : 'lg' }
           className={ emphasizedBtnClsx }
-          onClick={handleClick}
+          onClick={ handleClick }
         >
           <Link href={ '/dashboard' }> Dashboard </Link>
         </Button>
       </li>
       <li >
-          <Button
-            id='__sign-out-btn'
-            variant={ 'link' }
-            size={ 'lg' }
-            className={ unemphasizedBtnClsx }
-            onClick={handleClick}
-          >
-             Sign Out 
-          </Button>
+        <Button
+          id='__sign-out-btn'
+          variant={ 'link' }
+          size={ 'lg' }
+          className={ unemphasizedBtnClsx }
+          onClick={ handleClick }
+        >
+          Sign Out
+        </Button>
       </li>
     </>;
 }
@@ -119,19 +124,41 @@ export function Navlinks( { path }: NavlinksProps )
 
   const { status } = useSession();
   const [ toggleSideMenu, setToggleSideMenu ] = useState( false );
-  const [ windowWidth, setWindowWidth ] = useState( typeof window !== 'undefined' ? window.innerWidth : -1 );
-  
-  const isOverWithThreshold = windowWidth >= 1024
+  const [ windowWidth, setWindowWidth ] = useState<number | null>(  null   );
+
+  const isOverWithThreshold = Boolean(windowWidth && windowWidth >= 1024);
 
   const sideMenuPortalClsx = clsx( 'fixed top-32 inset-x-0 bottom-0 h-full bg-white/90 backdrop-contrast-90 z-10 transition-[z-index,opacity] duration-150 ease-in',
-    toggleSideMenu ? 'z-10 opacity-100' : '-z-10 opacity-0'
+    toggleSideMenu ? 'z-[999] opacity-100' : '-z-[999] opacity-0'
   );
 
-  const sideMenuHandler = ( open?: boolean ) => open ? setToggleSideMenu( open )
-    : setToggleSideMenu( prevState => !prevState );
-  
+  const sideMenuHandler = ( open?: boolean ) =>
+  {
+    const sidebarPortal = ( document.getElementById( '__side-menu-portal' ) as HTMLDivElement );
+
+    const sidebarPortalClickHandler = ( ev: MouseEvent ) =>
+    {
+      const clickTarget = ev.target as Node;
+
+      if ( sidebarPortal.isSameNode(clickTarget))
+        setToggleSideMenu( false )
+    }
+
+    if ( open || !toggleSideMenu )
+    {
+      sidebarPortal.addEventListener( 'click', sidebarPortalClickHandler );
+    }else sidebarPortal.removeEventListener( 'click', sidebarPortalClickHandler );
+
+    if ( open )
+    {
+      setToggleSideMenu( open );
+      return;
+    }
+    setToggleSideMenu( prevState => !prevState );
+  };
+
   const closeSideMenu = () => setToggleSideMenu( false );
-  
+
   useEffect( () =>
   {
     if ( !window ) return;
@@ -140,13 +167,13 @@ export function Navlinks( { path }: NavlinksProps )
     const popstateChangeHandler = () => sideMenuHandler( false );
 
     window.addEventListener( 'resize', scrollHandler );
-    window.addEventListener( 'popstate', popstateChangeHandler )
-    
-    
+    window.addEventListener( 'popstate', popstateChangeHandler );
+
+
     return () =>
     {
       window.removeEventListener( 'resize', scrollHandler );
-      window.removeEventListener('popstate', popstateChangeHandler)
+      window.removeEventListener( 'popstate', popstateChangeHandler );
     };
   } );
 
@@ -154,10 +181,13 @@ export function Navlinks( { path }: NavlinksProps )
   {
     if ( isOverWithThreshold )
     {
-      setToggleSideMenu( false )
+      setToggleSideMenu( false );
     }
-  }, [isOverWithThreshold] )
-  
+  }, [ isOverWithThreshold ] );
+
+
+  if ( windowWidth === 0 ) return null;
+
   return (
 
     <>
@@ -184,36 +214,36 @@ export function Navlinks( { path }: NavlinksProps )
         <div className='block lg:hidden'>
           <Button
             variant={ 'ghost' }
-            size={'icon'}
+            size={ 'icon' }
             className='rounded-lg aspect-square [&_svg]:size-5 text-prose shadow'
-            onClick={() => sideMenuHandler()}
+            onClick={ () => sideMenuHandler() }
           >
-            {toggleSideMenu ? <X/> : <MenuIcon/> }
+            { toggleSideMenu ? <X /> : <MenuIcon /> }
           </Button>
         </div>
       </div>
-      {/* side menu */}
-      <div className={ sideMenuPortalClsx }>
+      {/* side menu */ }
+      <div id='__side-menu-portal' className={ sideMenuPortalClsx }>
         <div className='h-full w-full max-w-xs bg-white shadow-sm overflow-x-hidden px-[5%] py-10 border-r border-zinc-200'>
           <div>
             <ul className='mb-6 flex justify-between items-center'>
               <AuthLinks
                 status={ status }
                 isOnSideMenu={ !isOverWithThreshold }
-                closeMenu={closeSideMenu}
+                closeMenu={ closeSideMenu }
               />
             </ul>
-            <hr className='mb-6'/>
+            <hr className='mb-6' />
             <ul className='space-y-3.5'>
               { NAV_LINKS_DATA.main.map( l => (
-                <li key={l.id}>
+                <li key={ l.id }>
                   <Button
                     asChild
                     variant={ 'link' }
-                    className={clsx('text-base px-0 ml-4', path === l.href && 'text-primary')}
+                    className={ clsx( 'text-base px-0 ml-4', path === l.href && 'text-primary' ) }
                     onClick={ closeSideMenu }
                   >
-                    <Link href={l.href}>{ l.label }</Link>
+                    <Link href={ l.href }>{ l.label }</Link>
                   </Button>
                 </li>
               ) ) }
