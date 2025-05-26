@@ -129,7 +129,7 @@ export function Navlinks( { path }: NavlinksProps )
   const isOverWithThreshold = Boolean(windowWidth && windowWidth >= 1024);
 
   const sideMenuPortalClsx = clsx( 'fixed top-32 inset-x-0 bottom-0 h-full bg-white/90 backdrop-contrast-90 z-10 transition-[z-index,opacity] duration-150 ease-in',
-    toggleSideMenu ? 'z-[999] opacity-100' : '-z-[999] opacity-0'
+    toggleSideMenu ? 'z-[999] opacity-100 translate-x-0' : '-z-[999] opacity-0 -translate-x-[9999px]'
   );
 
   const sideMenuHandler = ( open?: boolean ) =>
@@ -164,16 +164,13 @@ export function Navlinks( { path }: NavlinksProps )
     if ( !window ) return;
 
     const scrollHandler = () => setWindowWidth( window.innerWidth );
-    const popstateChangeHandler = () => sideMenuHandler( false );
 
     window.addEventListener( 'resize', scrollHandler );
-    window.addEventListener( 'popstate', popstateChangeHandler );
 
 
     return () =>
     {
       window.removeEventListener( 'resize', scrollHandler );
-      window.removeEventListener( 'popstate', popstateChangeHandler );
     };
   } );
 

@@ -24,7 +24,7 @@ export default function Navbar()
           {/* logo */ }
           <Link href={ '/' }>
             <span>
-              <Image src={ '/prosfinder.svg' } alt='site logo' height={ 250 } width={ 250 } className='h-[30px] sm:h-[40px] w-auto' />
+              <Image src={ '/prosfinder.svg' } alt='site logo' height={ 250 } width={ 250 } className='h-[30px] w-auto' />
             </span>
           </Link>
           <Navlinks path={ path } />
