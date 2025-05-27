@@ -3,10 +3,19 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Input, InputError } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
-import { Button } from '../../ui/button';
+import { Button } from '../../shadcnUI/button';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import validator from 'validator'
+import
+  {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/app/components/shadcnUI/select"
+
 
 
 export interface NewVendorPayload
@@ -46,7 +55,7 @@ export function NewVendorForm()
   const [ isFetching, setIsFetching ] = useState( false );
   const [ pwdConfirmation, setPwdConfirmation ] = useState( '' );
   const [ revealPwd, setRevealPwd ] = useState( false );
-  const { register, handleSubmit, formState: { errors } } = useForm<NewVendorPayload>( {
+  const { register, handleSubmit, formState: { errors },setValue } = useForm<NewVendorPayload>( {
     defaultValues: {
       business: {
         name: '',
@@ -102,13 +111,13 @@ export function NewVendorForm()
 
 
   return (
-    <form className='h-full w-full px-10 overflow-auto' onSubmit={ handleSubmit( submitHandler ) }>
-      <div className='space-y-6 overflow-auto mb-20 p-2 max-w-xl mx-auto'>
-        <h2>Profile</h2>
-        <div className='grid grid-cols-2 gap-2.5'>
+    <form className='h-full w-full pb-32' onSubmit={ handleSubmit( submitHandler ) }>
+      <div className='h-full max-w-xl mx-auto px-7 space-y-6 overflow-auto'>
+        <h2 className='font-medium'>Profile</h2>
+        <div className='grid lg:grid-cols-2 gap-x-2.5 gap-y-6'>
           <div>
             <Input
-              label='First Name*'
+              placeholder='First Name*'
               id='__listing-first-name'
               { ...register( 'firstName', {
                 required: 'Please enter first name'
@@ -118,7 +127,7 @@ export function NewVendorForm()
           </div>
           <div>
             <Input
-              label='Last Name*'
+              placeholder='Last Name*'
               id='__listing-last-name'
               { ...register( 'lastName', {
                 required: 'Please enter last name'
@@ -129,7 +138,7 @@ export function NewVendorForm()
         </div>
         <div>
           <Input
-            label='Email*'
+            placeholder='Email*'
             type={ 'email' }
             id='__listing-email'
             { ...register( 'email', {
@@ -141,7 +150,7 @@ export function NewVendorForm()
         </div>
         <div className='space-y-6'>
           <Input
-            label='Password*'
+            placeholder='Password*'
             type={ revealPwd ? 'text' : 'password' }
             id='new-password'
             autoComplete='new-password'
@@ -155,7 +164,7 @@ export function NewVendorForm()
           <div>
             <Input
               type={ revealPwd ? 'text' : 'password' }
-              label='Confirm Password*'
+              placeholder='Confirm Password*'
               id='confirm-password'
               onChange={ e => setPwdConfirmation(e.target.value) }
             />
@@ -168,15 +177,15 @@ export function NewVendorForm()
                 className='float-right mb-5 text-rose-400 underline'
                 onClick={() => setRevealPwd( prevState => !prevState )}
               >
-                show password
+                Show password
               </Button>
             </div>
           </div>
         </div>
-        <h2>Business Info</h2>
+        <h2 className='font-medium'>Business Info</h2>
         <div>
           <Input
-            label='Legal Business Name*'
+            placeholder='Legal Business Name*'
             id='__listing-business-name'
             { ...register( 'business.name' , {
               required: 'Please enter business name'
@@ -186,7 +195,7 @@ export function NewVendorForm()
         </div>
         <div>
           <Input
-            label='Address*'
+            placeholder='Address*'
             id='__listing-business-address'
             { ...register( 'business.address.street' , {
               required: 'Please enter street address'
@@ -198,7 +207,7 @@ export function NewVendorForm()
           
           <div>
             <Input
-              label='City*'
+              placeholder='City*'
               id='__listing-business-city'
               { ...register( 'business.address.city', {
                 required: 'Please enter city'
@@ -208,7 +217,7 @@ export function NewVendorForm()
           </div>
           <div>
             <Input
-              label='Zipcode*'
+              placeholder='Zipcode*'
               id='__listing-business-zip'
               { ...register( 'business.address.zipcode', {
                 required: 'Please enter zipcode',
@@ -221,7 +230,7 @@ export function NewVendorForm()
         </div>
         <div>
           <Input
-            label='Phone*'
+            placeholder='Phone*'
             id='__listing-business-phone'
             { ...register( 'business.phone', {
               required: 'Please enter phone #',
@@ -232,7 +241,7 @@ export function NewVendorForm()
         </div>
         <div>
           <Input
-            label='Website/URL'
+            placeholder='Website/URL'
             id='__listing-business-website'
             { ...register( 'business.url', {
               validate: v => v?.trim() === '' || validator.isURL( v as string ) || 'Please enter valid url'
@@ -240,32 +249,23 @@ export function NewVendorForm()
           />
           <InputError errors={ errors } name={ 'business.url' } />
         </div>
-        <div className='grid grid-cols-2 gap-x-2.5'>
-          <div>
-            <div className='relative h-fit'>
-              <label htmlFor="__listing-category" className='absolute top-1.5 text-[12px] peer-focus:text-rose-500 font-medium text-slate-500 px-4'>Category*</label>
-              <select
-                id="__listing-category"
-                className='peer h-full w-full py-5 px-4 rounded-lg border border-slate-200 focus:outline focus:border-transparent outline-rose-400 order-1 bg-slate-50'
-                { ...register( 'category', {
-                  required: 'Select category'
-                } ) }
-              >
-                <option value="">-</option>
-                <option value="security">Security</option>
-                <option value="pest control">Pest Control</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="pool">Pools</option>
-              </select>
-
-            </div>
-            <InputError errors={errors} name={ 'category' }/>
-          </div>
-         
+        <div>
+          <Select onValueChange={ v => setValue( 'category', v ) }>
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder={ 'Category*' } />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="security">Security</SelectItem>
+              <SelectItem value="pest control">Pest Control</SelectItem>
+              <SelectItem value="landscaping">Landscaping</SelectItem>
+              <SelectItem value="pool">Pools</SelectItem>
+            </SelectContent>
+          </Select>
+          <InputError errors={ errors } name={ 'category' } />
         </div>
         <div>
           <Input
-            label='TIN*'
+            placeholder='TIN*'
             id='__listing-business-tin'
             { ...register( 'business.tin', {
               required: 'Please enter business TIN',
@@ -274,19 +274,18 @@ export function NewVendorForm()
           />
           <InputError errors={ errors } name={ 'business.tin' } />
         </div>
-        <h2>Misc</h2>
+        <h2 className='font-medium'>Misc</h2>
         <Textarea
           id='__listing-bio'
           placeholder='Please enter bio here'
-          label='Bio'
           { ...register( 'bio' ) }
         />
         <hr />
-      </div>
-      <div className='absolute bottom-0 inset-x-0 bg-white z-10 py-3 px-12'>
-        <Button variant={ 'secondary' } >
-          { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }
-        </Button>
+        <div>
+          <Button variant={ 'secondary' } size={'lg'} className='w-full h-14 text-lg font-medium'>
+            { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }
+          </Button>
+        </div>
       </div>
     </form>
   );

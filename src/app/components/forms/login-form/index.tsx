@@ -1,11 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Input } from '../../ui/input';
-import { Button } from '../../ui/button';
+import { Input, InputError } from '../../ui/input';
+import { Button } from '../../shadcnUI/button';
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
+import validator from 'validator'
 
 interface LoginPayload
 {
@@ -14,7 +15,7 @@ interface LoginPayload
 }
 export function LoginForm()
 {
-  const { register, handleSubmit } = useForm<LoginPayload>( {
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginPayload>( {
     reValidateMode: 'onChange',
     defaultValues: {
       user: '',
@@ -23,6 +24,7 @@ export function LoginForm()
   } );
   const router = useRouter();
 
+  const [ showPwd, setShowPwd ] = useState( false );
   const [ isFetching, setIsFetching ] = useState( false );
   const [ loginError, setLoginError ] = useState<string | null>( null );
 
@@ -53,20 +55,50 @@ export function LoginForm()
   };
 
   return (
-    <form className='w-full space-y-3 px-5' onSubmit={ handleSubmit( submitHandler ) }>
+    <form className='w-full max-w-sm' onSubmit={ handleSubmit( submitHandler ) }>
 
 
+      <div className='mb-10 space-y-4'>
+        <Input
+          { ...register( 'user', {
+            required: 'Please enter email address',
+            validate: v => validator.isEmail( v ) || 'Email must be of the format name@example.com'
+          } ) }
+          id='__username/email'
+          type={ 'email' }
+          placeholder='Email*'
+        />
+        <InputError errors={ errors } name={ 'user' } />
+        <div className='relative flex items-center'>
+          <Input
+            { ...register( 'pwd', {
+              required: 'Please enter password'
+            } ) }
+            id='current-password'
+            autoComplete='current-password'
+            type={ showPwd ? 'text' : 'password' }
+            placeholder='Password*'
+          />
+          <Button
+            variant={ 'ghost' }
+            size={ 'icon' }
+            type='button'
+            onClick={() => setShowPwd( prevState => !prevState )}
+            className='absolute right-4 [&_svg]:size-6 [&_svg]:stroke-2 text-zinc-500 hover:bg-transparent'>{
+              !showPwd ? <EyeOff /> : <Eye /> }
+          </Button>
+        </div>
+        <InputError errors={ errors } name={ 'pwd' } />
 
-      <Input { ...register( 'user' ) } id='__username/email' label='Email' type={ 'email' } />
-      <Input { ...register( 'pwd' ) } id='current-password' label='Password' autoComplete='current-password' type={ 'password' } />
+        {/* login feedback */ }
+        <p className='text-red-500 text-center'>{ loginError }</p>
+      </div>
 
-      {/* login feedback */ }
-      <p className='text-red-500 text-center'>{ loginError }</p>
-
-      <div className='pt-6'>
-        <Button >
-          { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }
+      <div className='mt-10'>
+        <Button className='w-full py-5 h-14 text-lg' size={ 'lg' }>
+          { isFetching ? <Loader2 className='animate-spin' /> : 'Login' }
         </Button>
+        <p className='text-end'><Button variant={ 'link' } className='text-primary'>Forgot password?</Button></p>
       </div>
 
     </form>

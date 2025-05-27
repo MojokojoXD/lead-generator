@@ -32,7 +32,7 @@ export function Input( { className, label, wrapperClx, fileName, ...props }: Inp
 
   if ( label && !props.id ) throw new Error( 'element id must be provided if a label is provided' );
 
-  const defaultStyles = 'h-full w-full py-5 px-4 rounded-lg border border-slate-200 bg-slate-50 peer order-2 focus:outline outline-rose-500 focus:border-transparent';
+  const defaultStyles = 'h-14 w-full py-3 px-2 rounded-md bg-transparent border border-input text-sm peer order-2 focus:ring-1 ring-primary focus:border-transparent placeholder:text-muted-foreground shadow-sm focus:outline-none';
 
 
   if ( props.type === 'file' ) return (
@@ -49,7 +49,7 @@ export function Input( { className, label, wrapperClx, fileName, ...props }: Inp
   return (
     <div className={ twMerge( 'relative w-full flex flex-col', wrapperClx && wrapperClx ) }>
       <input { ...props } className={ twMerge( defaultStyles, className ) } />
-      { label && <label htmlFor={ props.id } className='absolute top-1.5 text-[12px] px-4 peer-focus:text-rose-500 order-1 text-slate-500'>{ label }</label> }
+      {/* { label && <label htmlFor={ props.id } className='absolute top-1.5 text-[12px] px-4 peer-focus:text-primary order-1 text-slate-500'>{ label }</label> } */}
     </div>
   );
 }
