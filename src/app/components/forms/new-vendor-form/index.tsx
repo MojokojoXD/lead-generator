@@ -115,7 +115,7 @@ export function NewVendorForm()
 
 
   return (
-    <form className='h-full w-full' onSubmit={ handleSubmit( submitHandler ) }>
+    <form className='h-full w-full' onSubmit={ handleSubmit( submitHandler ) } noValidate>
       <div className='h-full lg:max-h-[28rem] max-w-2xl mx-auto px-7 space-y-6 overflow-auto pb-36'>
         <h2 className='font-medium'>Profile</h2>
         <div className='grid lg:grid-cols-2 gap-x-2.5 gap-y-6'>

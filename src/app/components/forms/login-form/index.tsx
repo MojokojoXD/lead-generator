@@ -55,7 +55,7 @@ export function LoginForm()
   };
 
   return (
-    <form className='w-full px-7' onSubmit={ handleSubmit( submitHandler ) }>
+    <form className='w-full px-7' onSubmit={ handleSubmit( submitHandler ) } noValidate>
 
 
       <div className='mb-10 space-y-6'>
@@ -67,6 +67,7 @@ export function LoginForm()
           id='__username/email'
           type={ 'email' }
           placeholder='Email*'
+          formNoValidate
         />
         <InputError errors={ errors } name={ 'user' } />
         <div className='relative flex items-center'>
