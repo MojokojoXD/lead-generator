@@ -55,10 +55,10 @@ export function LoginForm()
   };
 
   return (
-    <form className='w-full max-w-sm' onSubmit={ handleSubmit( submitHandler ) }>
+    <form className='w-full px-7' onSubmit={ handleSubmit( submitHandler ) }>
 
 
-      <div className='mb-10 space-y-4'>
+      <div className='mb-10 space-y-6'>
         <Input
           { ...register( 'user', {
             required: 'Please enter email address',
@@ -94,11 +94,11 @@ export function LoginForm()
         <p className='text-red-500 text-center'>{ loginError }</p>
       </div>
 
-      <div className='mt-10'>
+      <div>
         <Button className='w-full py-5 h-14 text-lg' size={ 'lg' }>
           { isFetching ? <Loader2 className='animate-spin' /> : 'Login' }
         </Button>
-        <p className='text-end'><Button variant={ 'link' } className='text-primary'>Forgot password?</Button></p>
+        <p className='text-end'><Button variant={ 'link' } type='button' className='text-primary'>Forgot password?</Button></p>
       </div>
 
     </form>

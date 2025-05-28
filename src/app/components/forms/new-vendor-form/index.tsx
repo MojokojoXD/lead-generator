@@ -79,6 +79,10 @@ export function NewVendorForm()
     }
   } );
 
+  const { ref: categoryRef, name } = register( 'category', {
+    required: 'Please select category'
+  })
+
   const submitHandler: SubmitHandler<NewVendorPayload> = async ( data ) =>
   {
     setIsFetching( true );
@@ -111,8 +115,8 @@ export function NewVendorForm()
 
 
   return (
-    <form className='h-full w-full pb-32' onSubmit={ handleSubmit( submitHandler ) }>
-      <div className='h-full max-w-xl mx-auto px-7 space-y-6 overflow-auto'>
+    <form className='h-full w-full' onSubmit={ handleSubmit( submitHandler ) }>
+      <div className='h-full lg:max-h-[28rem] max-w-2xl mx-auto px-7 space-y-6 overflow-auto'>
         <h2 className='font-medium'>Profile</h2>
         <div className='grid lg:grid-cols-2 gap-x-2.5 gap-y-6'>
           <div>
@@ -250,8 +254,8 @@ export function NewVendorForm()
           <InputError errors={ errors } name={ 'business.url' } />
         </div>
         <div>
-          <Select onValueChange={ v => setValue( 'category', v ) }>
-            <SelectTrigger className='w-full'>
+          <Select onValueChange={ v => setValue( 'category', v ) } name={name}>
+            <SelectTrigger className='w-full' ref={categoryRef}>
               <SelectValue placeholder={ 'Category*' } />
             </SelectTrigger>
             <SelectContent>
