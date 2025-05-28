@@ -65,9 +65,7 @@ export function LoginForm()
             validate: v => validator.isEmail( v ) || 'Email must be of the format name@example.com'
           } ) }
           id='__username/email'
-          type={ 'email' }
           placeholder='Email*'
-          formNoValidate
         />
         <InputError errors={ errors } name={ 'user' } />
         <div className='relative flex items-center'>
