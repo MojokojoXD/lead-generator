@@ -7,10 +7,10 @@ export default async function SurveyCategory( { params }: {params: Promise<{ cat
   const headerInsert = slug.category.split( '-' ).join( ' ' );
 
   return (
-    <div className='h-full flex justify-center py-24 bg-slate-100'>
-      <div className='max-w-3xl space-y-8'>
-        <h1 className='text-5xl text-slate-800 font-bold tracking-tight text-center'>Compare quotes from top-rated <span className='capitalize text-rose-500'>{ headerInsert }</span> Contractors</h1>
-        <div className='bg-white py-10 shadow-sm rounded-lg px-8 w-3/5 mx-auto space-y-8'>
+    <div className='h-fit flex justify-center py-16'>
+      <div className='h-full max-w-3xl text-prose'>
+        <h1 className='text-3xl sm:text-5xl font-normal tracking-tighter text-center leading-tight mb-10 mx-5'>Compare quotes from top-rated <span className='text-primary'>{ headerInsert }</span> contractors</h1>
+        <div className='bg-white py-6 shadow-sm rounded-lg px-8 max-w-lg mx-1.5 sm:mx-auto space-y-8 border '>
           <SurveyForm/>
         </div>
       </div>

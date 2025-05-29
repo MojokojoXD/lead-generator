@@ -49,7 +49,9 @@ export function LoginForm()
       return;
     }
 
-    setLoginError( result?.error ?? 'Invalid email or password' );
+    console.log( result?.error );
+
+    setLoginError( 'Invalid email or password' );
 
 
   };
@@ -90,7 +92,7 @@ export function LoginForm()
         <InputError errors={ errors } name={ 'pwd' } />
 
         {/* login feedback */ }
-        <p className='text-red-500 text-center'>{ loginError }</p>
+        <p className='text-red-500 text-sm'>{ loginError }</p>
       </div>
 
       <div>

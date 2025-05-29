@@ -33,7 +33,7 @@ export default async function RootLayout({
         >
           <main className='relative h-screen overflow-hidden'>
             <Navbar />
-            <div className='w-full h-[calc(100vh-128px)] overflow-y-auto text-prose'>
+            <div className='w-full h-[calc(100vh-96px)] sm:h-[calc(100vh-128px)] overflow-y-auto text-prose'>
               {children}
             </div>
           </main>
