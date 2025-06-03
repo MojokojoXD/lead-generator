@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Task, useTaskQueue } from '@/app/(authenticated)/dashboard/(components)/hooks/useTaskQueue';
 import { useDashboardPortal } from '../../hooks/useDashboardPortal';
 import { cn } from '@/lib/utils';
-import { MenuIcon } from 'lucide-react';
+import { ArrowLeft, MenuIcon } from 'lucide-react';
 import Image from 'next/image';
 
 
@@ -57,7 +57,7 @@ function Main( { children }: MainProps )
     currentPortal
   } = useDashboardPortal( children );
   const { addTask } = useTaskQueue( { shouldProcess: true } );
-  const [ toggleMenu, setToggleMenu ] = useState( true );
+  const [ toggleMenu, setToggleMenu ] = useState( false );
 
   const handleToggleMenu = useCallback( ( open: boolean ) =>
   {
@@ -69,21 +69,22 @@ function Main( { children }: MainProps )
     <QueueContext.Provider value={ {
       add: addTask
     } }>
-      <main className={cn('fixed inset-y-0 right-0 h-full w-fit bg-secondary p-2.5 transition-[left] ease-in-out duration-300', toggleMenu ? 'left-0' : '-left-[20rem]')}>
+      <main className={cn('fixed h-full inset-y-0 right-0 bg-secondary px-2.5 py-5 transition-[left] ease-in-out duration-300', toggleMenu ? 'left-0' : '-left-[80vw] sm:-left-[20rem]')}>
         <Menu
           portalNames={ portalNames }
           currentPortal={ currentPortal }
           onPortalChange={ handlePortalChange }
           handleMenuClose={handleToggleMenu}
         />
-        <div className='relative h-full w-dwv border bg-white rounded-lg overflow-hidden ml-2.5 p-2.5'>
-          <div>
+        <div className='relative h-full w-dwv border bg-white rounded-2xl overflow-hidden'>
+          <div className={cn('absolute top-0 h-40 flex justify-center items-center transition-[width] ease-in-out duration-300 ', toggleMenu ? 'w-full' : 'w-[20vw]')}>
             <Button
               variant={ 'ghost' }
-              size={ 'icon' }
+              size={ 'lg' }
+              className='[&_svg]:size-5 px-4'
               onClick={ () => setToggleMenu( prevState => !prevState ) }
             >
-              <MenuIcon />
+              { toggleMenu ? <ArrowLeft /> : <MenuIcon /> }
             </Button>
           </div>
           { renderPortal() }
@@ -99,17 +100,21 @@ function Menu( {
   handleMenuClose }: MenuProps )
 {
 
-  const dashboardBtnClsx = cn('text-xl text-neutral-400 font-semibold px-0')
+  const dashboardBtnClsx = cn('text-xl text-neutral-400 font-semibold px-0 hover:bg-transparent hover:text-text-neutral-400')
   return (
 
-    <nav className='h-full w-[20rem] py-16 bg-inherit float-left flex justify-center'>
-      <div className='w-fit flex flex-col'>
-        <div>
+    <nav className='h-full w-[80vw] sm:w-full sm:max-w-[20rem] py-16 bg-inherit float-left flex justify-center'>
+      <div className='w-fit flex flex-col space-y-16'>
+        <div className='h-40'>
           <Image src={'/prosfinder-white.svg'} height={200} width={200} alt='site logo' className='h-[30px] w-auto'/>
         </div>
-        <div className='grow flex flex-col justify-center space-y-8'>
-          <div>
-            <h3 className='text-xs font-medium text-stone-500 mb-2.5'>GENERAL</h3>
+        {/* <div className='text-secondary-foreground'>
+          <span className='h-24 aspect-square border inline-block rounded-xl border-stone-700 bg-neutral text-neutral-foreground flex items-center justify-center text-2xl font-medium tracking-tighter mb-2.5'>KB.</span>
+          <p className='text-lg font-semibold mb-1'>Kwadwo</p>
+          <p className=' text-stone-500 font-medium text-sm'>kwadwoneer@gmail.com</p>
+        </div> */}
+        <div>
+          <div className='mb-10'>
             <ul>
 
               <li >
@@ -121,16 +126,14 @@ function Menu( {
               </li>
             </ul>
           </div>
-          <hr className='border-stone-700' />
           <div>
-            <h3 className='text-xs font-medium text-stone-500 mb-2.5'>DASHBOARD</h3>
             <ul>
               { portalNames.map( n => (
                 <li key={ n } className='py-0.5'>
                   <Button
                     variant={ 'ghost' }
-                    size={'lg'}
-                    className={ cn(dashboardBtnClsx,'flex items-center', n === currentPortal && 'text-secondary-foreground') }
+                    size={ 'lg' }
+                    className={ cn( dashboardBtnClsx, 'flex items-center', n === currentPortal && 'text-secondary-foreground' ) }
                     onClick={ () =>
                     {
                       onPortalChange( n );
@@ -162,11 +165,11 @@ function Portal( { children }: PortalProps )
 function PortalView( { title, children }: PortalViewProps )
 {
   return (
-    <section className='h-full w-full overflow-hidden'>
-      <div className='h-40 bg-slate-50 px-24 flex items-center border-b'>
-        <h1 className='text-xl tracking-tight font-medium text-slate-800 tracking-wide'>{ title }</h1>
+    <section className='h-full w-full overflow-hidden text-prose'>
+      <div className='h-40 flex items-center border-b px-[15vw]'>
+        <h1 className='text-2xl font-medium'>{ title }</h1>
       </div>
-      <div className='relative h-full px-24 overflow-auto pt-16 pb-24'>
+      <div className='relative h-full px-[10vw] pt-16'>
         <div>
           { children }
         </div>
