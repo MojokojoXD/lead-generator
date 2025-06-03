@@ -3,7 +3,7 @@ import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ListingCard } from '@/app/components/marketplace/listing-card';
 import type { ListingPayload } from '@/app/(authenticated)/dashboard/(components)/forms/add-marketplace-listing-form';
 import type { WithId } from 'mongodb';
-import { generatePromoImgURL } from '@/app/(authenticated)/dashboard/storage/_lib/s3';
+import { generatePromoImgURL } from '@/app/(authenticated)/_lib/storage/s3';
 
 
 const getAllListings = async () =>

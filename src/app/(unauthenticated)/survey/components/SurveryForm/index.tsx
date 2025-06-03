@@ -24,7 +24,7 @@ import
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogAction,
- } from '@/app/components/shadcnUI/alert-dialog';
+} from '@/app/components/shadcnUI/alert-dialog';
 
 const BUDGET_RANGE = [ '< $1000', '$1k-$10k', '$10k-$50k', '> $50k' ];
 
@@ -61,8 +61,8 @@ const STATUS_CONFIG: Record<STATUS, STATUS_MSGS | undefined> = {
     desc: 'Something went wrong! Please contact system admin.'
   },
   COMPLETED: {
-    title: 'Done!',
-    desc: 'Our top rated contractor will be in touch soon.'
+    title: 'Congratulations!',
+    desc: 'Your application has been submitted and is in review.'
   },
   IDLE: undefined
 }
@@ -70,15 +70,12 @@ const STATUS_CONFIG: Record<STATUS, STATUS_MSGS | undefined> = {
 export interface SurveyJobPayload
 {
   comments: string;
-
-  desc: string;
+  desc: Categories ;
   location: {
-    desc: string;
     zipcode: string;
   };
   timeline: string;
   budget: string;
-
   contacts: {
     firstName: string;
     lastName: string;
@@ -93,27 +90,34 @@ export interface SurveyJobPayload
 
 const JobDescStep = () =>
 {
-  const { register, formState: { errors } } = useFormContext<SurveyJobPayload>();
+  const { control } = useFormContext<SurveyJobPayload>();
 
 
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center text-lg'>Description of the job</h2>
-        <div className='bg-secondary border text-secondary-foreground py-4 px-5 rounded-lg mb-5 font-semibold text-sm'>
-          <div>
-            <p className='mb-2.5'>Provide a detailed description of what you need done</p>
-            <ul className='list-disc list-inside'>
-              <li>What specifically needs done?</li>
-              <li>Are there any special requests or customizations?</li>
-            </ul>
-          </div>
-        </div>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Job Description</h2>
       </div>
-      <Textarea placeholder='Type here...' { ...register( 'desc', {
-        required: 'Please enter job description'
-      } ) } />
-      <InputError errors={ errors } name={ 'desc' } />
+      <Controller
+        name={ 'desc' }
+        control={ control }
+        render={ ( { field, formState: { errors }} ) => (
+          <>
+            <Select onValueChange={ v => field.onChange(v)} value={ field.value }>
+              <SelectTrigger ref={ field.ref }>
+                <SelectValue placeholder='Description'/>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='security'> Security </SelectItem>
+                <SelectItem value='pool'> Pools </SelectItem>
+                <SelectItem value='landscaping'> Landscaping </SelectItem>
+                <SelectItem value='pest control'> Pest Control </SelectItem>
+              </SelectContent>
+            </Select>
+            <InputError errors={ errors } name={ 'desc' } />
+          </>
+        ) }
+      />
     </div>
   );
 };
@@ -125,20 +129,9 @@ const LocationStep = () =>
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center text-lg'>Location of the job</h2>
-        <div className='bg-secondary border text-secondary-foreground text-sm font-semibold py-4 px-5 rounded-lg mb-5'>
-          <div >
-            <ul className='list-disc list-inside'>
-              <li>Exact address or at least the city/area.</li>
-              <li>Any access issues? (e.g., limited parking, gated entry, remote location)</li>
-            </ul>
-          </div>
-        </div>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Location</h2>
       </div>
       <div className='space-y-6'>
-        <div>
-          <Textarea placeholder='Type here...' { ...register( 'location.desc' ) } />
-        </div>
         <div>
           <Input
             placeholder='Zipcode*'
@@ -160,16 +153,7 @@ const TimelineStep = () =>
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center text-lg'>Timeline</h2>
-        <div className='bg-secondary text-secondary-foreground border font-semibold text-sm py-4 px-5 rounded-lg mb-5'>
-          <div>
-            <ul className='list-disc list-inside'>
-              <li>When do you want the job to start?</li>
-              <li>Any deadlines or urgency?</li>
-              <li>Is flexibility allowed?</li>
-            </ul>
-          </div>
-        </div>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Timeline</h2>
       </div>
       <div className='space-y-6'>
         <div>
@@ -198,7 +182,7 @@ const BudgetStep = () =>
   return (
     <div>
       <div className='mb-5'>
-        <h2 className='font-medium text-zinc-800 flex items-center text-lg'>Budget</h2>
+        <h2 className='font-medium text-zinc-800 flex items-center'>Budget</h2>
       </div>
       <div>
         <div className='grid md:grid-flow-col auto-cols-fr grid-cols-2 gap-2.5 h-full w-full'>
@@ -320,7 +304,7 @@ const CommentStep = () =>
     </div>
   );
 };
-export function SurveyForm()
+export function SurveyForm( { category }: { category: Categories } )
 {
 
   const [ step, setStep ] = useState<STEPS>( STEPS.FIRST );
@@ -329,12 +313,11 @@ export function SurveyForm()
     defaultValues: {
       budget: BUDGET_RANGE.at(0) ?? '',
       location: {
-        desc: '',
         zipcode: ''
       },
       timeline: '',
       comments: '',
-      desc: '',
+      desc: category,
       contacts: {
         firstName: '',
         lastName: '',
@@ -393,8 +376,8 @@ export function SurveyForm()
   };
 
   const FormComponent: Record<STEPS, JSX.Element> = {
-    1: <JobDescStep />,
-    2: <LocationStep />,
+    1: <LocationStep />,
+    2: <JobDescStep />,
     3: <TimelineStep />,
     4: <BudgetStep />,
     5: <ContactStep/>,
@@ -421,10 +404,10 @@ export function SurveyForm()
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <div className='mb-10'>
+        <div className='mb-5'>
           { FormComponent[ step ] }
         </div>
-        <hr className='mb-10'/>
+        <hr className='mb-5'/>
         <div className={ `flex ${ step === STEPS.FIRST ? 'justify-end' : 'justify-between' }` }>
           <Button
             type='button'

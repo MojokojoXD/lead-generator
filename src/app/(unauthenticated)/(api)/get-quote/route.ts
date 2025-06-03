@@ -13,8 +13,6 @@ const packageTransport = (msgConfig: SendMailOptions) =>
 export async function POST(req: NextRequest) {
   const body: Record<string, string> = await req.json();
 
-  throw body;
-
   try {
     const result = await packageTransport({
       from: {

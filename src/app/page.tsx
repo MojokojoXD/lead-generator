@@ -5,10 +5,10 @@ export default function Home()
 {
   return (
     <div className="h-fit w-full px-[5%] lg:px-[10%] home-categories bg-cover">
-      <section className='h-full w-full pt-16 sm:pt-24 sm:grid grid-cols-2 gap-5'>
+      <section className='h-full w-full pt-16 sm:pt-24 xl:grid grid-cols-2 gap-5'>
         <div className='pb-24'>
-          <h1 className='text-6xl sm:text-8xl font-bold tracking-tighter text-zinc-800 mb-8 sm:mb-3.5'>Find highly <br />rated <br />certified pros <br /> in <span className='text-primary'>Arizona</span></h1>
-          <div className='sm:hidden grid grid-cols-2 auto-cols-fr gap-2.5 mb-8 sm:mb-3.5'>
+          <h1 className='text-6xl sm:text-8xl md:text-9xl lg:text-8xl font-bold tracking-tighter text-zinc-800 mb-8 sm:mb-3.5'>Find highly <br />rated <br />certified pros <br /> in <span className='text-primary'>Arizona</span></h1>
+          <div className='lg:hidden grid grid-cols-2 auto-cols-fr gap-2.5 mb-8 sm:mb-3.5'>
             <Link href={ '/survey/security' }>
               <div className='group relative w-full aspect-square rounded-xl shadow-lg overflow-hidden'>
                 <Image src={ 'https://images.unsplash.com/photo-1596835090344-b57279fac184?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } alt='security service' fill className='object-cover object-center transition-[transform] duration-300 ease-in-out group-hover:scale-110' />
@@ -45,7 +45,7 @@ export default function Home()
           <p className='text-lg sm:text-2xl mb-5 max-w-prose'>Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.</p>
           <Button variant={ 'secondary' } className='h-[3.25rem] sm:h-[4.25rem] w-[11.4rem] sm:w-[19.8rem] text-xl sm:text-2xl'>Get a Quote!</Button>
         </div>
-        <div className='hidden sm:grid pb-24 grid-cols-2 auto-cols-fr gap-4'>
+        <div className='hidden lg:grid pb-24 md:grid-cols-4 xl:grid-cols-2 auto-cols-fr gap-4'>
           <Link href={ '/survey/security' }>
             <div className='group relative w-full aspect-square rounded-xl shadow-lg overflow-hidden ring-1 ring-rose-300'>
               <Image src={ 'https://images.unsplash.com/photo-1596835090344-b57279fac184?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } alt='security service' fill className='object-cover object-center transition-[transform] duration-300 ease-in-out group-hover:scale-110'/>

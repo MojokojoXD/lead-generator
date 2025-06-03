@@ -1,8 +1,14 @@
 'use client';
 
-import { type ReactElement, type ReactNode, useState } from 'react';
+import
+{
+  type ReactNode,
+  createContext,
+} from 'react';
 import { Button } from '@/app/components/ui/button';
 import Link from 'next/link';
+import { Task, useTaskQueue } from '@/app/(authenticated)/dashboard/(components)/hooks/useTaskQueue';
+import { useDashboardPortal } from '../../hooks/useDashboardPortal';
 
 
 interface MainProps
@@ -10,7 +16,7 @@ interface MainProps
   children: ReactNode;
 }
 
-interface PortalProps
+export interface PortalProps
 {
   name: string;
   children: ReactNode;
@@ -32,46 +38,41 @@ interface PortalViewProps
   title?: string;
 }
 
+
+export const QueueContext = createContext<{ add: ( task: Task ) => void; } | null>( null );
+
 function Main( { children }: MainProps )
 {
+  const {
+    renderPortal,
+    handlePortalChange,
+    portalNames,
+    currentPortal
+  } = useDashboardPortal( children );
+  const { addTask } = useTaskQueue( { shouldProcess: true } );
 
-  let portalNames: string[] = [];
-
-  let childrenElements = children as ReactElement<PortalProps> | ReactElement<PortalProps>[];
-
-  if ( Array.isArray( childrenElements ) )
-  {
-    childrenElements = childrenElements.filter( Boolean );
-    portalNames = childrenElements.map( p => p.props.name );
-
-  } else portalNames.push( ( children as ReactElement<PortalProps> ).props.name );
-
-
-  const [ portal, setPortal ] = useState<string | undefined>( portalNames[ 0 ] );
-
-  if ( !portal ) throw new Error( 'Main component must have at least one portal child' );
-
-
-  const handlePortalChange = ( newPortal: string ) => setPortal( newPortal );
-
-  const renderPortal = () => Array.isArray( childrenElements ) ? childrenElements.filter( e => e.props.name === portal ) : childrenElements;
 
   return (
-    <div className='h-full grid grid-cols-6 bg-white'>
-      <Menu
-        portalNames={ portalNames }
-        currentPortal={ portal }
-        onPortalChange={ handlePortalChange }
-      />
-      <div className='h-full col-start-2 col-span-full overflow-auto'>
-        { renderPortal() }
+    <QueueContext.Provider value={ {
+      add: addTask
+    } }>
+      <div className='h-full grid grid-cols-6 bg-white'>
+        <Menu
+          portalNames={ portalNames }
+          currentPortal={ currentPortal }
+          onPortalChange={ handlePortalChange }
+        />
+        <div className='h-full col-start-2 col-span-full overflow-auto'>
+          { renderPortal() }
+        </div>
       </div>
-    </div>
+    </QueueContext.Provider>
   );
 }
 function Menu( { portalNames, currentPortal, onPortalChange }: MenuProps )
 {
   return (
+
     <div className='h-full col-span-1 px-5 py-16 space-y-10 bg-slate-800'>
       <div>
         <ul>

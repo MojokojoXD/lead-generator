@@ -45,7 +45,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 {
 
   const emphasizedBtnClsx = clsx( isOnSideMenu && 'max-w-[6.5rem] w-full' );
-  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit max-w-[3.5rem] w-full font-normal text-sm' );
+  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit font-normal text-sm' );
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = ( ev ) =>
   {
@@ -82,7 +82,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           asChild
           variant={ 'link' }
           size={ 'lg' }
-          className={ unemphasizedBtnClsx }
+          className={ unemphasizedBtnClsx + ' ml-1.5 max-w-[3.5rem] w-full' }
           onClick={ handleClick }
         >
           <Link href={ '/login' }>
@@ -110,7 +110,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           id='__sign-out-btn'
           variant={ 'link' }
           size={ 'lg' }
-          className={ unemphasizedBtnClsx + ' ml-1.5' }
+          className={ unemphasizedBtnClsx + ' ml-1.5 max-w-[3.5rem] w-full' }
           onClick={ handleClick }
         >
           Log Out

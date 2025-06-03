@@ -4,9 +4,10 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Input } from '@/app/components/ui/input';
 import { Textarea } from '@/app/components/ui/textarea';
 import { Button } from '@/app/components/ui/button';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { QueueContext } from '../../layout/main/parts';
 export interface ListingPayload
 {
   _metadata: {
@@ -35,6 +36,7 @@ const __5MB = 5242880;
 export function AddMarketplaceListingForm()
 {
   const router = useRouter();
+  const queueContext = useContext( QueueContext );
   const [ isFetching, setIsFetching ] = useState( false );
   const [ promoImgFile, setPromoImgFile ] = useState<File | null>( null );
   const { register, handleSubmit, setValue, setError, getValues } = useForm<ListingPayload>( {
@@ -57,7 +59,7 @@ export function AddMarketplaceListingForm()
       }
     }
   } );
-  const fileName = getValues('promo_img.filename');
+  const fileName = getValues( 'promo_img.filename' );
 
 
   register( 'promo_img.filename', {
@@ -91,7 +93,7 @@ export function AddMarketplaceListingForm()
   };
 
 
-  const submitHandler: SubmitHandler<ListingPayload> = async ( data ) =>
+  const submitHandler: SubmitHandler<ListingPayload> = ( data ) =>
   {
 
     setIsFetching( true );
@@ -108,36 +110,65 @@ export function AddMarketplaceListingForm()
     form.append( 'vendorJSON', JSON.stringify( data ) );
     form.append( 'promoImg', promoImgFile as File );
 
-    try
+    const promoPromise = new Promise<void>( ( resolve, reject ) =>
     {
-      const res = await fetch( '/dashboard/mkt-listing', {
+      fetch( '/dashboard/mkt-listing', {
         method: 'POST',
         body: form,
-      } );
-
-      if ( res.ok )
+      } ).then( res =>
       {
-        alert( 'Listing added! Approval pending' );
-        return;
-      };
+        if ( res.ok )
+        {
+          alert( 'Listing added! Approval pending' );
+          resolve();
+          return;
+        }
 
-      if ( res.status === 401 )
+        if ( res.status === 401 )
+        {
+          router.replace( '/' );
+          resolve();
+        }
+
+      } ).catch( err =>
       {
-        router.replace( '/' );
-        return;
-      };
+        console.log( err );
+        reject();
+      } ).finally( () => setIsFetching( false ) );
+    } );
 
-      alert( 'Unable to add listing. Please contact system admin!' );
+    queueContext?.add( () => promoPromise) 
 
-      throw res;
+    // try
+    // {
+    //   const res = await fetch( '/dashboard/mkt-listing', {
+    //     method: 'POST',
+    //     body: form,
+    //   } );
 
-    } catch ( error )
-    {
-      console.log( error );
-    } finally
-    {
-      setIsFetching( false );
-    }
+    //   if ( res.ok )
+    //   {
+    //     alert( 'Listing added! Approval pending' );
+    //     return;
+    //   };
+
+    //   if ( res.status === 401 )
+    //   {
+    //     router.replace( '/' );
+    //     return;
+    //   };
+
+    //   alert( 'Unable to add listing. Please contact system admin!' );
+
+    //   throw res;
+
+    // } catch ( error )
+    // {
+    //   console.log( error );
+    // } finally
+    // {
+    //   setIsFetching( false );
+    // }
   };
 
 
@@ -189,7 +220,7 @@ export function AddMarketplaceListingForm()
         { ...register( 'desc' ) }
       />
       <hr />
-      <Button variant={ 'secondary' }>
+      <Button variant={ 'secondary' } disabled={isFetching}>
         { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
       </Button>
     </form>

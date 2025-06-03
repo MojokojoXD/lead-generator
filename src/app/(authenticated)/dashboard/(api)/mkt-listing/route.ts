@@ -1,11 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
-import type { ListingPayload } from '../(components)/forms/add-marketplace-listing-form';
 import { getToken } from 'next-auth/jwt';
-import { uploadFileToAWS } from '../storage/_lib/s3';
+import { uploadFileToAWS } from '@/app/(authenticated)/_lib/storage/s3';
+import type { ListingPayload } from '../../(components)/forms/add-marketplace-listing-form';
 
 const secret = process.env.NEXTAUTH_SECRET;
-export async function POST(req: NextRequest) {
+export async function POST( req: NextRequest )
+{
+  
   //jwt token verification
 
   const token = await getToken({ req, secret });
