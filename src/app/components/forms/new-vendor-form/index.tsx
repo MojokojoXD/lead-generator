@@ -284,7 +284,6 @@ export function NewVendorForm()
           placeholder='Please enter bio here'
           { ...register( 'bio' ) }
         />
-        <hr />
         <div>
           <Button variant={ 'secondary' } size={'lg'} className='w-full h-14 text-lg font-medium'>
             { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }

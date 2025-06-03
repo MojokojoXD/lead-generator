@@ -407,7 +407,6 @@ export function SurveyForm( { category }: { category: Categories } )
         <div className='mb-5'>
           { FormComponent[ step ] }
         </div>
-        <hr className='mb-5'/>
         <div className={ `flex ${ step === STEPS.FIRST ? 'justify-end' : 'justify-between' }` }>
           <Button
             type='button'
