@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { auth } from '@/app/api/auth';
 import type { DefaultUser } from 'next-auth';
 import { NewVendorPayload } from '../../../../components/forms/new-vendor-form';
-import { DashboardParts } from '../layout/main';
+import { Dashboard } from '../layout/main';
 import
 {
   Phone,
@@ -59,7 +59,7 @@ export async function ProfilePortal()
   const iconStyles = 'size-4 stroke-2 mr-1.5';
 
   return (
-    <DashboardParts.PortalView title='Profile'>
+    <Dashboard.PortalView title='Profile'>
       <ul className='text-slate-700 space-y-6 font-bold max-w-sm'>
         <div className='space-y-3'>
           <h2>About</h2>
@@ -112,6 +112,6 @@ export async function ProfilePortal()
           </li>
         </div>
       </ul>
-    </DashboardParts.PortalView>
+    </Dashboard.PortalView>
   );
 }

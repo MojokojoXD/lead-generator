@@ -1,4 +1,4 @@
-import * as DashboardParts from './parts';
+import * as Dashboard from './parts';
 
 
-export { DashboardParts }
+export { Dashboard }

@@ -1,10 +1,10 @@
 import { AddMarketplaceListingForm } from '../forms/add-marketplace-listing-form';
-import { DashboardParts } from '../layout/main';
+import { Dashboard } from '../layout/main';
 export function MarketplacePortal()
 {
   return (
-    <DashboardParts.PortalView title='Marketplace'>
+    <Dashboard.PortalView title='Marketplace'>
       <AddMarketplaceListingForm />
-    </DashboardParts.PortalView>
+    </Dashboard.PortalView>
   );
 }

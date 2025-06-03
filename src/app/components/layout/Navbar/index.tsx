@@ -3,7 +3,6 @@
 import { Navlinks } from './Navlinks';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
-import { DashboardNavbar } from '../DashboardNavbar';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,9 +12,6 @@ const HIDE_NAV_ON_ROUTES = [ '/login', '/dashboard', '/sign-up' ];
 export default function Navbar()
 {
   const path = usePathname();
-
-  if ( path === '/dashboard' ) return <DashboardNavbar />;
-
 
   return (
     <>

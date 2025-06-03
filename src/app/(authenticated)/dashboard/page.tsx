@@ -1,4 +1,4 @@
-import { DashboardParts } from './(components)/layout/main';
+import { Dashboard } from './(components)/layout/main';
 import { MarketplacePortal } from './(components)/marketplace-portal';
 import { ListAllPromos } from './(components)/list-all-promos';
 import { ProfilePortal } from './(components)/profile-portal';
@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import { auth } from '@/app/api/auth';
 import Link from 'next/link';
 import { Loading } from '@/app/components/ui/loading';
-export default async function Dashboard()
+export default async function DashboardPage()
 {
 
   const session = await auth();
@@ -22,25 +22,25 @@ export default async function Dashboard()
 
   return (
     <Suspense fallback={ <Loading /> }>
-      <DashboardParts.Main>
-        {/* @ts-expect-error haven't figured out how to add properties to session type */ }
+      <Dashboard.Main>
+        {/* @ts-expect-error haven't figured out how to add properties to session type yet */ }
         { session.user && session.user.role === 'admin' ?
           (
-            <DashboardParts.Portal name='list-promos'>
+            <Dashboard.Portal name='list-promos'>
               <ListAllPromos />
-            </DashboardParts.Portal> )
+            </Dashboard.Portal> )
           :
           (
-            <DashboardParts.Portal name='Profile'>
+            <Dashboard.Portal name='Profile'>
               <ProfilePortal />
-            </DashboardParts.Portal>
+            </Dashboard.Portal>
           )
 
         }
-        <DashboardParts.Portal name='Add Promo'>
+        <Dashboard.Portal name='Add Promo'>
           <MarketplacePortal />
-        </DashboardParts.Portal>
-      </DashboardParts.Main>
+        </Dashboard.Portal>
+      </Dashboard.Main>
     </Suspense>
   );
 }
