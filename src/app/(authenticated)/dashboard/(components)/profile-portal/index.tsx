@@ -60,83 +60,83 @@ export async function ProfilePortal()
 
   return (
     <Dashboard.PortalView title='Profile'>
-      <ul className='space-y-6 max-w-sm'>
-        <div className='space-y-6'>
-          <table className='w-full [&_td:first-of-type]:flex [&_td:first-of-type]:w-[7rem] [&_td:first-of-type]:py-2.5 [&_td:first-of-type]:text-zinc-500 [&_td:first-of-type]:items-center [&_td:last-of-type]:text-sm'>
-            <tbody>
-              <tr>
-                <th className='text-left py-2.5 font-medium text-sm'>About</th>
-              </tr>
-              <tr>
-                <td>
-                  <div >
-                    <Phone className={ iconStyles } />
-                  </div>
-                  <span>Phone: </span>
-                </td>
-                <td>
-                  { profile.business.phone }
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Mail className={ iconStyles } />
-                  <span>Email: </span>
-                </td>
-                <td>
-                  { profile.email }
-                </td>
-              </tr>
-              <tr>
-                <th className='text-left py-2.5 font-normal w-fit font-medium text-sm'>Business</th>
-              </tr>
-              <tr>
-                <td>
-                  <div >
-                    <BriefcaseBusiness className={ iconStyles } />
-                  </div>
-                  <span>Name: </span>
-                </td>
-                <td>
-                  { profile.business.name }
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div >
-                    <LocateIcon className={ iconStyles } />
-                  </div>
-                  <span>Address: </span>
-                </td>
-                <td>
-                  { profile.business.address.street }
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div >
-                    <Building2 className={ iconStyles } />
-                  </div>
-                  <span>City: </span>
-                </td>
-                <td>
-                  { profile.business.address.city }
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div >
-                    <MapPin className={ iconStyles } />
-                  </div>
-                  <span>Zipcode: </span>
-                </td>
-                <td>
-                  { profile.business.address.zipcode }
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <ul className='max-w-sm'>
+        <table className='w-full [&_td:first-of-type]:flex [&_td:first-of-type]:w-[7rem] [&_td:first-of-type]:py-2.5 [&_td:first-of-type]:text-zinc-500 [&_td:first-of-type]:items-center [&_td:first-of-type]:font-medium [&_td:last-of-type]:text-nowrap [&_td:last-of-type]:truncate [&_td:last-of-type]:text-sm'>
+          <thead>
+            <tr>
+              <th className='text-left py-2.5 font-medium'>About</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div >
+                  <Phone className={ iconStyles } />
+                </div>
+                <span>Phone</span>
+              </td>
+              <td>
+                { profile.business.phone }
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Mail className={ iconStyles } />
+                <span>Email</span>
+              </td>
+              <td>
+                { profile.email }
+              </td>
+            </tr>
+            <tr>
+              <th className='text-left py-2.5 w-fit font-[500]'>Business</th>
+            </tr>
+            <tr>
+              <td>
+                <div >
+                  <BriefcaseBusiness className={ iconStyles } />
+                </div>
+                <span>Name</span>
+              </td>
+              <td>
+                { profile.business.name }
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div >
+                  <LocateIcon className={ iconStyles } />
+                </div>
+                <span>Address</span>
+              </td>
+              <td>
+                { profile.business.address.street }
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div >
+                  <Building2 className={ iconStyles } />
+                </div>
+                <span>City</span>
+              </td>
+              <td>
+                { profile.business.address.city }
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div >
+                  <MapPin className={ iconStyles } />
+                </div>
+                <span>Zipcode</span>
+              </td>
+              <td>
+                { profile.business.address.zipcode }
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </ul>
     </Dashboard.PortalView>
   );

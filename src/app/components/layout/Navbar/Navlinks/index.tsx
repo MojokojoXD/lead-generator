@@ -126,7 +126,7 @@ export function Navlinks( { path }: NavlinksProps )
   const [ toggleSideMenu, setToggleSideMenu ] = useState( false );
   const [ windowWidth, setWindowWidth ] = useState<number | null>(  null   );
 
-  const isOverWithThreshold = Boolean(windowWidth && windowWidth >= 1024);
+  const isOverWidthThreshold = Boolean(windowWidth && windowWidth >= 1024);
 
   const sideMenuPortalClsx = clsx( 'fixed top-24 sm:top-32 inset-x-0 bottom-0 h-full bg-white/90 backdrop-contrast-90 z-10 transition-[z-index,opacity] duration-150 ease-in',
     toggleSideMenu ? 'z-[999] opacity-100 translate-x-0' : '-z-[999] opacity-0 -translate-x-[9999px]'
@@ -176,11 +176,11 @@ export function Navlinks( { path }: NavlinksProps )
 
   useEffect( () =>
   {
-    if ( isOverWithThreshold )
+    if ( isOverWidthThreshold )
     {
       setToggleSideMenu( false );
     }
-  }, [ isOverWithThreshold ] );
+  }, [ isOverWidthThreshold ] );
 
 
   if ( windowWidth === 0 ) return null;
@@ -207,7 +207,7 @@ export function Navlinks( { path }: NavlinksProps )
           }
         </ul>
         <ul className='hidden lg:flex w-full space-x-2.5'>
-          <AuthLinks status={ status } isOnSideMenu={ isOverWithThreshold } />
+          <AuthLinks status={ status } isOnSideMenu={ isOverWidthThreshold } />
         </ul>
         <div className='block lg:hidden'>
           <Button
@@ -227,7 +227,7 @@ export function Navlinks( { path }: NavlinksProps )
             <ul className='mb-6 flex justify-between items-center'>
               <AuthLinks
                 status={ status }
-                isOnSideMenu={ !isOverWithThreshold }
+                isOnSideMenu={ !isOverWidthThreshold }
                 closeMenu={ closeSideMenu }
               />
             </ul>
