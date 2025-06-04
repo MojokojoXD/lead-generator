@@ -5,7 +5,8 @@ import
   type ReactNode,
   createContext,
   useCallback,
-  useState
+  useState,
+  useEffect
 } from 'react';
 import { Button } from '@/app/components/shadcnUI/button';
 import Link from 'next/link';
@@ -14,6 +15,7 @@ import { useDashboardPortal } from '../../hooks/useDashboardPortal';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, MenuIcon } from 'lucide-react';
 import Image from 'next/image';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 
 interface MainProps
@@ -56,14 +58,28 @@ function Main( { children }: MainProps )
     portalNames,
     currentPortal
   } = useDashboardPortal( children );
-  const { addTask } = useTaskQueue( { shouldProcess: true } );
-  const [ toggleMenu, setToggleMenu ] = useState( false );
 
+  const { addTask } = useTaskQueue( { shouldProcess: true } );
+  const { width } = useWindowSize();
+  const isOverSmallWindowWidth = Boolean(width && width >= 640);
+  const [ toggleMenu, setToggleMenu ] = useState( isOverSmallWindowWidth );
+
+  
   const handleToggleMenu = useCallback( ( open: boolean ) =>
   {
+    if ( isOverSmallWindowWidth ) return;
     setToggleMenu( open )
-  }, [])
+  }, [ isOverSmallWindowWidth ] )
+  
 
+  useEffect( () =>
+  {
+    if ( width )
+    {
+      setToggleMenu(true)
+    }
+  },[width])
+  
 
   return (
     <QueueContext.Provider value={ {
@@ -77,7 +93,7 @@ function Main( { children }: MainProps )
           handleMenuClose={handleToggleMenu}
         />
         <div className='relative h-full w-dwv border bg-white rounded-2xl overflow-hidden'>
-          <div className={cn('absolute top-0 h-40 flex justify-center items-center transition-[width] ease-in-out duration-300 ', toggleMenu ? 'w-full' : 'w-[20vw]')}>
+          <div className={cn('absolute top-0 h-40 flex justify-center items-center transition-[width] ease-in-out duration-300 sm:hidden', toggleMenu ? 'w-full' : 'w-[20vw]')}>
             <Button
               variant={ 'ghost' }
               size={ 'lg' }
@@ -104,7 +120,7 @@ function Menu( {
   return (
 
     <nav className='h-full w-[80vw] sm:w-full sm:max-w-[20rem] py-16 bg-inherit float-left flex justify-center'>
-      <div className='w-fit flex flex-col space-y-16'>
+      <div className='h-full w-fit flex flex-col space-y-16'>
         <div className='h-40'>
           <Image src={'/prosfinder-white.svg'} height={200} width={200} alt='site logo' className='h-[30px] w-auto'/>
         </div>
@@ -113,7 +129,7 @@ function Menu( {
           <p className='text-lg font-semibold mb-1'>Kwadwo</p>
           <p className=' text-stone-500 font-medium text-sm'>kwadwoneer@gmail.com</p>
         </div> */}
-        <div>
+        <div className='h-full'>
           <div className='mb-10'>
             <ul>
 
@@ -166,7 +182,7 @@ function PortalView( { title, children }: PortalViewProps )
 {
   return (
     <section className='h-full w-full overflow-hidden text-prose'>
-      <div className='h-40 flex items-center border-b px-[15vw]'>
+      <div className='h-40 flex items-center border-b px-[20vw]'>
         <h1 className='text-2xl font-medium'>{ title }</h1>
       </div>
       <div className='relative h-full px-[10vw] pt-16'>
