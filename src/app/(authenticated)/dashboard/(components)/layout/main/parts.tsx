@@ -69,7 +69,7 @@ function Main( { children }: MainProps )
     <QueueContext.Provider value={ {
       add: addTask
     } }>
-      <main className={cn('fixed h-full inset-y-0 right-0 bg-secondary px-2.5 py-5 transition-[left] ease-in-out duration-300', toggleMenu ? 'left-0' : '-left-[80vw] sm:-left-[20rem]')}>
+      <main className={ cn( 'fixed h-full inset-y-0  bg-secondary px-2.5 py-5 transition-[left] ease-in-out duration-300', toggleMenu ? 'left-0 -right-[20rem]' : '-left-[80vw] sm:-left-[20rem] right-0')}>
         <Menu
           portalNames={ portalNames }
           currentPortal={ currentPortal }
