@@ -11,7 +11,8 @@ import
   LocateIcon,
   Building2,
   MapPin,
-  BriefcaseBusiness
+  BriefcaseBusiness,
+  Globe
 } from 'lucide-react';
 
 
@@ -27,9 +28,14 @@ const getProfile = async ( id: string ) =>
   try
   {
 
-    const collection = dbConnection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.ACCOUNTS );
+    const collection = dbConnection
+      .db( DBs.CLIENT_DATA )
+      .collection( COLLECTIONS.ACCOUNTS );
 
-    const result = await collection.findOne<NewVendorPayload>( { _id: new ObjectId( id ) }, { projection: { _id: 0, pwd: 0, role: 0 } } );
+    const result = await collection.
+      findOne<NewVendorPayload>(
+        { _id: new ObjectId( id ) },
+        { projection: { _id: 0, pwd: 0, role: 0 } } );
 
     if ( !result ) throw new Error( 'Profile not found' );
 
@@ -60,11 +66,10 @@ export async function ProfilePortal()
 
   return (
     <Dashboard.PortalView title='Profile'>
-      <ul className='max-w-sm'>
-        <table className='w-full [&_td:first-of-type]:flex [&_td:first-of-type]:w-[7rem] [&_td:first-of-type]:py-2.5 [&_td:first-of-type]:text-zinc-500 [&_td:first-of-type]:items-center [&_td:first-of-type]:font-medium [&_td:last-of-type]:text-nowrap [&_td:last-of-type]:truncate [&_td:last-of-type]:text-sm'>
+        <table className='w-full max-w-sm text-sm [&_td:first-of-type]:flex [&_td:first-of-type]:w-[7rem] [&_td:first-of-type]:py-2.5 [&_td:first-of-type]:text-zinc-500 [&_td:first-of-type]:items-center [&_td:first-of-type]:font-normal [&_td:last-of-type]:text-nowrap [&_td:last-of-type]:truncate [&_td:last-of-type]:font-medium'>
           <thead>
             <tr>
-              <th className='text-left py-2.5 font-medium'>About</th>
+              <th className='text-left py-2.5 font-normal'>About</th>
             </tr>
           </thead>
           <tbody>
@@ -89,7 +94,16 @@ export async function ProfilePortal()
               </td>
             </tr>
             <tr>
-              <th className='text-left py-2.5 w-fit font-[500]'>Business</th>
+              <td>
+                <Globe className={ iconStyles } />
+                <span>Website</span>
+              </td>
+              <td>
+                http://{ profile.business.url }
+              </td>
+            </tr>
+            <tr>
+              <th className='text-left py-2.5 w-fit font-normal'>Business</th>
             </tr>
             <tr>
               <td>
@@ -137,7 +151,6 @@ export async function ProfilePortal()
             </tr>
           </tbody>
         </table>
-      </ul>
     </Dashboard.PortalView>
   );
 }

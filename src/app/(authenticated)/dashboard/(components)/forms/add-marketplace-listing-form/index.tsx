@@ -8,25 +8,27 @@ import { ChangeEvent, useContext, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { QueueContext } from '../../layout/main/parts';
+import { DatePicker } from '@/app/components/shadcnUI/date-picker';
 export interface ListingPayload
 {
   _metadata: {
     isApproved?: boolean;
     approvalOn?: Date;
   };
-  businessName: string;
   title: string;
   discount: string;
   url_website: string;
-  period: {
-    from: string;
-    to: string;
-  };
+  
+  expiration: string;
   desc: string;
   promo_img: {
     upload_time: number | null | undefined;
     filename: string;
   };
+
+  businessName?: string;
+
+  category?: string;
 }
 
 
@@ -36,22 +38,19 @@ const __5MB = 5242880;
 export function AddMarketplaceListingForm()
 {
   const router = useRouter();
-  const queueContext = useContext( QueueContext );
+  const taskQueueContext = useContext( QueueContext );
   const [ isFetching, setIsFetching ] = useState( false );
   const [ promoImgFile, setPromoImgFile ] = useState<File | null>( null );
-  const { register, handleSubmit, setValue, setError, getValues } = useForm<ListingPayload>( {
+  const { register, handleSubmit, setValue, setError, getValues, watch } = useForm<ListingPayload>( {
     defaultValues: {
       _metadata: {
         isApproved: false
       },
-      businessName: '',
+
       title: '',
       discount: '',
       url_website: '',
-      period: {
-        from: '',
-        to: ''
-      },
+      expiration: '',
       desc: '',
       promo_img: {
         upload_time: null,
@@ -59,8 +58,11 @@ export function AddMarketplaceListingForm()
       }
     }
   } );
-  const fileName = getValues( 'promo_img.filename' );
 
+  const fileName = getValues( 'promo_img.filename' );
+  const currentExpirationValue = watch( 'expiration' );
+  const expirationDateValue = !Number.isNaN( Date.parse( currentExpirationValue ) ) ?
+    new Date( currentExpirationValue ) : undefined;
 
   register( 'promo_img.filename', {
     required: 'Please upload promo image'
@@ -137,56 +139,26 @@ export function AddMarketplaceListingForm()
       } ).finally( () => setIsFetching( false ) );
     } );
 
-    queueContext?.add( () => promoPromise) 
+    taskQueueContext?.add( () => promoPromise) 
 
-    // try
-    // {
-    //   const res = await fetch( '/dashboard/mkt-listing', {
-    //     method: 'POST',
-    //     body: form,
-    //   } );
-
-    //   if ( res.ok )
-    //   {
-    //     alert( 'Listing added! Approval pending' );
-    //     return;
-    //   };
-
-    //   if ( res.status === 401 )
-    //   {
-    //     router.replace( '/' );
-    //     return;
-    //   };
-
-    //   alert( 'Unable to add listing. Please contact system admin!' );
-
-    //   throw res;
-
-    // } catch ( error )
-    // {
-    //   console.log( error );
-    // } finally
-    // {
-    //   setIsFetching( false );
-    // }
   };
 
 
   return (
     <form className='h-full max-w-md space-y-6 pb-32' onSubmit={ handleSubmit( submitHandler ) }>
       <Input
-        label='Title'
-        id='__listing-id'
+        placeholder='Title'
+        id='__listing-title'
         { ...register( 'title' ) }
       />
       <div className='grid grid-cols-3 gap-2.5'>
         <Input
-          label='Discount'
+          placeholder='Discount %'
           id='__listing-discount'
           { ...register( 'discount' ) }
         />
         <Input
-          label='URL/Website'
+          placeholder='URL/Website'
           id='__listing-url'
           { ...register( 'url_website' ) }
           wrapperClx='col-span-2'
@@ -194,17 +166,12 @@ export function AddMarketplaceListingForm()
 
       </div>
       <div className='grid grid-cols-2 gap-2.5'>
-        <Input
-          label='From'
-          id='__listing-from'
-          type={ 'date' }
-          { ...register( 'period.from' ) }
+        <DatePicker
+          placeholder='Expiration'
+          currentDate={ expirationDateValue }
+          onDateChange={
+            date => setValue( 'expiration', date ? date.toDateString() : '' ) }
         />
-        <Input
-          label='To'
-          id='__listing-to'
-          { ...register( 'period.to' ) }
-          type={ 'date' } />
       </div>
       <Input
         id='__list-img-upload'
