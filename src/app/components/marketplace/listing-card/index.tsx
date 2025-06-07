@@ -7,7 +7,6 @@ type ListingCardProps = ListingPayload;
 
 export function ListingCard( {
   businessName,
-  period,
   title,
   desc,
   url_website,
@@ -29,7 +28,7 @@ export function ListingCard( {
           <div className='text-sm space-y-2.5'>
             <div className='leading-7 font-bold'>
               <h3 className='capitalize'>{ title }</h3>
-              <p >Expires: <span>{ period.to }</span></p>
+              {/* <p >Expires: <span>{ period.to }</span></p> */}
             </div>
             <p className='max-w-prose line-clamp-3 text-zinc-500'>{ desc }</p>
           </div>
