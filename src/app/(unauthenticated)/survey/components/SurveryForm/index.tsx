@@ -228,6 +228,13 @@ const BudgetStep = () =>
 
 const ContactStep = () =>
 {
+
+  const recaptchaKey = process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
+    : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+  if ( !recaptchaKey ) throw new Error( 'google recaptcha key is missing' );
+
   const { register, formState: { errors }, control } = useFormContext<SurveyJobPayload>();
 
   return (
@@ -315,7 +322,7 @@ const ContactStep = () =>
           {
             //@ts-expect-error grecaptcha comes from an external script
             window.grecaptcha.ready( () => window.grecaptcha.render( 'recaptcha-container', {
-              sitekey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV,
+              sitekey: recaptchaKey,
               callback: 'onCaptcha'
             } ) );
            
@@ -347,8 +354,8 @@ export function SurveyForm( { category }: { category: Categories; } )
 {
 
   const recaptchaKey = process.env.NODE_ENV === 'development'
-    ? '6LcwG1krAAAAAOzp66kzmzc6mUWS8njaozFIGrXB'
-    : '6LeBDFkrAAAAAPApE0svbZZbgNPFs2o3QfRaFMPU';
+    ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
+    : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   if ( !recaptchaKey ) throw new Error( 'google recaptcha key is missing' );
 
