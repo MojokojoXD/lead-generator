@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       },
       to: 'kwadwoneer@gmail.com',
       subject: 'lead',
-      text: JSON.stringify(body.raw),
+      text: JSON.stringify(body),
     });
 
     console.log(result);

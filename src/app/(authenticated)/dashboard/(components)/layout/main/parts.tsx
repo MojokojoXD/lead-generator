@@ -63,7 +63,7 @@ function Main( { children }: MainProps )
   const { addTask } = useTaskQueue( { shouldProcess: true } );
   const { width } = useWindowSize();
   const isOverSmallWindowWidth = Boolean(width && width >= 640);
-  const [ toggleMenu, setToggleMenu ] = useState( isOverSmallWindowWidth );
+  const [ toggleMenu, setToggleMenu ] = useState( false );
 
   
   const handleToggleMenu = useCallback( ( open: boolean ) =>
@@ -75,18 +75,21 @@ function Main( { children }: MainProps )
 
   useEffect( () =>
   {
-    if ( width )
+    if ( !width ) return 
+    
+    if ( width >= 640 )
     {
       setToggleMenu(true)
-    }
+    } else setToggleMenu( false )
   },[width])
   
+  if( !width ) return <></>
 
   return (
     <QueueContext.Provider value={ {
       add: addTask
     } }>
-      <main className={ cn( 'fixed h-full inset-y-0 bg-secondary pr-1.5 sm:pr-5 py-5 transition-[left] ease-in-out duration-300',
+      <main className={ cn( 'fixed h-full inset-y-0 bg-secondary pr-1.5 sm:pr-5 py-5 sm:transition-[left] ease-in-out duration-300',
         toggleMenu && isOverSmallWindowWidth ? 'left-0 right-0' :
          toggleMenu && !isOverSmallWindowWidth ? 'left-0 -right-[20rem]' : '-left-[80vw] sm:-left-[20rem] right-0 pl-1.5 sm:pl-5' ) }>
         <Menu
