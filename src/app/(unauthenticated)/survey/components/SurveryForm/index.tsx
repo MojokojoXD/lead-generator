@@ -347,8 +347,8 @@ export function SurveyForm( { category }: { category: Categories; } )
 {
 
   const recaptchaKey = process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
-    : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+    ? '6LcwG1krAAAAAOzp66kzmzc6mUWS8njaozFIGrXB'
+    : '6LeBDFkrAAAAAPApE0svbZZbgNPFs2o3QfRaFMPU';
 
   if ( !recaptchaKey ) throw new Error( 'google recaptcha key is missing' );
 
