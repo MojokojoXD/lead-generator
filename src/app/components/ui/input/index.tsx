@@ -32,7 +32,7 @@ export function Input( { className, label, wrapperClx, fileName, ...props }: Inp
 
   if ( label && !props.id ) throw new Error( 'element id must be provided if a label is provided' );
 
-  const defaultStyles = 'h-14 w-full py-3 px-2 rounded-md bg-transparent border border-input text-sm peer order-2 focus:ring-1 ring-primary focus:border-transparent placeholder:text-muted-foreground shadow-sm focus:outline-none';
+  const defaultStyles = 'h-14 w-full py-2 px-3 rounded-md bg-transparent border border-input text-sm peer order-2 focus:ring-1 ring-primary focus:border-transparent placeholder:text-muted-foreground shadow-sm focus:outline-none';
 
 
   if ( props.type === 'file' ) return (

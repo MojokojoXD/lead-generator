@@ -15,8 +15,8 @@ import
 
 interface DatePickerProps
 {
-  currentDate: Date | undefined;
-  onDateChange: ( date: Date | undefined ) => void;
+  currentDate: string;
+  onDateChange: ( date: string ) => void;
 
   placeholder?: string;
 }
@@ -25,6 +25,9 @@ export function DatePicker({ currentDate, onDateChange, placeholder }: DatePicke
 {
   const [ open, setOpen ] = React.useState( false );
 
+  const currentDateObj = !Number.isNaN( Date.parse( currentDate ) ) ?
+    new Date( currentDate ) : undefined;
+
   return (
     <div className="flex flex-col gap-3">
       <Popover open={ open } onOpenChange={ setOpen }>
@@ -32,20 +35,20 @@ export function DatePicker({ currentDate, onDateChange, placeholder }: DatePicke
           <Button
             variant="outline"
             id="date"
-            className="h-14 py-3 px-2 w-48 justify-between font-normal"
+            className="h-14 py-2 px-3 w-full justify-between font-normal"
           >
-            { currentDate ? currentDate.toLocaleDateString() : placeholder ?? 'Select date' }
+            { currentDate || (placeholder ?? 'Select date') }
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
             mode="single"
-            selected={ currentDate }
+            selected={ currentDateObj }
             captionLayout="dropdown"
             onSelect={ ( date ) =>
             {
-              onDateChange( date )
+              onDateChange( date?.toLocaleDateString() ?? '' )
               setOpen( false );
             } }
           />

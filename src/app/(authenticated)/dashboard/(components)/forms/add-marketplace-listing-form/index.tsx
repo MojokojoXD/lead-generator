@@ -61,8 +61,6 @@ export function AddMarketplaceListingForm()
 
   const fileName = getValues( 'promo_img.filename' );
   const currentExpirationValue = watch( 'expiration' );
-  const expirationDateValue = !Number.isNaN( Date.parse( currentExpirationValue ) ) ?
-    new Date( currentExpirationValue ) : undefined;
 
   register( 'promo_img.filename', {
     required: 'Please upload promo image'
@@ -168,9 +166,9 @@ export function AddMarketplaceListingForm()
       <div className='grid grid-cols-2 gap-2.5'>
         <DatePicker
           placeholder='Expiration'
-          currentDate={ expirationDateValue }
+          currentDate={ currentExpirationValue }
           onDateChange={
-            date => setValue( 'expiration', date ? date.toDateString() : '' ) }
+            date => setValue( 'expiration', date ) }
         />
       </div>
       <Input

@@ -1,5 +1,6 @@
 'use client';
-import { JSX, useState } from 'react';
+import { JSX, useState, useRef } from 'react';
+import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
 import { Textarea } from '@/app/components/ui/textarea';
 import { Input, InputError } from '@/app/components/ui/input';
@@ -8,23 +9,24 @@ import { useForm, FormProvider, useFormContext, type SubmitHandler, Controller }
 import validator from 'validator';
 import { cn } from '@/lib/utils';
 import
-  {
-    Select,
-    SelectContent,
-    SelectTrigger,
-    SelectValue,
-    SelectItem
+{
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  SelectItem
 } from '@/app/components/shadcnUI/select';
 import
-  {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogAction,
+{
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
 } from '@/app/components/shadcnUI/alert-dialog';
+import { DatePicker } from '@/app/components/shadcnUI/date-picker';
 
 const BUDGET_RANGE = [ '< $1000', '$1k-$10k', '$10k-$50k', '> $50k' ];
 
@@ -37,9 +39,7 @@ enum STEPS
   THIRD = 3,
 
   FOURTH = 4,
-
-  FIFTH = 5,
-  LAST = 6,
+  LAST = 5,
 }
 
 enum STATUS
@@ -50,10 +50,10 @@ enum STATUS
   COMPLETED = 'COMPLETED'
 }
 
-type STATUS_MSGS = { 
+type STATUS_MSGS = {
   title: string;
   desc: string;
- }
+};
 
 const STATUS_CONFIG: Record<STATUS, STATUS_MSGS | undefined> = {
   SUBMITTED: {
@@ -65,12 +65,12 @@ const STATUS_CONFIG: Record<STATUS, STATUS_MSGS | undefined> = {
     desc: 'Your application has been submitted and is in review.'
   },
   IDLE: undefined
-}
+};
 
 export interface SurveyJobPayload
 {
   comments: string;
-  desc: Categories ;
+  desc: Categories;
   location: {
     zipcode: string;
   };
@@ -101,11 +101,11 @@ const JobDescStep = () =>
       <Controller
         name={ 'desc' }
         control={ control }
-        render={ ( { field, formState: { errors }} ) => (
+        render={ ( { field, formState: { errors } } ) => (
           <>
-            <Select onValueChange={ v => field.onChange(v)} value={ field.value }>
+            <Select onValueChange={ v => field.onChange( v ) } value={ field.value }>
               <SelectTrigger ref={ field.ref }>
-                <SelectValue placeholder='Description'/>
+                <SelectValue placeholder='Description' />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='security'> Security </SelectItem>
@@ -148,7 +148,7 @@ const LocationStep = () =>
 
 const TimelineStep = () =>
 {
-  const { register, formState: { errors } } = useFormContext<SurveyJobPayload>();
+  const { control } = useFormContext<SurveyJobPayload>();
 
   return (
     <div>
@@ -157,10 +157,23 @@ const TimelineStep = () =>
       </div>
       <div className='space-y-6'>
         <div>
-          <Textarea placeholder='Type here...' { ...register( 'timeline', {
-            required: 'Please enter timeline'
-          } ) } />
-          <InputError errors={ errors } name={ 'timeline' } />
+          <Controller
+            control={ control }
+            name={ 'timeline' }
+            rules={ {
+              required: 'Please select date'
+            } }
+            render={ ( { field, formState: { errors } } ) => (
+              <>
+                <DatePicker
+                  placeholder='Select Timeline*'
+                  currentDate={ field.value }
+                  onDateChange={ date => field.onChange( date ) }
+                />
+                <InputError errors={ errors } name={ 'timeline' } />
+              </>
+            ) }
+          />
         </div>
       </div>
     </div>
@@ -169,6 +182,7 @@ const TimelineStep = () =>
 
 const BudgetStep = () =>
 {
+
   const { register, formState: { errors }, watch } = useFormContext<SurveyJobPayload>();
 
   const currentBudget = watch( 'budget' );
@@ -198,7 +212,7 @@ const BudgetStep = () =>
                   className='appearance-none'
                   type={ 'radio' }
                   { ...attributes }
-                  value={b}
+                  value={ b }
                 />
                 { b }
               </label>
@@ -211,6 +225,7 @@ const BudgetStep = () =>
   );
 };
 
+
 const ContactStep = () =>
 {
   const { register, formState: { errors }, control } = useFormContext<SurveyJobPayload>();
@@ -221,6 +236,9 @@ const ContactStep = () =>
         <h2 className='font-medium text-zinc-800 flex items-center text-lg'>Contact Details</h2>
       </div>
       <div className='space-y-6'>
+        <div id='recaptcha-container' data-size='invisible'>
+        </div>
+
         <div className='grid grid-cols-2 gap-x-2.5 gap-y-6'>
           <div>
             <Input
@@ -243,7 +261,8 @@ const ContactStep = () =>
           <Input
             placeholder='Email'
             { ...register( 'contacts.email', {
-              validate: v => v.length === 0 || validator.isEmail( v ) || 'Email must be of the format name@example.com'
+              required: 'Please enter email address',
+              validate: v => validator.isEmail( v ) || 'Email must be of the format name@example.com'
             } ) } />
           <InputError errors={ errors } name={ 'contacts.email' } />
         </div>
@@ -251,14 +270,15 @@ const ContactStep = () =>
           <Input
             placeholder='Phone'
             { ...register( 'contacts.phone', {
-              validate: v => v.length === 0 || validator.isMobilePhone( v ) || 'Please enter valid phone number'
+              required: 'Please enter phone number',
+              validate: v => validator.isMobilePhone( v ) || 'Please enter valid phone number'
             } ) } />
           <InputError errors={ errors } name={ 'contacts.phone' } />
         </div>
         <div>
           <Controller
             name={ 'contacts.method' }
-            control={control}
+            control={ control }
             rules={ {
               required: 'Select contact method'
             } }
@@ -268,50 +288,75 @@ const ContactStep = () =>
                   onValueChange={ v => field.onChange( v ) }
                   value={ field.value }
                 >
-                  <SelectTrigger ref={field.ref} name={ field.name }>
-                    <SelectValue placeholder='Contact Method*'/>
+                  <SelectTrigger ref={ field.ref } name={ field.name }>
+                    <SelectValue placeholder='Contact Method*' />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value='email'>Email</SelectItem>
-                    <SelectItem value='phone'>Phone</SelectItem>
+                    <SelectItem value='phone'>Call</SelectItem>
+                    <SelectItem value='text'>Text</SelectItem>
                   </SelectContent>
                 </Select>
                 <InputError errors={ errors_contact } name={ field.name } />
               </>
-              
+
             ) }
           />
         </div>
-      </div>
-    </div>
-  );
-  };
-
-const CommentStep = () =>
-{
-  const { register } = useFormContext<SurveyJobPayload>();
-
-  return (
-    <div>
-      <div className='mb-5'>
-        <h2 className='font-medium text-zinc-800 flex items-center text-lg'>Comments</h2>
-      </div>
-      <div className='space-y-6'>
         <div>
-          <Textarea placeholder='Type here...' { ...register( 'comments' ) } />
+          <Textarea placeholder='Enter any additional information here' { ...register( 'comments' ) } />
         </div>
       </div>
+      <Script src='https://www.google.com/recaptcha/api.js'
+        onReady={ () =>
+        {
+          //@ts-expect-error grecaptcha comes from an external script
+          if ( window.grecaptcha )
+          {
+            //@ts-expect-error grecaptcha comes from an external script
+            window.grecaptcha.ready( () => window.grecaptcha.render( 'recaptcha-container', {
+              sitekey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV,
+              callback: 'onCaptcha'
+            } ) );
+           
+          }
+        }}
+      />
+      <Script
+        id='recaptcha-callback'
+      >
+        {
+          `
+            function onCaptcha( token ){
+                const submitBtn = document.getElementById('__survey-form-sub');
+                const recaptchaInput = document.getElementById('__recaptcha-token');
+
+                recaptchaInput.value = token;
+
+                submitBtn?.click();
+
+            }
+          `
+        }
+      </Script>
     </div>
   );
 };
-export function SurveyForm( { category }: { category: Categories } )
+
+export function SurveyForm( { category }: { category: Categories; } )
 {
+
+  const recaptchaKey = process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
+    : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+  if ( !recaptchaKey ) throw new Error( 'google recaptcha key is missing' );
 
   const [ step, setStep ] = useState<STEPS>( STEPS.FIRST );
   const [ submissionStatus, setSubmissionStatus ] = useState<STATUS>( STATUS.IDLE );
   const methods = useForm<SurveyJobPayload>( {
     defaultValues: {
-      budget: BUDGET_RANGE.at(0) ?? '',
+      budget: BUDGET_RANGE.at( 0 ) ?? '',
       location: {
         zipcode: ''
       },
@@ -331,11 +376,15 @@ export function SurveyForm( { category }: { category: Categories } )
   const { handleSubmit, trigger, reset } = methods;
   const [ isFetching, setIsFetching ] = useState( false );
 
+  //refs
+  const recaptchaTokenRef = useRef<HTMLInputElement | null>( null );
+
+  //handlers
   const handleNext = async () =>
   {
     const isStepValid = await trigger();
     if ( !isStepValid ) return;
-    if(step < STEPS.LAST) setStep( prevStep => prevStep + 1 );
+    if ( step < STEPS.LAST ) setStep( prevStep => prevStep + 1 );
   };
   const handlePrev = () => step > STEPS.FIRST && setStep( prevStep => prevStep - 1 );
 
@@ -343,7 +392,7 @@ export function SurveyForm( { category }: { category: Categories } )
   {
     reset();
     setStep( STEPS.FIRST );
-  }
+  };
 
   const submitHandler: SubmitHandler<SurveyJobPayload> = async ( data ) =>
   {
@@ -351,7 +400,16 @@ export function SurveyForm( { category }: { category: Categories } )
 
     try
     {
-      const result = await fetch( '/get-quote', {
+      if ( !recaptchaTokenRef.current?.value )
+      {
+        console.log( 'Recaptcha token not set' );
+        alert( 'Something went wrong! Please try again later' );
+        return;
+      };
+
+      const recaptchaToken = recaptchaTokenRef.current.value;
+
+      const result = await fetch( `/get-quote?recaptcha-token=${ recaptchaToken }`, {
         method: 'POST',
         body: JSON.stringify( data )
       } );
@@ -380,20 +438,22 @@ export function SurveyForm( { category }: { category: Categories } )
     2: <JobDescStep />,
     3: <TimelineStep />,
     4: <BudgetStep />,
-    5: <ContactStep/>,
-    6: <CommentStep />
+    5: <ContactStep />,
   };
 
 
   return (
     <FormProvider { ...methods }>
-      <form onSubmit={ handleSubmit( submitHandler ) }>
-        <AlertDialog open={ submissionStatus === STATUS.COMPLETED || submissionStatus === STATUS.SUBMITTED } onOpenChange={ ( open ) =>
-        {
-          if ( open ) return;
+      <form onSubmit={ handleSubmit( submitHandler ) } id='__survey-form'>
+        <AlertDialog
+          open={ submissionStatus === STATUS.COMPLETED || submissionStatus === STATUS.SUBMITTED }
+          onOpenChange={ ( open ) =>
+          {
+            if ( open ) return;
 
-          setSubmissionStatus( STATUS.IDLE );
-        } }>
+            setSubmissionStatus( STATUS.IDLE );
+          } }
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{ STATUS_CONFIG[ submissionStatus ]?.title ?? '' }</AlertDialogTitle>
@@ -405,6 +465,8 @@ export function SurveyForm( { category }: { category: Categories } )
           </AlertDialogContent>
         </AlertDialog>
         <div className='mb-5'>
+          { step === STEPS.LAST &&
+            <input hidden type='text' id='__recaptcha-token' ref={ recaptchaTokenRef } /> }
           { FormComponent[ step ] }
         </div>
         <div className={ `flex ${ step === STEPS.FIRST ? 'justify-end' : 'justify-between' }` }>
@@ -426,12 +488,18 @@ export function SurveyForm( { category }: { category: Categories } )
             Next
           </Button> }
           { step === STEPS.LAST && <Button
-            type='submit'
+            type='button'
+            id='__survey-submit-btn'
             size={ 'lg' }
             className='min-w-[8rem]'
+            //@ts-expect-error grecaptcha comes from a script
+            onClick={ () => window.grecaptcha && window.grecaptcha.execute() }
           >
-            { isFetching ? <Loader2 className='h-5 aspect-square animate-spin mx-auto' /> : 'Get Quote' }
+            { isFetching
+              ? <Loader2 className='h-5 aspect-square animate-spin mx-auto' />
+              : 'Get Quote' }
           </Button> }
+          <input id='__survey-form-sub' type='submit' hidden />
         </div>
       </form>
     </FormProvider>
