@@ -143,51 +143,54 @@ export function AddMarketplaceListingForm()
 
 
   return (
-    <form className='h-full max-w-md space-y-6 pb-32' onSubmit={ handleSubmit( submitHandler ) }>
-      <Input
-        placeholder='Title'
-        id='__listing-title'
-        { ...register( 'title' ) }
-      />
-      <div className='grid grid-cols-3 gap-2.5'>
-        <Input
-          placeholder='Discount %'
-          id='__listing-discount'
-          { ...register( 'discount' ) }
-        />
-        <Input
-          placeholder='URL/Website'
-          id='__listing-url'
-          { ...register( 'url_website' ) }
-          wrapperClx='col-span-2'
-        />
+    <form className='h-full w-full max-w-md pb-16' onSubmit={ handleSubmit( submitHandler ) }>
+      <div className='space-y-6'>
 
-      </div>
-      <div className='grid grid-cols-2 gap-2.5'>
-        <DatePicker
-          placeholder='Expiration'
-          currentDate={ currentExpirationValue }
-          onDateChange={
-            date => setValue( 'expiration', date ) }
+        <Input
+          placeholder='Title'
+          id='__listing-title'
+          { ...register( 'title' ) }
         />
+        <div className='grid grid-cols-3 gap-2.5'>
+          <Input
+            placeholder='Discount %'
+            id='__listing-discount'
+            { ...register( 'discount' ) }
+          />
+          <Input
+            placeholder='URL/Website'
+            id='__listing-url'
+            { ...register( 'url_website' ) }
+            wrapperClx='col-span-2'
+          />
+
+        </div>
+        <div className='grid grid-cols-2 gap-2.5'>
+          <DatePicker
+            placeholder='Expiration'
+            currentDate={ currentExpirationValue }
+            onDateChange={
+              date => setValue( 'expiration', date ) }
+          />
+        </div>
+        <Input
+          id='__list-img-upload'
+          fileName={ fileName }
+          type={ 'file' }
+          label='Upload Promo Image'
+          onChange={ handlePromoImg }
+        />
+        <Textarea
+          id='__listing-desc'
+          placeholder='Please enter additional details here'
+          label='Description'
+          { ...register( 'desc' ) }
+        />
+        <hr />
+        <Button variant={ 'secondary' } disabled={isFetching}>
+          { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
+        </Button>
       </div>
-      <Input
-        id='__list-img-upload'
-        fileName={ fileName }
-        type={ 'file' }
-        label='Upload Promo Image'
-        onChange={ handlePromoImg }
-      />
-      <Textarea
-        id='__listing-desc'
-        placeholder='Please enter additional details here'
-        label='Description'
-        { ...register( 'desc' ) }
-      />
-      <hr />
-      <Button variant={ 'secondary' } disabled={isFetching}>
-        { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
-      </Button>
     </form>
   );
 }
