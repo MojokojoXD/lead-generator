@@ -229,7 +229,7 @@ const BudgetStep = () =>
 const ContactStep = () =>
 {
 
-  const recaptchaKey = process.env.NODE_ENV === 'development'
+  const recaptchaKey = process.env.NODE_ENV !== 'development'
     ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
     : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -319,15 +319,22 @@ const ContactStep = () =>
         {
           //@ts-expect-error grecaptcha comes from an external script
           if ( window.grecaptcha )
-          {
+            {
             //@ts-expect-error grecaptcha comes from an external script
-            window.grecaptcha.ready( () => window.grecaptcha.render( 'recaptcha-container', {
+            window.grecaptcha.ready( () =>
+              {
+              //@ts-expect-error grecaptcha comes from an external script
+              const widgetId = window.grecaptcha.render( 'recaptcha-container', {
               sitekey: recaptchaKey,
               callback: 'onCaptcha'
-            } ) );
-           
+              } );
+              
+              localStorage.setItem( 'recaptcha_widget_id', widgetId );
+            } );
+
+
           }
-        }}
+        } }
       />
       <Script
         id='recaptcha-callback'
@@ -352,13 +359,6 @@ const ContactStep = () =>
 
 export function SurveyForm( { category }: { category: Categories; } )
 {
-
-  const recaptchaKey = process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
-    : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-
-  if ( !recaptchaKey ) throw new Error( 'google recaptcha key is missing' );
-
   const [ step, setStep ] = useState<STEPS>( STEPS.FIRST );
   const [ submissionStatus, setSubmissionStatus ] = useState<STATUS>( STATUS.IDLE );
   const methods = useForm<SurveyJobPayload>( {
@@ -420,6 +420,21 @@ export function SurveyForm( { category }: { category: Categories; } )
         method: 'POST',
         body: JSON.stringify( data )
       } );
+
+
+
+      const widgetId = localStorage.getItem( 'recaptcha_widget_id' );
+      if ( widgetId )
+      {
+        //@ts-expect-error grecaptcha comes from an external script
+        window.grecaptcha.ready( () =>
+        {
+          //@ts-expect-error grecaptcha comes from an external script
+          window.grecaptcha.reset( widgetId );
+          window.localStorage.removeItem('recaptcha_widget_id')
+        } );
+
+      }
 
       if ( result.ok )
       {

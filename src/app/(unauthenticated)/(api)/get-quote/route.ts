@@ -12,7 +12,7 @@ const packageTransport = (msgConfig: SendMailOptions) =>
   });
 
 const RECAPTCHA_SECRET =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV !== 'development'
     ? process.env.RECAPTCHA_SECRET_DEV
     : process.env.RECAPTCHA_SECRET;
 export async function POST(req: NextRequest) {

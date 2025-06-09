@@ -205,7 +205,7 @@ function PortalView( { title, children }: PortalViewProps )
       <div className='h-40 flex items-center border-b px-[20vw] sm:px-[10vw] lg:px-24'>
         <h1 className='text-2xl font-medium'>{ title }</h1>
       </div>
-      <div className='relative h-full w-full px-[10vw] lg:px-24 pt-16 max-h-[30rem] overflow-y-auto'>
+      <div className='relative h-full w-full px-[10vw] lg:px-24 pt-16'>
           { children }
       </div>
     </section>
