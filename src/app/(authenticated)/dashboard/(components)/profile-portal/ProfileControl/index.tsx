@@ -31,7 +31,7 @@ export function ProfileControl( { config }: ProfileControlProps )
     modifiedURL.searchParams.append( BUSINESS_NAME_PARAM, config.businessName );
     modifiedURL.searchParams.append( CATEGORY_PARAM, config.category );
 
-    history.replaceState( 'setting profile params', '', modifiedURL.toString() );
+    history.replaceState( {}, '', modifiedURL.toString() );
 
   }
 
