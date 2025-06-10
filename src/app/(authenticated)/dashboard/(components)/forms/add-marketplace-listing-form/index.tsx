@@ -1,14 +1,16 @@
 'use client';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { Input } from '@/app/components/ui/input';
+import { Input, InputError } from '@/app/components/ui/input';
 import { Textarea } from '@/app/components/ui/textarea';
 import { Button } from '@/app/components/ui/button';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useContext, useState, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { QueueContext } from '../../layout/main/parts';
 import { DatePicker } from '@/app/components/shadcnUI/date-picker';
+import { BUSINESS_NAME_PARAM, CATEGORY_PARAM } from '../../profile-portal/ProfileControl';
+import validator from 'validator';
 export interface ListingPayload
 {
   _metadata: {
@@ -18,7 +20,7 @@ export interface ListingPayload
   title: string;
   discount: string;
   url_website: string;
-  
+
   expiration: string;
   desc: string;
   promo_img: {
@@ -31,17 +33,26 @@ export interface ListingPayload
   category?: string;
 }
 
-
 const VALID_IMG_FORMATS = [ 'jpg', 'jpeg', 'png' ];
 const __5MB = 5242880;
 
 export function AddMarketplaceListingForm()
 {
+  const currentURL = useRef<URL>(
+    new URL( location.href ) );
   const router = useRouter();
   const taskQueueContext = useContext( QueueContext );
   const [ isFetching, setIsFetching ] = useState( false );
   const [ promoImgFile, setPromoImgFile ] = useState<File | null>( null );
-  const { register, handleSubmit, setValue, setError, getValues, watch } = useForm<ListingPayload>( {
+  const {
+    register,
+    handleSubmit,
+    resetField,
+    setValue,
+    setError,
+    getValues,
+    watch,
+    formState: { errors }} = useForm<ListingPayload>( {
     defaultValues: {
       _metadata: {
         isApproved: false
@@ -55,20 +66,28 @@ export function AddMarketplaceListingForm()
       promo_img: {
         upload_time: null,
         filename: ''
-      }
+      },
+      businessName: currentURL.current.searchParams.get( BUSINESS_NAME_PARAM ) ?? '',
+      category: currentURL.current.searchParams.get( CATEGORY_PARAM ) ?? ''
     }
   } );
-
-  const fileName = getValues( 'promo_img.filename' );
-  const currentExpirationValue = watch( 'expiration' );
 
   register( 'promo_img.filename', {
     required: 'Please upload promo image'
   } );
+  register( 'expiration', {
+    required: 'Please select expiration',
+  } )
+
+  const fileName = getValues( 'promo_img.filename' );
+  const currentExpirationValue = watch( 'expiration' );
+
 
 
   const handlePromoImg = ( event: ChangeEvent<HTMLInputElement> ) =>
   {
+    if ( errors.promo_img?.filename ) resetField( 'promo_img' )
+
     const fileInput = event.target;
 
     if ( fileInput.files && fileInput.files.length > 0 )
@@ -137,60 +156,81 @@ export function AddMarketplaceListingForm()
       } ).finally( () => setIsFetching( false ) );
     } );
 
-    taskQueueContext?.add( () => promoPromise) 
+    taskQueueContext?.add( () => promoPromise );
 
   };
 
 
   return (
-    <form className='h-full w-full max-w-md pb-16' onSubmit={ handleSubmit( submitHandler ) }>
-      <div className='space-y-6'>
-
-        <Input
-          placeholder='Title'
-          id='__listing-title'
-          { ...register( 'title' ) }
-        />
-        <div className='grid grid-cols-3 gap-2.5'>
+    <form className='w-full max-w-md pb-5 space-y-6 pr-4 pl-1 pt-1' onSubmit={ handleSubmit( submitHandler ) }>
+      <Input
+        placeholder='Title'
+        id='__listing-title'
+        { ...register( 'title', {
+          required: 'Please enter title'
+        } ) }
+      />
+      <InputError errors={ errors } name={ 'title' } />
+      <div className='h-full grid grid-cols-2 gap-y-6'>
+        <div>
           <Input
             placeholder='Discount %'
             id='__listing-discount'
-            { ...register( 'discount' ) }
+            { ...register( 'discount', {
+              required: 'Please enter discount amount',
+              max: {
+                value: 100,
+                message: 'Discount amount invalid'
+              },
+              min: {
+                value: 0,
+                message: 'Discount amount invalid'
+              }
+            } ) }
           />
+          <InputError errors={ errors } name={ 'discount' } />
+        </div>
+        <div className='col-span-2'>
           <Input
             placeholder='URL/Website'
             id='__listing-url'
-            { ...register( 'url_website' ) }
-            wrapperClx='col-span-2'
+            { ...register( 'url_website', {
+              required: 'Please enter website url',
+              validate: v => validator.isURL( v ) || 'Please enter valid url'
+            } ) }
           />
-
+          <InputError errors={ errors } name={ 'url_website' } />
         </div>
-        <div className='grid grid-cols-2 gap-2.5'>
+      </div>
+      <div className='h-full grid grid-cols-2 gap-2.5'>
+        <div>
           <DatePicker
             placeholder='Expiration'
             currentDate={ currentExpirationValue }
             onDateChange={
               date => setValue( 'expiration', date ) }
           />
+          <InputError errors={ errors } name={ 'expiration' } />
         </div>
-        <Input
-          id='__list-img-upload'
-          fileName={ fileName }
-          type={ 'file' }
-          label='Upload Promo Image'
-          onChange={ handlePromoImg }
-        />
-        <Textarea
-          id='__listing-desc'
-          placeholder='Please enter additional details here'
-          label='Description'
-          { ...register( 'desc' ) }
-        />
-        <hr />
-        <Button variant={ 'secondary' } disabled={isFetching}>
-          { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
-        </Button>
       </div>
+      <Input
+        id='__list-img-upload'
+        fileName={ fileName }
+        type={ 'file' }
+        label='Upload Promo Image'
+        onChange={ handlePromoImg }
+      />
+      <InputError errors={ errors } name={ 'promo_img.filename' } />
+      <Textarea
+        id='__listing-desc'
+        placeholder='Please enter additional details here'
+        label='Description'
+        { ...register( 'desc' ) }
+      />
+      <hr />
+      <Button variant={ 'secondary' } disabled={ isFetching }>
+        { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
+      </Button>
     </form>
   );
 }

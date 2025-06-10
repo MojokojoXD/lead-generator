@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import type { NewVendorPayload } from '@/app/components/forms/new-vendor-form';
 import type { WithId } from 'mongodb';
-import { hashPWD } from '@/app/(authenticated)/_lib/pwd';
+import { hashPwd } from '@/app/(authenticated)/_lib/pwd';
 import { timingSafeEqual } from 'crypto';
 
 type VendorFromDB = WithId<NewVendorPayload> & { role: 'vendor' | 'admin' };
@@ -67,7 +67,7 @@ export const config = {
 
           if (result) await connection.close();
 
-          const [pwd] = hashPWD(cred.pwd, result.pwd.salt);
+          const [pwd] = hashPwd(cred.pwd, result.pwd.salt);
 
           const inputPwdBuffer = Buffer.from(pwd, 'hex');
           const dbPwdBuffer = Buffer.from(result.pwd.content, 'hex');

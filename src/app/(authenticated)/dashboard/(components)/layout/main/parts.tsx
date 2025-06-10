@@ -89,7 +89,7 @@ function Main( { children }: MainProps )
     <QueueContext.Provider value={ {
       add: addTask
     } }>
-      <main className={ cn( 'fixed h-full inset-y-0 bg-secondary pr-1.5 sm:pr-5 py-5 sm:transition-[left] ease-in-out duration-300',
+      <main className={ cn( 'fixed h-screen inset-y-0 bg-secondary pr-1.5 sm:transition-[left] ease-in-out duration-300',
         toggleMenu && isOverSmallWindowWidth ? 'left-0 right-0' :
          toggleMenu && !isOverSmallWindowWidth ? 'left-0 -right-[20rem]' : '-left-[80vw] sm:-left-[20rem] right-0 pl-1.5 sm:pl-5' ) }>
         <Menu
@@ -98,8 +98,8 @@ function Main( { children }: MainProps )
           onPortalChange={ handlePortalChange }
           handleMenuClose={handleToggleMenu}
         />
-        <div className='relative h-full w-dwv border bg-white rounded-2xl overflow-hidden'>
-          <div className={cn('absolute top-0 left-0 h-40 w-[20vw] flex justify-center items-center sm:hidden')}>
+        <section className='relative h-full w-dwv border bg-white rounded-2xl overflow-hidden'>
+          <div className={cn('absolute top-0 left-0 h-40 w-[20vw] flex justify-center items-center sm:hidden z-10')}>
             <Button
               variant={ 'ghost' }
               size={ 'lg' }
@@ -110,7 +110,7 @@ function Main( { children }: MainProps )
             </Button>
           </div>
           { renderPortal() }
-        </div>
+        </section>
       </main>
     </QueueContext.Provider>
   );
@@ -124,7 +124,6 @@ function Menu( {
 
   const dashboardBtnClsx = cn('text-xl text-neutral-400 font-semibold px-0 hover:bg-transparent hover:text-text-neutral-400')
   return (
-
     <nav className='h-full w-[80vw] sm:w-full sm:max-w-[20rem] py-16 bg-inherit float-left flex justify-center'>
       <div className='relative h-full w-fit flex flex-col space-y-16'>
         <div className='h-40'>
@@ -201,14 +200,17 @@ function Portal( { children }: PortalProps )
 function PortalView( { title, children }: PortalViewProps )
 {
   return (
-    <section className='h-full w-full overflow-hidden text-prose'>
+    <div className='relative h-full w-full text-prose'>
       <div className='h-40 flex items-center border-b px-[20vw] sm:px-[10vw] lg:px-24'>
         <h1 className='text-2xl font-medium'>{ title }</h1>
       </div>
-      <div className='relative h-full w-full px-[10vw] lg:px-24 pt-16'>
+      <div className='absolute top-40 h-[calc(100vh-160px)] w-full px-[10vw] lg:px-24 overflow-hidden grid lg:grid-cols-2 gap-x-2.5 py-8'>
+        <div className='h-full w-full max-w-md overflow-y-auto'>
           { children }
+          </div>
+          <div className='hidden lg:block'></div>
       </div>
-    </section>
+    </div>
   );
 }
 

@@ -22,24 +22,9 @@ enum DBs
 enum COLLECTIONS
 {
   ZIPCODES = 'location-cluster',
-  ACCOUNTS = 'client-account',
+  ACCOUNTS = 'accounts',
   LISTINGS = 'marketplace-listings'
 }
 
-const dbs = {
-  metadata: {
-    dbName: 'metadata',
-    collections: {
-      zipcodes: 'location-cluster'
-    },
-  },
-  client: {
-    dbName: 'client-data',
-    collections: {
-      account: 'client-account',
-      listings: 'marketplace-listings'
-    }
-  }
-}
 
-export { client, dbs, DBs, COLLECTIONS };
+export { client, DBs, COLLECTIONS };

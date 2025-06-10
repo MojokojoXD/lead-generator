@@ -1,15 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { transporter } from './nodemailer';
-import type { SentMessageInfo, SendMailOptions } from 'nodemailer';
+import { mailTransport } from '../../../(authenticated)/_lib/smtp/nodemailer';
 
-const packageTransport = (msgConfig: SendMailOptions) =>
-  new Promise<SentMessageInfo>((resolve, reject) => {
-    transporter.sendMail(msgConfig, (err, info) => {
-      if (err) reject(err);
-
-      resolve(info);
-    });
-  });
 
 const RECAPTCHA_SECRET =
   process.env.NODE_ENV !== 'development'
@@ -48,7 +39,7 @@ export async function POST(req: NextRequest) {
         { status: 400, statusText: 'recaptcha challenge failed' }
       );
 
-    const result = await packageTransport({
+    const result = await mailTransport({
       from: {
         address: 'kwadwoneer@yahoo.com',
         name: 'no-reply',

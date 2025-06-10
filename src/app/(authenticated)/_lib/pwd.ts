@@ -1,7 +1,7 @@
 import { scryptSync, randomBytes } from 'crypto';
 
 
-export function hashPWD( pwd: string, salt?: string )
+export function hashPwd( pwd: string, salt?: string )
 {
   const tempSalt = salt ?? randomBytes( 16 ).toString( 'hex' );
 

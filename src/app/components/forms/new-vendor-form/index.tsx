@@ -20,6 +20,10 @@ import
 
 export interface NewVendorPayload
 {
+  _metadata?: {
+    created_at: Date;
+    creation_token: string | null | undefined;
+  }
   role?: 'vendor' | 'admin';
   firstName: string;
   lastName: string;
@@ -31,9 +35,9 @@ export interface NewVendorPayload
 
   email: string;
 
-  category: string;
+  category?: string;
 
-  business: {
+  business?: {
     name: string;
     address: {
       street: string;

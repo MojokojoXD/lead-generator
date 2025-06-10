@@ -36,12 +36,12 @@ export function Input( { className, label, wrapperClx, fileName, ...props }: Inp
 
 
   if ( props.type === 'file' ) return (
-    <div className='flex justify-between items-center'>
-      <label htmlFor={ props.id } className='cursor-pointer inline-flex items-center transition-colors justify-center space-x-[.5rem] whitespace-nowrap disabled:opacity-50 bg-primary hover:bg-primary/90 text-white border border-transparent rounded-lg font-bold justify-start text-[14px] py-3 shadow-sm px-3.5'>
+    <div className='flex flex-col'>
+      <label htmlFor={ props.id } className='w-full cursor-pointer inline-flex items-center transition-colors justify-center space-x-[.5rem] whitespace-nowrap disabled:opacity-50 bg-primary hover:bg-primary/90 text-white border border-transparent rounded-lg font-bold justify-start text-[14px] py-3 shadow-sm px-3.5'>
           <Upload className='mr-1.5 size-5'/>Upload Image
       </label>
       <input type="file" name="file-upload" className='hidden' { ...props } />
-      <span className='underline'>{ fileName ?? '' }</span>
+      <span className='underline self-end'>{ fileName ?? '' }</span>
     </div>
   );
 
