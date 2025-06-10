@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 interface ProfileControlProps
 {
   config: {
-    businessName: string;
-    category: string;
+    businessName: string | undefined;
+    category: string | undefined;
   };
 }
 
@@ -26,6 +26,7 @@ export function ProfileControl( { config }: ProfileControlProps )
       modifiedURL.searchParams.has( CATEGORY_PARAM );
 
     if ( isAlreadyModified ) return;
+    if ( !config.businessName || !config.category ) return;
 
     modifiedURL.searchParams.append( BUSINESS_NAME_PARAM, config.businessName );
     modifiedURL.searchParams.append( CATEGORY_PARAM, config.category );

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { client, dbs } from '../../../_db/mongodb';
+import { client, DBs, COLLECTIONS } from '../../../_db/mongodb';
 
 type Coordinate = number | string | null;
 
@@ -27,9 +27,7 @@ export async function GET(req: NextRequest) {
 
     const dbConnection = await client.connect();
 
-    const { dbName, collections } = dbs.metadata;
-
-    const collection = dbConnection.db(dbName).collection(collections.zipcodes);
+    const collection = dbConnection.db(DBs.METADATA).collection(COLLECTIONS.ZIPCODES);
 
     const cursor = await collection
       .find({

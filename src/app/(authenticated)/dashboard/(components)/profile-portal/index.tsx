@@ -68,7 +68,7 @@ export async function ProfilePortal()
   return (
     <Dashboard.PortalView title='Profile'>
       <ProfileControl config={ {
-        businessName: profile.business.name,
+        businessName: profile.business?.name,
         category: profile.category
       } } />
       <table className='w-full max-w-sm text-sm [&_td:first-of-type]:flex [&_td:first-of-type]:w-[7rem] [&_td:first-of-type]:py-2.5 [&_td:first-of-type]:text-zinc-500 [&_td:first-of-type]:items-center [&_td:first-of-type]:font-normal [&_td:last-of-type]:text-nowrap [&_td:last-of-type]:truncate [&_td:last-of-type]:font-medium'>
@@ -86,7 +86,7 @@ export async function ProfilePortal()
               <span>Phone</span>
             </td>
             <td>
-              { profile.business.phone }
+              { profile.business?.phone ?? '' }
             </td>
           </tr>
           <tr>
@@ -104,7 +104,7 @@ export async function ProfilePortal()
               <span>Website</span>
             </td>
             <td>
-              http://{ profile.business.url }
+              http://{ profile.business?.url ?? '' }
             </td>
           </tr>
           <tr>
@@ -118,7 +118,7 @@ export async function ProfilePortal()
               <span>Name</span>
             </td>
             <td>
-              { profile.business.name }
+              { profile.business?.name ?? '' }
             </td>
           </tr>
           <tr>
@@ -129,7 +129,7 @@ export async function ProfilePortal()
               <span>Address</span>
             </td>
             <td>
-              { profile.business.address.street }
+              { profile.business?.address.street ?? '' }
             </td>
           </tr>
           <tr>
@@ -140,7 +140,7 @@ export async function ProfilePortal()
               <span>City</span>
             </td>
             <td>
-              { profile.business.address.city }
+              { profile.business?.address.city ?? '' }
             </td>
           </tr>
           <tr>
@@ -151,7 +151,7 @@ export async function ProfilePortal()
               <span>Zipcode</span>
             </td>
             <td>
-              { profile.business.address.zipcode }
+              { profile.business?.address.zipcode ?? '' }
             </td>
           </tr>
         </tbody>
