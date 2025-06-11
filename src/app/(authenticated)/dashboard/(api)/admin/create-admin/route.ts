@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
       _metadata: {
         creation_token: creationToken,
         created_at: new Date(),
+        isExpired: false,
       },
       role: 'admin',
       firstName: '',

@@ -23,6 +23,7 @@ export interface NewVendorPayload
   _metadata?: {
     created_at: Date;
     creation_token: string | null | undefined;
+    isExpired: boolean;
   }
   role?: 'vendor' | 'admin';
   firstName: string;

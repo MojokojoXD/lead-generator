@@ -61,9 +61,11 @@ export async function ProfilePortal()
 
   const profile = await getProfile( user.id );
 
-  if ( !profile ) return <div className='h-full w-full flex items-center justify-center'>Profile not found. Try refreshing</div>;
+  if ( !profile )
+    return <div className='h-full w-full flex items-center justify-center'>Profile not found. Try refreshing</div>;
 
-  const iconStyles = 'aspect-square bg-neutral [&_svg]:size-5 stroke-2 mr-1.5 rounded-lg p-1 flex items-center justify-center';
+  const iconStyles =
+    'aspect-square bg-neutral [&_svg]:size-5 stroke-2 mr-1.5 rounded-lg p-1 flex items-center justify-center';
 
   return (
     <Dashboard.PortalView title='Profile'>

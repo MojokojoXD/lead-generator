@@ -1,11 +1,11 @@
-'use client';
-
 import { NewVendorForm } from '@/app/components/forms/new-vendor-form';
-import { Button } from '../../components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
-export default function SignUpPage()
+
+export default async function SignUpPage( {
+}: { searchParams: Promise<{[key:string]: string | string[] | undefined}> })
 {
+
 
   return (
     <div className='fixed h-dvh top-0 w-full grid grid-cols-1 lg:grid-cols-2 bg-secondary lg:bg-white lg:overflow-hidden'>
@@ -16,7 +16,7 @@ export default function SignUpPage()
               <Link href={ '/' }>
                 <Image src={ 'prosfinder.svg' } alt='logo' height={ 200 } width={ 200 } className='h-[30px] w-auto mb-4' />
               </Link>
-              <p className='text-sm w-full mb-4'>Already have an account? <Button variant={ 'link' } size={ 'sm' } className='text-primary inline px-0 h-fit w-fit'><Link href={ '/login' }>Login</Link></Button></p>
+              <p className='text-sm w-full mb-4'>Already have an account? <Link href={ '/login' } className='text-primary inline px-0 h-fit w-fit text-sm font-medium'>Login</Link></p>
             </div>
 
             <NewVendorForm />

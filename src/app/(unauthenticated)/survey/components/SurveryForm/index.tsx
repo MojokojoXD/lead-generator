@@ -229,7 +229,7 @@ const BudgetStep = () =>
 const ContactStep = () =>
 {
 
-  const recaptchaKey = process.env.NODE_ENV !== 'development'
+  const recaptchaKey = process.env.NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_DEV
     : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 

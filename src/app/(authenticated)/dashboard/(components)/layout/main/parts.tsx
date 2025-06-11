@@ -201,10 +201,10 @@ function PortalView( { title, children }: PortalViewProps )
 {
   return (
     <div className='relative h-full w-full text-prose'>
-      <div className='h-40 flex items-center border-b px-[20vw] sm:px-[10vw] lg:px-24'>
+      <div className='h-40 flex items-center border-b px-[20vw] sm:px-[10vw] md:px-[5vw] lg:px-24'>
         <h1 className='text-2xl font-medium'>{ title }</h1>
       </div>
-      <div className='absolute top-40 h-[calc(100vh-160px)] w-full px-[10vw] lg:px-24 overflow-hidden grid lg:grid-cols-2 gap-x-2.5 py-8'>
+      <div className='absolute top-40 h-[calc(100vh-160px)] w-full px-[5vw] lg:px-24 overflow-hidden grid lg:grid-cols-2 gap-x-2.5 py-8'>
         <div className='h-full w-full max-w-md overflow-y-auto'>
           { children }
           </div>
