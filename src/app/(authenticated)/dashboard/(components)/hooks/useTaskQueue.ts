@@ -21,7 +21,7 @@ export function useTaskQueue(params: { shouldProcess: boolean }): {
       tasks: prev.tasks.slice(1),
     }));
 
-    Promise.resolve(task()).finally(() => {
+    Promise.resolve(task.action()).finally(() => {
       setQueue(prev => ({
         isProcessing: false,
         tasks: prev.tasks,
@@ -41,4 +41,7 @@ export function useTaskQueue(params: { shouldProcess: boolean }): {
   };
 }
 
-export type Task = () => Promise<void> | void;
+export type Task = {
+  id: string;
+  action: () => Promise<void> | void;
+};

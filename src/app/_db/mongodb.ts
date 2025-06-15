@@ -21,6 +21,7 @@ enum DBs
 
 enum COLLECTIONS
 {
+  TOKENS = 'tokens',
   ZIPCODES = 'location-cluster',
   ACCOUNTS = 'accounts',
   LISTINGS = 'marketplace-listings'

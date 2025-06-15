@@ -26,7 +26,7 @@ export default async function DashboardPage()
         {/* @ts-expect-error haven't figured out how to add properties to session type yet */ }
         { session.user && session.user.role === 'admin' ?
           (
-            <Dashboard.Portal name='list-promos'>
+            <Dashboard.Portal name='Dashboard'>
               <ListAllPromos />
             </Dashboard.Portal> )
           :

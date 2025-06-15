@@ -1,14 +1,23 @@
-import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
-import { type NextAuthOptions, getServerSession, type User } from 'next-auth';
+import type {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
+import {
+  type NextAuthOptions,
+  getServerSession,
+  type User,
+} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
-import type { NewVendorPayload } from '@/app/components/forms/new-vendor-form';
 import type { WithId } from 'mongodb';
-import { hashPwd } from '@/app/(authenticated)/_lib/pwd';
+import { hashFn } from '@/app/(authenticated)/_lib/hashFn';
 import { timingSafeEqual } from 'crypto';
+import { VendorAccount } from '@/app/types/account';
 
-type VendorFromDB = WithId<NewVendorPayload> & { role: 'vendor' | 'admin' };
-type ProUser = Pick<VendorFromDB, 'firstName' | 'lastName' | 'role'> & User;
+type ProUser = Pick<VendorAccount, 'firstName' | 'lastName'> &
+  Pick<Required<VendorAccount>['_metadata'], 'role'> &
+  User;
 interface AuthCredential {
   user: string;
   pwd: string;
@@ -59,20 +68,30 @@ export const config = {
         try {
           const connection = await client.connect();
 
-          const collection = connection.db(DBs.CLIENT_DATA).collection(COLLECTIONS.ACCOUNTS);
+          const collection = connection
+            .db(DBs.CLIENT_DATA)
+            .collection(COLLECTIONS.ACCOUNTS);
 
-          const result = await collection.findOne<WithId<VendorFromDB>>({ email: cred.user });
+          const result = await collection.findOne<
+            WithId<VendorAccount>
+          >({ email: cred.user });
 
           if (!result) return null;
 
           if (result) await connection.close();
 
-          const [pwd] = hashPwd(cred.pwd, result.pwd.salt);
+          const [pwd] = hashFn(cred.pwd, result.pwd.salt);
 
           const inputPwdBuffer = Buffer.from(pwd, 'hex');
-          const dbPwdBuffer = Buffer.from(result.pwd.content, 'hex');
+          const dbPwdBuffer = Buffer.from(
+            result.pwd.content!,
+            'hex'
+          );
 
-          const isEqual = timingSafeEqual(inputPwdBuffer, dbPwdBuffer);
+          const isEqual = timingSafeEqual(
+            inputPwdBuffer,
+            dbPwdBuffer
+          );
 
           if (!isEqual) return null;
 
@@ -81,7 +100,7 @@ export const config = {
             email: result.email,
             firstName: result.firstName,
             lastName: result.lastName,
-            role: result.role,
+            role: result._metadata?.role,
           };
         } catch (error) {
           console.log(error);
@@ -96,7 +115,10 @@ export const config = {
 // Use it in server contexts
 export function auth(
   ...args:
-    | [GetServerSidePropsContext['req'], GetServerSidePropsContext['res']]
+    | [
+        GetServerSidePropsContext['req'],
+        GetServerSidePropsContext['res']
+      ]
     | [NextApiRequest, NextApiResponse]
     | []
 ) {

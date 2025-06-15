@@ -2,7 +2,6 @@ import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/app/api/auth';
 import type { DefaultUser } from 'next-auth';
-import { NewVendorPayload } from '../../../../components/forms/new-vendor-form';
 import { Dashboard } from '../layout/main';
 import { ProfileControl } from './ProfileControl';
 import
@@ -15,6 +14,7 @@ import
   BriefcaseBusiness,
   Globe
 } from 'lucide-react';
+import { VendorAccount } from '@/app/types/account';
 
 
 interface UserWithId extends DefaultUser
@@ -34,11 +34,11 @@ const getProfile = async ( id: string ) =>
       .collection( COLLECTIONS.ACCOUNTS );
 
     const result = await collection.
-      findOne<NewVendorPayload>(
+      findOne<VendorAccount>(
         { _id: new ObjectId( id ) },
-        { projection: { _id: 0, pwd: 0, role: 0 } } );
+        { projection: { _id: 0, pwd: 0 } } );
 
-    if ( !result ) throw new Error( 'Profile not found' );
+    // if ( !result ) throw new Error( 'Profile not found' );
 
     if ( result ) await dbConnection.close();
 

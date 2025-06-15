@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
-import { NewVendorPayload } from '@/app/components/forms/new-vendor-form';
 import { ClientCard } from '@/app/components/pros/client-card';
 import { WithId } from 'mongodb';
+import { VendorAccount } from '@/app/types/account';
 
 
 const getAllClients = async () =>
@@ -11,9 +11,9 @@ const getAllClients = async () =>
   {
     const connection = await client.connect();
 
-    const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.ACCOUNTS );
+    const collection = connection.db( DBs.CLIENT_DATA ).collection<VendorAccount>( COLLECTIONS.ACCOUNTS );
 
-    const cursor = await collection.find<WithId<NewVendorPayload>>( { role: 'vendor' } );
+    const cursor = await collection.find<WithId<VendorAccount>>( { '_metadata.role': 'vendor' } );
 
 
     const data = await cursor.toArray();

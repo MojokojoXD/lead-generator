@@ -1,13 +1,17 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { mailTransport } from '@/app/(authenticated)/_lib/smtp/nodemailer';
 import validator from 'validator';
-import { NewVendorPayload } from '@/app/components/forms/new-vendor-form';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
+import { add } from 'date-fns';
+import { hashFn } from '@/app/(authenticated)/_lib/hashFn';
+import { TokenSchema } from '@/app/types/account';
 
 const baseSiteURL =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/sign-up'
     : 'https://www.prosfinder.com/sign-up';
+
+const CREATION_TOKEN_HASH_SALT = process.env.CREATION_TOKEN_SALT;
 export async function GET(req: NextRequest) {
   const email = req.nextUrl.searchParams.get('email');
 
@@ -16,34 +20,33 @@ export async function GET(req: NextRequest) {
 
   try {
     const creationToken = crypto.randomUUID();
-    const potentialAccount: NewVendorPayload = {
-      _metadata: {
-        creation_token: creationToken,
-        created_at: new Date(),
-        isExpired: false,
-      },
-      role: 'admin',
-      firstName: '',
-      lastName: '',
-      pwd: {
-        content: '',
-        salt: '',
-      },
+
+    const [hashedCreationToken] = hashFn(
+      creationToken,
+      CREATION_TOKEN_HASH_SALT
+    );
+
+    const tokenInfo: TokenSchema = {
+      id: 'ADMIN_CREATION',
+      token: hashedCreationToken,
+      expiry: add( new Date(), { minutes: 10 } ),
       email,
     };
 
-    const dbConnection = await client;
+    const dbConnection = await client.connect();
 
     const collection = dbConnection
       .db(DBs.CLIENT_DATA)
-      .collection(COLLECTIONS.ACCOUNTS);
+      .collection(COLLECTIONS.TOKENS);
 
     const dbResult = await collection.insertOne(
-      potentialAccount
+      tokenInfo
     );
 
     if (!dbResult.acknowledged)
       throw new Error('failed to insert partial admin');
+
+    await dbConnection.close();
 
     const senderEmail = process.env.NODEMAILER_EMAIL_SENDER;
     const accountCreationURL = new URL(baseSiteURL);

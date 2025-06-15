@@ -12,11 +12,13 @@ export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   if (path.startsWith('/survey'))
-    return ALLOWED_SURVEY_CATEGORIES.includes(path)
+    return ALLOWED_SURVEY_CATEGORIES.includes(
+      path.split('/').pop() ?? ''
+    )
       ? NextResponse.next()
       : NextResponse.error();
 
-  if (path.startsWith('/dashboard/admin/create-admin')) {
+  if (path.startsWith('/dashboard/admin/create-admiÏn')) {
     const hasAuthHeader = req.headers.has('Admin-Authorization');
 
     if (!hasAuthHeader) return NextResponse.error();

@@ -15,44 +15,8 @@ import
     SelectTrigger,
     SelectValue,
   } from "@/app/components/shadcnUI/select"
+import { VendorAccount } from '@/app/types/account';
 
-
-
-export interface NewVendorPayload
-{
-  _metadata?: {
-    created_at: Date;
-    creation_token: string | null | undefined;
-    isExpired: boolean;
-  }
-  role?: 'vendor' | 'admin';
-  firstName: string;
-  lastName: string;
-
-  pwd: {
-    content: string;
-    salt: string;
-  };
-
-  email: string;
-
-  category?: string;
-
-  business?: {
-    name: string;
-    address: {
-      street: string;
-      city: string;
-      zipcode: string;
-    },
-    phone: string;
-    tin: string;
-    url?: string;
-  };
-
-  bio?: string;
-
-}
 
 
 export function NewVendorForm()
@@ -60,7 +24,7 @@ export function NewVendorForm()
   const [ isFetching, setIsFetching ] = useState( false );
   const [ pwdConfirmation, setPwdConfirmation ] = useState( '' );
   const [ revealPwd, setRevealPwd ] = useState( false );
-  const { register, handleSubmit, formState: { errors },setValue } = useForm<NewVendorPayload>( {
+  const { register, handleSubmit, formState: { errors },setValue } = useForm<VendorAccount>( {
     defaultValues: {
       business: {
         name: '',
@@ -88,7 +52,7 @@ export function NewVendorForm()
     required: 'Please select category'
   })
 
-  const submitHandler: SubmitHandler<NewVendorPayload> = async ( data ) =>
+  const submitHandler: SubmitHandler<VendorAccount> = async ( data ) =>
   {
     setIsFetching( true );
 

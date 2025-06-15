@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ListingCard } from '@/app/components/marketplace/listing-card';
-import type { ListingPayload } from '@/app/(authenticated)/dashboard/(components)/forms/add-marketplace-listing-form';
 import type { WithId } from 'mongodb';
 import { generatePromoImgURL } from '@/app/(authenticated)/_lib/storage/s3';
 
@@ -15,7 +14,7 @@ const getAllListings = async () =>
 
     const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.LISTINGS );
 
-    const cursor = await collection.find<WithId<ListingPayload>>( {'_metadata.isApproved': true} );
+    const cursor = await collection.find<WithId<ListingPayload>>( {'_metadata.status': 'LISTED'} );
 
 
     let data = await cursor.toArray();
@@ -51,9 +50,9 @@ export default async function Marketplace()
 
   return (
     <Suspense fallback={ <p>Loading...</p> }>
-      <div className='px-20 py-10 space-y-12 bg-white min-h-screen'>
-        <h1 className='text-2xl font-2xl tracking-wide text-slate-800'>Marketplace</h1>
-        <div className='grid grid-cols-3 auto-cols-fr gap-8 w-full'>
+      <div className='px-[5%] lg:px-[6.5%] py-10 space-y-12 min-h-screen bg-stone-50'>
+        <h1 className='text-2xl font-2xl tracking-wide text-prose'>Marketplace</h1>
+        <div className='grid grid-cols-[repeat(auto-fit,minmax(350px,25rem))] gap-3 w-full h-full'>
           {
             listings.map( l =>
             {

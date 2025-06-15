@@ -1,7 +1,7 @@
 import { PromosTable } from './PromosTable';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
-import type { ListingPayload } from '../forms/add-marketplace-listing-form';
 import { WithId } from 'mongodb';
+import { PortalView } from '../layout/main/parts';
 
 
 const getAllPromos = async() =>
@@ -15,6 +15,8 @@ const getAllPromos = async() =>
      const cursor = await collection.find<WithId<ListingPayload>>( {} );
 
      const data = await cursor.toArray();
+
+     if ( data ) await dbConnection.close();
 
      return data;
      
@@ -32,10 +34,8 @@ export async function ListAllPromos()
   const promos = await getAllPromos()
 
   return (
-    <div className='h-full w-full space-y-5'>
-      <h1 className='text-2xl font-medium text-slate-800 tracking-wide'>All Promos</h1>
-      <hr/>
+    <PortalView title='Dashboard'>
       <PromosTable promos={promos}/>
-    </div>
+    </PortalView>
   )
 }

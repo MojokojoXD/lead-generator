@@ -18,7 +18,7 @@ export default function Navbar()
       <nav
         className={ twMerge( 'relative bg-white flex items-center h-24 sm:h-32 border-b border-zinc-200', HIDE_NAV_ON_ROUTES.includes( path ) && 'hidden' ) }
       >
-        <div className='h-fit w-full mx-[5%] lg:mx-[10%] flex items-center justify-between'>
+        <div className='h-fit w-full mx-[5%] lg:mx-[6.5%] flex items-center justify-between'>
           {/* logo */ }
           <Link href={ '/' }>
             <span>

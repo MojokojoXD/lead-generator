@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { getToken } from 'next-auth/jwt';
 import { uploadFileToAWS } from '@/app/(authenticated)/_lib/storage/s3';
-import type { ListingPayload } from '../../(components)/forms/add-marketplace-listing-form';
 
 const secret = process.env.NEXTAUTH_SECRET;
 export async function POST( req: NextRequest )
@@ -10,8 +9,8 @@ export async function POST( req: NextRequest )
   
   //jwt token verification
 
-  const token = await getToken({ req, secret });
-
+  const token = await getToken( { req, secret } );
+  
   if (!token) return NextResponse.json({ message: 'unauthorized user' }, { status: 401 });
 
   //parsing multipart form
@@ -36,7 +35,7 @@ export async function POST( req: NextRequest )
 
     if (!isUploaded) throw new Error('failed to upload file to aws');
 
-    const connection = await client;
+    const connection = await client.connect();
 
     const collection = connection.db(DBs.CLIENT_DATA).collection(COLLECTIONS.LISTINGS);
 

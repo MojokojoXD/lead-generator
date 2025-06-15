@@ -1,47 +1,28 @@
 'use client';
 
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { RefCallBack, useForm, type SubmitHandler } from 'react-hook-form';
 import { Input, InputError } from '@/app/components/ui/input';
 import { Textarea } from '@/app/components/ui/textarea';
 import { Button } from '@/app/components/ui/button';
-import { ChangeEvent, useContext, useState, useRef } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { QueueContext } from '../../layout/main/parts';
+import { DashboardContext } from '../../layout/main/parts';
 import { DatePicker } from '@/app/components/shadcnUI/date-picker';
 import { BUSINESS_NAME_PARAM, CATEGORY_PARAM } from '../../profile-portal/ProfileControl';
 import validator from 'validator';
-export interface ListingPayload
-{
-  _metadata: {
-    isApproved?: boolean;
-    approvalOn?: Date;
-  };
-  title: string;
-  discount: string;
-  url_website: string;
-
-  expiration: string;
-  desc: string;
-  promo_img: {
-    upload_time: number | null | undefined;
-    filename: string;
-  };
-
-  businessName?: string;
-
-  category?: string;
-}
+import { useSearchParams } from 'next/navigation';
+import { Role } from '@/app/types/account';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/shadcnUI/select';
 
 const VALID_IMG_FORMATS = [ 'jpg', 'jpeg', 'png' ];
 const __5MB = 5242880;
 
-export function AddMarketplaceListingForm()
+export function AddMarketplaceListingForm( { role }: { role: Role; } )
 {
-  const currentURL = useRef<URL>(
-    new URL( location.href ) );
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const taskQueueContext = useContext( QueueContext );
+  const taskQueueContext = useContext( DashboardContext );
   const [ isFetching, setIsFetching ] = useState( false );
   const [ promoImgFile, setPromoImgFile ] = useState<File | null>( null );
   const {
@@ -52,32 +33,45 @@ export function AddMarketplaceListingForm()
     setError,
     getValues,
     watch,
-    formState: { errors }} = useForm<ListingPayload>( {
-    defaultValues: {
-      _metadata: {
-        isApproved: false
-      },
+    formState: { errors } } = useForm<ListingPayload>( {
+      defaultValues: {
+        _metadata: {
+          status: 'REVIEW'
+        },
 
-      title: '',
-      discount: '',
-      url_website: '',
-      expiration: '',
-      desc: '',
-      promo_img: {
-        upload_time: null,
-        filename: ''
-      },
-      businessName: currentURL.current.searchParams.get( BUSINESS_NAME_PARAM ) ?? '',
-      category: currentURL.current.searchParams.get( CATEGORY_PARAM ) ?? ''
-    }
-  } );
+        title: '',
+        discount: '',
+        url_website: '',
+        expiration: '',
+        desc: '',
+        promo_img: {
+          upload_time: null,
+          filename: ''
+        },
+        businessName: searchParams.get( BUSINESS_NAME_PARAM ) ?? '',
+        category: searchParams.get( CATEGORY_PARAM ) ?? ''
+      }
+    } );
 
   register( 'promo_img.filename', {
     required: 'Please upload promo image'
   } );
   register( 'expiration', {
     required: 'Please select expiration',
-  } )
+  } );
+
+  let categoryRef: RefCallBack | undefined;
+  let categoryName: string | undefined;
+
+  if ( role === 'admin' )
+  {
+    const { ref, name } = register( 'category', {
+      required: 'Please select category'
+    } );
+
+    categoryRef = ref
+    categoryName = name;
+  }
 
   const fileName = getValues( 'promo_img.filename' );
   const currentExpirationValue = watch( 'expiration' );
@@ -86,7 +80,7 @@ export function AddMarketplaceListingForm()
 
   const handlePromoImg = ( event: ChangeEvent<HTMLInputElement> ) =>
   {
-    if ( errors.promo_img?.filename ) resetField( 'promo_img' )
+    if ( errors.promo_img?.filename ) resetField( 'promo_img' );
 
     const fileInput = event.target;
 
@@ -156,13 +150,26 @@ export function AddMarketplaceListingForm()
       } ).finally( () => setIsFetching( false ) );
     } );
 
-    taskQueueContext?.add( () => promoPromise );
+    taskQueueContext?.addTask( {
+      id: 'UPLOADING_PROMO',
+      action: () => promoPromise
+    } );
 
   };
 
 
   return (
-    <form className='w-full max-w-md pb-5 space-y-6 pr-4 pl-1 pt-1' onSubmit={ handleSubmit( submitHandler ) }>
+    <form className='w-full pb-5 space-y-6 pr-4 pl-1 pt-1 overflow-auto' onSubmit={ handleSubmit( submitHandler ) }>
+      { role === 'admin' && <div>
+        <Input
+          placeholder='Business Name*'
+          id='__listing-business-name'
+          { ...register( 'businessName', {
+            required: 'Please enter business name'
+          } ) }
+        />
+        <InputError errors={ errors } name={ 'business.name' } />
+      </div> }
       <Input
         placeholder='Title'
         id='__listing-title'
@@ -171,7 +178,7 @@ export function AddMarketplaceListingForm()
         } ) }
       />
       <InputError errors={ errors } name={ 'title' } />
-      <div className='h-full grid grid-cols-2 gap-y-6'>
+      <div className='h-full grid grid-cols-2 gap-x-2.5'>
         <div>
           <Input
             placeholder='Discount %'
@@ -190,17 +197,32 @@ export function AddMarketplaceListingForm()
           />
           <InputError errors={ errors } name={ 'discount' } />
         </div>
-        <div className='col-span-2'>
-          <Input
-            placeholder='URL/Website'
-            id='__listing-url'
-            { ...register( 'url_website', {
-              required: 'Please enter website url',
-              validate: v => validator.isURL( v ) || 'Please enter valid url'
-            } ) }
-          />
-          <InputError errors={ errors } name={ 'url_website' } />
-        </div>
+        { role === 'admin' && <div>
+          <Select onValueChange={ v => setValue( 'category', v ) } name={ categoryName }>
+            <SelectTrigger className='w-full' ref={ categoryRef }>
+              <SelectValue placeholder={ 'Category*' } />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="security">Security</SelectItem>
+              <SelectItem value="pest control">Pest Control</SelectItem>
+              <SelectItem value="landscaping">Landscaping</SelectItem>
+              <SelectItem value="pool">Pools</SelectItem>
+            </SelectContent>
+          </Select>
+          <InputError errors={ errors } name={ 'category' } />
+        </div> }
+
+      </div>
+      <div>
+        <Input
+          placeholder='URL/Website'
+          id='__listing-url'
+          { ...register( 'url_website', {
+            required: 'Please enter website url',
+            validate: v => validator.isURL( v ) || 'Please enter valid url'
+          } ) }
+        />
+        <InputError errors={ errors } name={ 'url_website' } />
       </div>
       <div className='h-full grid grid-cols-2 gap-2.5'>
         <div>
