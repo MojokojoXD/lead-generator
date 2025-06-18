@@ -111,12 +111,6 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
 
     setIsFetching( true );
 
-    //headers
-
-    const headers = new Headers();
-
-    headers.append( 'Content-Type', 'multipart/form-data;boundary=---------------vendor_data' );
-
     //form data
     const form = new FormData();
 

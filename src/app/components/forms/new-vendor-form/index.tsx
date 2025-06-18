@@ -4,34 +4,47 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Input, InputError } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../shadcnUI/button';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import validator from 'validator'
+import validator from 'validator';
 import
-  {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/app/components/shadcnUI/select"
+{
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/shadcnUI/select";
 import { VendorAccount } from '@/app/types/account';
+import { useRouter } from 'next/navigation';
 
 
+const __5MB = 5242880;
 
 export function NewVendorForm()
 {
+  const router = useRouter();
   const [ isFetching, setIsFetching ] = useState( false );
+  const [ logo, setLogo ] = useState<File | null>( null );
   const [ pwdConfirmation, setPwdConfirmation ] = useState( '' );
   const [ revealPwd, setRevealPwd ] = useState( false );
-  const { register, handleSubmit, formState: { errors },setValue } = useForm<VendorAccount>( {
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+    setValue, resetField,
+    setError } = useForm<VendorAccount>( {
     defaultValues: {
       business: {
         name: '',
         address: {
           street: '',
           city: '',
-          zipcode: ''
+          zipcode: '',
+        },
+        logo: {
+          filename: '',
         },
         phone: '',
         url: '',
@@ -50,22 +63,57 @@ export function NewVendorForm()
 
   const { ref: categoryRef, name } = register( 'category', {
     required: 'Please select category'
-  })
+  } );
+  const { ref: fileUploadRef } = register( 'business.logo.filename' )
+
+  const handleLogoUpload = ( event: ChangeEvent<HTMLInputElement> ) =>
+  {
+    if ( errors.business?.logo?.filename ) resetField( 'business.logo' );
+
+    const fileInput = event.target;
+
+    if ( fileInput.files && fileInput.files.length > 0 )
+    {
+      const uploadedFile = fileInput.files[ 0 ];
+
+      const error = ['jpg','jpeg','png'].includes( uploadedFile.type ) ? 'File format not support'
+        : uploadedFile.size > __5MB ? 'File must be under 5mb' :
+          null;
+
+      if ( error )
+      {
+        setError( 'business.logo.filename', { message: error, type: 'validate' } );
+      }
+
+      setLogo( uploadedFile );
+      setValue( 'business.logo.filename', uploadedFile.name );
+      setValue( 'business.logo.uploadAt', Date.now());
+    }
+
+
+  };
 
   const submitHandler: SubmitHandler<VendorAccount> = async ( data ) =>
   {
     setIsFetching( true );
 
+    const form = new FormData();
+
+    form.append( 'json', JSON.stringify( data ) )
+    
+    if ( logo ) form.append( 'logo', logo );
+
     try
     {
       const res = await fetch( '/vendor-sign-up', {
         method: 'POST',
-        body: JSON.stringify( data )
+        body: form
       } );
 
       if ( res.ok )
       {
         alert( 'client added successfully' );
+        router.replace('/login')
         return;
       };
 
@@ -139,7 +187,7 @@ export function NewVendorForm()
               type={ revealPwd ? 'text' : 'password' }
               placeholder='Confirm Password*'
               id='confirm-password'
-              onChange={ e => setPwdConfirmation(e.target.value) }
+              onChange={ e => setPwdConfirmation( e.target.value ) }
             />
             <div>
               <InputError errors={ errors } name={ 'pwd.content' } />
@@ -148,7 +196,7 @@ export function NewVendorForm()
                 size={ 'sm' }
                 type='button'
                 className='float-right mb-5 text-rose-400 underline'
-                onClick={() => setRevealPwd( prevState => !prevState )}
+                onClick={ () => setRevealPwd( prevState => !prevState ) }
               >
                 Show password
               </Button>
@@ -160,24 +208,24 @@ export function NewVendorForm()
           <Input
             placeholder='Legal Business Name*'
             id='__listing-business-name'
-            { ...register( 'business.name' , {
+            { ...register( 'business.name', {
               required: 'Please enter business name'
-            }) }
+            } ) }
           />
-          <InputError errors={errors} name={ 'business.name' }/>
+          <InputError errors={ errors } name={ 'business.name' } />
         </div>
         <div>
           <Input
             placeholder='Address*'
             id='__listing-business-address'
-            { ...register( 'business.address.street' , {
+            { ...register( 'business.address.street', {
               required: 'Please enter street address'
-            }) }
+            } ) }
           />
-          <InputError errors={errors} name={ 'business.address.street' }/>
+          <InputError errors={ errors } name={ 'business.address.street' } />
         </div>
         <div className='grid grid-cols-2 gap-2.5'>
-          
+
           <div>
             <Input
               placeholder='City*'
@@ -199,7 +247,7 @@ export function NewVendorForm()
             />
             <InputError errors={ errors } name={ 'business.address.zipcode' } />
           </div>
-          
+
         </div>
         <div>
           <Input
@@ -207,7 +255,7 @@ export function NewVendorForm()
             id='__listing-business-phone'
             { ...register( 'business.phone', {
               required: 'Please enter phone #',
-              validate: v => validator.isMobilePhone(v, 'en-US') || 'Please enter valid phone number'
+              validate: v => validator.isMobilePhone( v, 'en-US' ) || 'Please enter valid phone number'
             } ) }
           />
           <InputError errors={ errors } name={ 'business.phone' } />
@@ -223,8 +271,8 @@ export function NewVendorForm()
           <InputError errors={ errors } name={ 'business.url' } />
         </div>
         <div>
-          <Select onValueChange={ v => setValue( 'category', v ) } name={name}>
-            <SelectTrigger className='w-full' ref={categoryRef}>
+          <Select onValueChange={ v => setValue( 'category', v ) } name={ name }>
+            <SelectTrigger className='w-full' ref={ categoryRef }>
               <SelectValue placeholder={ 'Category*' } />
             </SelectTrigger>
             <SelectContent>
@@ -236,16 +284,14 @@ export function NewVendorForm()
           </Select>
           <InputError errors={ errors } name={ 'category' } />
         </div>
-        <div>
+        <div ref={fileUploadRef}>
           <Input
-            placeholder='TIN*'
-            id='__listing-business-tin'
-            { ...register( 'business.tin', {
-              required: 'Please enter business TIN',
-              validate: v => validator.isTaxID( v, 'en-US' ) || 'Please enter valid TIN'
-            } ) }
+            id='__vendor-logo'
+            fileName={ getValues( 'business.logo.filename' ) }
+            type={ 'file' } label='Upload Logo'
+            onChange={ handleLogoUpload }
           />
-          <InputError errors={ errors } name={ 'business.tin' } />
+          <InputError errors={ errors } name={ 'business.logo.filename' } />
         </div>
         <h2 className='font-medium'>Misc</h2>
         <Textarea
@@ -254,7 +300,7 @@ export function NewVendorForm()
           { ...register( 'bio' ) }
         />
         <div>
-          <Button variant={ 'secondary' } size={'lg'} className='w-full h-14 text-lg font-medium'>
+          <Button variant={ 'secondary' } size={ 'lg' } className='w-full h-14 text-lg font-medium'>
             { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }
           </Button>
         </div>

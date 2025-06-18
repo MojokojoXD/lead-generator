@@ -73,7 +73,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           onClick={ handleClick }
         >
           <Link href={ '/sign-up' }>
-            Sign Up
+            Pro Sign Up
           </Link>
         </Button>
       </li>

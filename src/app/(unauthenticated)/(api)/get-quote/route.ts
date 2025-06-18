@@ -1,10 +1,21 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { mailTransport } from '../../../(authenticated)/_lib/smtp/nodemailer';
+import type { SurveyJobPayload } from '../../survey/components/SurveryForm';
 
 const RECAPTCHA_SECRET =
   process.env.NODE_ENV === 'development'
     ? process.env.RECAPTCHA_SECRET_DEV
     : process.env.RECAPTCHA_SECRET;
+
+const formatSurveyData = ( raw: SurveyJobPayload ) => `Budget: ${ raw.budget }
+Location: ${ raw.location }
+Timeline: ${ raw.timeline }
+Job Desc: ${ raw.desc }
+First Name: ${ raw.contacts.firstName }
+Last Name: ${ raw.contacts.lastName }
+Email: ${ raw.contacts.email }
+Phone: ${ raw.contacts.phone }
+Contact Method: ${ raw.contacts.method }`;
 export async function POST(req: NextRequest) {
   try {
     if (!RECAPTCHA_SECRET) throw new Error('recaptcha failure');
@@ -17,7 +28,7 @@ export async function POST(req: NextRequest) {
     if (!recaptchaToken)
       throw new Error('recaptcha token missing in url');
 
-    const body: Record<string, string> = await req.json();
+    const body = <SurveyJobPayload>await req.json();
 
     const testURL = new URL(
       'https://www.google.com/recaptcha/api/siteverify'
@@ -47,9 +58,9 @@ export async function POST(req: NextRequest) {
         address: 'kwadwoneer@yahoo.com',
         name: 'no-reply',
       },
-      to: 'kwadwoneer@gmail.com',
+      to: 'dollarmasters@gmail.com',
       subject: 'lead',
-      text: JSON.stringify(body),
+      text: formatSurveyData( body ),
     });
 
     console.log(result);

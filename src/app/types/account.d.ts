@@ -28,7 +28,11 @@ interface VendorAccount extends BaseAccount {
       zipcode: string;
     };
     phone: string;
-    tin: string;
+    // tin: string;
+    logo: {
+      uploadAt?: number | string;
+      filename: string;
+    }
     url?: string;
   };
   bio?: string;

@@ -7,7 +7,7 @@ export default async function SignUpPage( {
 }: { searchParams: Promise<{ [ key: string ]: string | string[] | undefined; }>; } )
 {
 
-  const { token } = ( await searchParams );
+  const { token } = await searchParams ;
 
   return (
     <div className='fixed h-dvh top-0 w-full grid grid-cols-1 lg:grid-cols-2 bg-secondary lg:bg-white lg:overflow-hidden'>

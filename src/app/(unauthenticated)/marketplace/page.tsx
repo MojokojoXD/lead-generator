@@ -3,6 +3,7 @@ import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ListingCard } from '@/app/components/marketplace/listing-card';
 import type { WithId } from 'mongodb';
 import { generatePromoImgURL } from '@/app/(authenticated)/_lib/storage/s3';
+import { Loading } from '@/app/components/ui/loading';
 
 
 const getAllListings = async () =>
@@ -49,9 +50,9 @@ export default async function Marketplace()
   const listings = await getAllListings();
 
   return (
-    <Suspense fallback={ <p>Loading...</p> }>
+    <Suspense fallback={ <Loading/> }>
       <div className='px-[5%] lg:px-[6.5%] py-10 space-y-12 min-h-screen bg-stone-50'>
-        <h1 className='text-2xl font-2xl tracking-wide text-prose'>Marketplace</h1>
+        <h1 className='text-2xl font-medium tracking-wide text-prose'>Marketplace</h1>
         <div className='grid grid-cols-[repeat(auto-fit,minmax(350px,25rem))] gap-3 w-full h-full'>
           {
             listings.map( l =>

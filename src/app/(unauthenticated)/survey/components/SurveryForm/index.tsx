@@ -96,7 +96,7 @@ const JobDescStep = () =>
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Job Description</h2>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Select Job Description</h2>
       </div>
       <Controller
         name={ 'desc' }
@@ -108,7 +108,7 @@ const JobDescStep = () =>
                 <SelectValue placeholder='Description' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='security'> Security </SelectItem>
+                <SelectItem value='security'> Security & Cameras </SelectItem>
                 <SelectItem value='pool'> Pools </SelectItem>
                 <SelectItem value='landscaping'> Landscaping </SelectItem>
                 <SelectItem value='pest control'> Pest Control </SelectItem>
@@ -153,7 +153,7 @@ const TimelineStep = () =>
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Timeline</h2>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>When are you looking got start?</h2>
       </div>
       <div className='space-y-6'>
         <div>
@@ -196,7 +196,7 @@ const BudgetStep = () =>
   return (
     <div>
       <div className='mb-5'>
-        <h2 className='font-medium text-zinc-800 flex items-center'>Budget</h2>
+        <h2 className='font-medium text-zinc-800 flex items-center'>What is your budget range?</h2>
       </div>
       <div>
         <div className='grid md:grid-flow-col auto-cols-fr grid-cols-2 gap-2.5 h-full w-full'>
@@ -319,16 +319,16 @@ const ContactStep = () =>
         {
           //@ts-expect-error grecaptcha comes from an external script
           if ( window.grecaptcha )
-            {
+          {
             //@ts-expect-error grecaptcha comes from an external script
             window.grecaptcha.ready( () =>
-              {
+            {
               //@ts-expect-error grecaptcha comes from an external script
               const widgetId = window.grecaptcha.render( 'recaptcha-container', {
-              sitekey: recaptchaKey,
-              callback: 'onCaptcha'
+                sitekey: recaptchaKey,
+                callback: 'onCaptcha'
               } );
-              
+
               localStorage.setItem( 'recaptcha_widget_id', widgetId );
             } );
 
@@ -431,7 +431,7 @@ export function SurveyForm( { category }: { category: Categories; } )
         {
           //@ts-expect-error grecaptcha comes from an external script
           window.grecaptcha.reset( widgetId );
-          window.localStorage.removeItem('recaptcha_widget_id')
+          window.localStorage.removeItem( 'recaptcha_widget_id' );
         } );
 
       }

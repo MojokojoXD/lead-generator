@@ -5,6 +5,7 @@ const ALLOWED_SURVEY_CATEGORIES = [
   'pool',
   'landscaping',
   'pest-control',
+  'base'
 ];
 
 const ADMIN_SECRET = process.env.ADMIN_CREATION_SECRET;
