@@ -153,7 +153,7 @@ const TimelineStep = () =>
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>When are you looking got start?</h2>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>When are you looking to start?</h2>
       </div>
       <div className='space-y-6'>
         <div>
