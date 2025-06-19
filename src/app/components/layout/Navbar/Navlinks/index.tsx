@@ -23,6 +23,11 @@ const NAV_LINKS_DATA = {
       id: 2,
       label: 'Marketplace',
       href: '/marketplace'
+    },
+    {
+      id: 3,
+      label: 'About',
+      href: '/about'
     }
   ],
 };

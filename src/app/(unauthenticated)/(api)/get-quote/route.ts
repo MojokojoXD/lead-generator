@@ -8,7 +8,7 @@ const RECAPTCHA_SECRET =
     : process.env.RECAPTCHA_SECRET;
 
 const formatSurveyData = ( raw: SurveyJobPayload ) => `Budget: ${ raw.budget }
-Location: ${ raw.location }
+Location: ${ raw.location.zipcode }
 Timeline: ${ raw.timeline }
 Job Desc: ${ raw.desc }
 First Name: ${ raw.contacts.firstName }

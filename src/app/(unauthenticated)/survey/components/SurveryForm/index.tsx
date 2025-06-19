@@ -26,7 +26,6 @@ import
   AlertDialogFooter,
   AlertDialogAction,
 } from '@/app/components/shadcnUI/alert-dialog';
-import { DatePicker } from '@/app/components/shadcnUI/date-picker';
 
 const BUDGET_RANGE = [ '< $1000', '$1k-$10k', '$10k-$50k', '> $50k' ];
 
@@ -165,11 +164,19 @@ const TimelineStep = () =>
             } }
             render={ ( { field, formState: { errors } } ) => (
               <>
-                <DatePicker
-                  placeholder='Select Timeline*'
-                  currentDate={ field.value }
-                  onDateChange={ date => field.onChange( date ) }
-                />
+                <Select value={ field.value } onValueChange={ ( v ) => field.onChange( v ) }>
+                  <SelectTrigger name={ field.name } disabled={ field.disabled }>
+                    <SelectValue placeholder='Select Timeline'/>
+                  </SelectTrigger>
+                  <SelectContent ref={ field.ref }>
+                    <SelectItem value='immediately'>Immediately</SelectItem>
+                    <SelectItem value='in 1-2 months'>In 1-2 months</SelectItem>
+                    <SelectItem value='in 3-4 months'>In 3-4 months</SelectItem>
+                    <SelectItem value='in 6-12 months'>In 6-12 months</SelectItem>
+                    <SelectItem value='1 year or later'>1 year or later</SelectItem>
+                    <SelectItem value='just exploring'>Just exporing</SelectItem>
+                  </SelectContent>
+                </Select>
                 <InputError errors={ errors } name={ 'timeline' } />
               </>
             ) }

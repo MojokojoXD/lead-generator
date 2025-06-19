@@ -153,7 +153,7 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
 
 
   return (
-    <form className='w-full pb-5 space-y-6 pr-4 pl-1 pt-1 overflow-auto' onSubmit={ handleSubmit( submitHandler ) }>
+    <form className='w-full pb-5 space-y-6 pr-4 pl-1 pt-1 overflow-auto max-w-md' onSubmit={ handleSubmit( submitHandler ) }>
       { role === 'admin' && <div>
         <Input
           placeholder='Business Name*'

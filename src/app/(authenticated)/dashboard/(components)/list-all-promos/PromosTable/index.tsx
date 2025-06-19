@@ -19,7 +19,7 @@ export function PromosTable( { promos }: PromosTableProps )
 
 
   return (
-    <table className='[&_th]:bg-primary [&_th]:text-primary-foreground [&_th:first-of-type]:rounded-s-xl [&_th:last-of-type]:rounded-e-xl [&_th]:text-nowrap [&_th]:p-5 [&_th:first-of-type]:text-left [&_th:last-of-type]:text-right [&_th]:font-semibold [&_td:first-of-type]:border-s [&_td:last-of-type]:border-e [&_td]:border-y [&_td]:text-neutral-foreground [&_td]:text-nowrap [&_td]:px-5 [&_td]:py-2.5 [&_td:last-of-type]:rounded-e-xl [&_td:first-of-type]:rounded-s-xl [&_td]:text-[12px] [&_td:first-of-type]:max-w-[8.5rem] [&_td:first-of-type]:truncate border-separate border-spacing-y-1 table-fixed text-sm capitalize'>
+    <table className='[&_th]:bg-primary [&_th]:text-primary-foreground [&_th:first-of-type]:rounded-s-xl [&_th:last-of-type]:rounded-e-xl [&_th]:text-nowrap [&_th]:p-5 [&_th:first-of-type]:text-left [&_th:last-of-type]:text-right [&_th]:font-semibold [&_td:first-of-type]:border-s [&_td:last-of-type]:border-e [&_td]:border-y [&_td]:text-neutral-foreground [&_td]:text-nowrap [&_td]:px-5 [&_td]:py-2.5 [&_td:last-of-type]:rounded-e-xl [&_td:first-of-type]:rounded-s-xl [&_td]:text-[12px] [&_td:first-of-type]:max-w-[8.5rem] [&_td:first-of-type]:truncate border-separate border-spacing-y-1 table-fixed text-sm capitalize max-w-max'>
       <thead>
         <tr>
           <th>Pid</th>

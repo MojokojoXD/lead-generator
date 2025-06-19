@@ -135,7 +135,9 @@ function Menu( {
     <nav className='h-full w-[80vw] sm:w-full sm:max-w-[20rem] py-16 bg-inherit float-left flex justify-center'>
       <div className='relative h-full w-fit flex flex-col space-y-16'>
         <div className='h-40'>
-          <Image src={ '/prosfinder-white.svg' } height={ 200 } width={ 200 } alt='site logo' className='h-[30px] w-auto' />
+          <Link href={'/'}>
+            <Image src={ '/prosfinder-white.svg' } height={ 200 } width={ 200 } alt='site logo' className='h-[30px] w-auto' />
+          </Link>
         </div>
         {/* <div className='text-secondary-foreground'>
           <span className='h-24 aspect-square border inline-block rounded-xl border-stone-700 bg-neutral text-neutral-foreground flex items-center justify-center text-2xl font-medium tracking-tighter mb-2.5'>KB.</span>
@@ -212,11 +214,10 @@ function PortalView( { title, children }: PortalViewProps )
       <div className='h-40 flex items-center border-b px-[20vw] sm:px-[10vw] md:px-[5vw] lg:px-24'>
         <h1 className='text-2xl font-medium'>{ title }</h1>
       </div>
-      <div className='absolute top-40 h-[calc(100vh-160px)] w-full px-[5vw] sm:px-[10vw] lg:px-24 overflow-hidden grid lg:grid-cols-2 gap-x-2.5 py-8'>
-        <div className='h-full w-full max-w-md overflow-y-auto'>
+      <div className='absolute top-40 h-[calc(100vh-160px)] w-full px-[5vw] sm:px-[10vw] lg:px-24 overflow-hidden py-8'>
+        <div className='h-full w-full overflow-y-auto'>
           { children }
         </div>
-        <div className='hidden lg:block'></div>
       </div>
     </div>
   );

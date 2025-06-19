@@ -6,7 +6,7 @@ export default function Home()
   return (
     <div className="h-fit w-full px-[5%] lg:px-[6.5%] home-categories bg-cover">
       <section className='h-full w-full pt-16 sm:pt-24 xl:grid grid-cols-2 gap-5'>
-        <div className='pb-24'>
+        <div className='pb-24 space-y-14'>
           <h1 className='text-6xl sm:text-8xl md:text-9xl lg:text-8xl font-bold tracking-tighter text-zinc-800 mb-8 sm:mb-3.5'>Find highly <br />rated <br />certified pros <br /> in <span className='text-primary'>Arizona</span></h1>
           <div className='lg:hidden grid grid-cols-2 auto-cols-fr gap-2.5 mb-8 sm:mb-3.5'>
             <Link href={ '/survey/security' }>
@@ -42,7 +42,6 @@ export default function Home()
               </div>
             </Link>
           </div>
-          <p className='text-lg sm:text-2xl mb-5 max-w-prose'>Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.</p>
           <Button asChild variant={ 'secondary' } className='h-[3.25rem] sm:h-[4.25rem] w-[11.4rem] sm:w-[19.8rem] text-xl sm:text-2xl'>
             <Link href={ '/survey/base' }>
               Get a Quote!
