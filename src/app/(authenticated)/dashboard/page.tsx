@@ -40,6 +40,9 @@ export default async function DashboardPage()
         <Dashboard.Portal name='Add Promo'>
           <MarketplacePortal />
         </Dashboard.Portal>
+        <Dashboard.Portal name='Add Vendor'>
+          <></>
+        </Dashboard.Portal>
       </Dashboard.Main>
     </Suspense>
   );
