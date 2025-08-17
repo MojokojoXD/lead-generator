@@ -2,7 +2,6 @@
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Input, InputError } from '../../ui/input';
-import { Textarea } from '../../ui/textarea';
 import { Button } from '../../shadcnUI/button';
 import { ChangeEvent, useState } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -48,6 +47,8 @@ export function NewVendorForm()
         },
         phone: '',
         url: '',
+        isInsuredOrBonded: false,
+        yearsActive: ''
       },
       firstName: '',
       lastName: '',
@@ -57,7 +58,6 @@ export function NewVendorForm()
       },
       email: '',
       category: '',
-      bio: ''
     }
   } );
 
@@ -139,7 +139,7 @@ export function NewVendorForm()
           <div>
             <Input
               placeholder='First Name*'
-              id='__listing-first-name'
+              id='__vendor-first-name'
               { ...register( 'firstName', {
                 required: 'Please enter first name'
               } ) }
@@ -161,7 +161,7 @@ export function NewVendorForm()
           <Input
             placeholder='Email*'
             type={ 'email' }
-            id='__listing-email'
+            id='__vendor-email'
             { ...register( 'email', {
               required: 'Please enter email address',
               validate: v => validator.isEmail( v ) || 'Email must be of the format name@example.com'
@@ -202,6 +202,28 @@ export function NewVendorForm()
               </Button>
             </div>
           </div>
+        </div>
+        <div>
+          <Input
+            placeholder='How many years have you been in business?'
+            id='__vendor-years-active'
+            { ...register( 'business.yearsActive', {
+              required: 'Please enter response',
+              validate: v => (Number.isInteger( parseInt( v ) ) && parseInt( v ) >= 0) || 'Please enter a valid positive number'
+            }) }
+          />
+          <InputError errors={ errors } name='business.yearsActive'/>
+        </div>
+        <div>
+          <div className='flex space-x-1.5'>
+            <label htmlFor="__vendor-insurance-status" className='text-sm'>My business is licensed, bonded and insured?</label>
+            <input
+              type='checkbox'
+              id='__vendor-insurance-status'
+              { ...register( 'business.isInsuredOrBonded' ) }
+            />
+          </div>
+          <InputError errors={ errors } name='business.isInsuredOrBonded'/>
         </div>
         <h2 className='font-medium'>Business Info</h2>
         <div>
@@ -293,12 +315,6 @@ export function NewVendorForm()
           />
           <InputError errors={ errors } name={ 'business.logo.filename' } />
         </div>
-        <h2 className='font-medium'>Misc</h2>
-        <Textarea
-          id='__listing-bio'
-          placeholder='Please enter bio here'
-          { ...register( 'bio' ) }
-        />
         <div>
           <Button variant={ 'secondary' } size={ 'lg' } className='w-full h-14 text-lg font-medium'>
             { isFetching ? <Loader2 className='animate-spin' /> : 'Submit' }

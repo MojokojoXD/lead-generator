@@ -34,8 +34,9 @@ interface VendorAccount extends BaseAccount {
       filename: string;
     }
     url?: string;
+    yearsActive: string;
+    isInsuredOrBonded: boolean;
   };
-  bio?: string;
 }
 
 interface TokenSchema {

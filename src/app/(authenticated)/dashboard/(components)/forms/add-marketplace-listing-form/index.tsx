@@ -69,7 +69,7 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
       required: 'Please select category'
     } );
 
-    categoryRef = ref
+    categoryRef = ref;
     categoryName = name;
   }
 
@@ -153,100 +153,114 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
 
 
   return (
-    <form className='w-full pb-5 space-y-6 pr-4 pl-1 pt-1 overflow-auto max-w-md' onSubmit={ handleSubmit( submitHandler ) }>
-      { role === 'admin' && <div>
-        <Input
-          placeholder='Business Name*'
-          id='__listing-business-name'
-          { ...register( 'businessName', {
-            required: 'Please enter business name'
-          } ) }
-        />
-        <InputError errors={ errors } name={ 'business.name' } />
-      </div> }
-      <Input
-        placeholder='Title'
-        id='__listing-title'
-        { ...register( 'title', {
-          required: 'Please enter title'
-        } ) }
-      />
-      <InputError errors={ errors } name={ 'title' } />
-      <div className='h-full grid grid-cols-2 gap-x-2.5'>
-        <div>
+    <form className='h-full w-full' onSubmit={ handleSubmit( submitHandler ) } noValidate>
+      <div className='h-full lg:max-h-[28rem] max-w-2xl mx-auto px-7 space-y-6 overflow-auto pb-36'>
+        { role === 'admin' && <div>
           <Input
-            placeholder='Discount %'
-            id='__listing-discount'
-            { ...register( 'discount', {
-              required: 'Please enter discount amount',
-              max: {
-                value: 100,
-                message: 'Discount amount invalid'
-              },
-              min: {
-                value: 0,
-                message: 'Discount amount invalid'
-              }
+            placeholder='Business Name*'
+            id='__listing-business-name'
+            { ...register( 'businessName', {
+              required: 'Please enter business name'
             } ) }
           />
-          <InputError errors={ errors } name={ 'discount' } />
-        </div>
-        { role === 'admin' && <div>
-          <Select onValueChange={ v => setValue( 'category', v ) } name={ categoryName }>
-            <SelectTrigger className='w-full' ref={ categoryRef }>
-              <SelectValue placeholder={ 'Category*' } />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="security">Security</SelectItem>
-              <SelectItem value="pest control">Pest Control</SelectItem>
-              <SelectItem value="landscaping">Landscaping</SelectItem>
-              <SelectItem value="pool">Pools</SelectItem>
-            </SelectContent>
-          </Select>
-          <InputError errors={ errors } name={ 'category' } />
+          <InputError errors={ errors } name={ 'business.name' } />
         </div> }
-
-      </div>
-      <div>
         <Input
-          placeholder='URL/Website'
-          id='__listing-url'
-          { ...register( 'url_website', {
-            required: 'Please enter website url',
-            validate: v => validator.isURL( v ) || 'Please enter valid url'
+          placeholder='Title'
+          id='__listing-title'
+          { ...register( 'title', {
+            required: 'Please enter title'
           } ) }
         />
-        <InputError errors={ errors } name={ 'url_website' } />
-      </div>
-      <div className='h-full grid grid-cols-2 gap-2.5'>
-        <div>
-          <DatePicker
-            placeholder='Expiration'
-            currentDate={ currentExpirationValue }
-            onDateChange={
-              date => setValue( 'expiration', date ) }
-          />
-          <InputError errors={ errors } name={ 'expiration' } />
+        <InputError errors={ errors } name={ 'title' } />
+        <div className='grid grid-cols-2 gap-x-2.5'>
+          <div>
+            <Input
+              placeholder='Discount %'
+              id='__listing-discount'
+              { ...register( 'discount', {
+                required: 'Please enter discount amount',
+                max: {
+                  value: 100,
+                  message: 'Discount amount invalid'
+                },
+                min: {
+                  value: 0,
+                  message: 'Discount amount invalid'
+                }
+              } ) }
+            />
+            <InputError errors={ errors } name={ 'discount' } />
+          </div>
+          { role === 'admin' && <div>
+            <Select onValueChange={ v => setValue( 'category', v ) } name={ categoryName }>
+              <SelectTrigger className='w-full' ref={ categoryRef }>
+                <SelectValue placeholder={ 'Category*' } />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="security">Security</SelectItem>
+                <SelectItem value="pest control">Pest Control</SelectItem>
+                <SelectItem value="landscaping">Landscaping</SelectItem>
+                <SelectItem value="pool">Pools</SelectItem>
+                <SelectItem value="furniture, appliances & decor">Furniture, Appliances & Decor</SelectItem>
+                <SelectItem value="hvac & plumbing">HVAC & Plumbing</SelectItem>
+                <SelectItem value="security & cameras">Security & Cameras</SelectItem>
+                <SelectItem value="medical services">Medical Services</SelectItem>
+                <SelectItem value="automotive">Automotive</SelectItem>
+                <SelectItem value="restaurants & dining">Restaurants & Dining</SelectItem>
+                <SelectItem value="education">Education</SelectItem>
+                <SelectItem value="health & beauty">Health & Beauty</SelectItem>
+                <SelectItem value="general shopping">General Shopping</SelectItem>
+                <SelectItem value="entertainment">Entertainment</SelectItem>
+                <SelectItem value="insurance">Insurance</SelectItem>
+              </SelectContent>
+            </Select>
+            <InputError errors={ errors } name={ 'category' } />
+          </div> }
+
         </div>
+        <div>
+          <Input
+            placeholder='URL/Website'
+            id='__listing-url'
+            { ...register( 'url_website', {
+              required: 'Please enter website url',
+              validate: v => validator.isURL( v ) || 'Please enter valid url'
+            } ) }
+          />
+          <InputError errors={ errors } name={ 'url_website' } />
+        </div>
+        <div className='grid grid-cols-2 gap-2.5'>
+          <div>
+            <DatePicker
+              placeholder='Expiration'
+              currentDate={ currentExpirationValue }
+              onDateChange={
+                date => setValue( 'expiration', date ) }
+            />
+            <InputError errors={ errors } name={ 'expiration' } />
+          </div>
+        </div>
+        <Input
+          id='__list-img-upload'
+          fileName={ fileName }
+          type={ 'file' }
+          label='Upload Promo Image'
+          onChange={ handlePromoImg }
+        />
+        <InputError errors={ errors } name={ 'promo_img.filename' } />
+        <Textarea
+          id='__listing-desc'
+          placeholder='Please enter additional details here'
+          label='Description'
+          { ...register( 'desc' ) }
+        />
+        <hr />
+        <Button variant={ 'secondary' } disabled={ isFetching }>
+          { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
+        </Button>
       </div>
-      <Input
-        id='__list-img-upload'
-        fileName={ fileName }
-        type={ 'file' }
-        label='Upload Promo Image'
-        onChange={ handlePromoImg }
-      />
-      <InputError errors={ errors } name={ 'promo_img.filename' } />
-      <Textarea
-        id='__listing-desc'
-        placeholder='Please enter additional details here'
-        label='Description'
-        { ...register( 'desc' ) }
-      />
-      <hr />
-      <Button variant={ 'secondary' } disabled={ isFetching }>
-        { isFetching ? <Loader2 className='animate-spin' /> : 'Send' }
-      </Button>
     </form>
-  );
+
+  ); 
 }

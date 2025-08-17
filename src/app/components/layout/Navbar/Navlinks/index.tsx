@@ -49,8 +49,8 @@ type AuthStatus = 'authenticated' | 'loading' | 'unauthenticated';
 function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 {
 
-  const emphasizedBtnClsx = clsx( isOnSideMenu && 'max-w-[6.5rem] w-full' );
-  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit font-normal text-sm' );
+  const emphasizedBtnClsx = clsx( isOnSideMenu ? 'max-w-[6.5rem] w-full' : 'text-lg' );
+  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit font-normal text-lg' );
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = ( ev ) =>
   {
@@ -203,7 +203,7 @@ export function Navlinks( { path }: NavlinksProps )
                 <Button
                   asChild
                   variant={ 'ghost' }
-                  className={ clsx( 'font-normal text-sm',path === l.href && 'text-primary hover:text-primary font-medium' ) }
+                  className={ clsx( 'font-normal text-lg',path === l.href && 'text-primary hover:text-primary font-medium' ) }
                 >
                   <Link href={ l.href }> { l.label } </Link>
                 </Button>
