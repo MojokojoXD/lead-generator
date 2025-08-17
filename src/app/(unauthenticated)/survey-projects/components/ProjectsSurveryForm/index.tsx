@@ -27,18 +27,16 @@ import
   AlertDialogAction,
 } from '@/app/components/shadcnUI/alert-dialog';
 
-const BUDGET_RANGE = [ '< $1000', '$1k-$10k', '$10k-$50k', '> $50k' ];
+const BUDGET_RANGE = [ '< $1000', '$1k-$10k', '$10k-$50k', '> $50k', 'I don\'t know' ];
 
 enum STEPS
 {
   FIRST = 1,
-
   SECOND = 2,
-
   THIRD = 3,
-
   FOURTH = 4,
-  LAST = 5,
+  FIFTH = 5,
+  LAST = 6
 }
 
 enum STATUS
@@ -66,12 +64,17 @@ const STATUS_CONFIG: Record<STATUS, STATUS_MSGS | undefined> = {
   IDLE: undefined
 };
 
-export interface SurveyJobPayload
+export interface ProjectsSurveyFormPayload
 {
   comments: string;
   desc: Categories;
   location: {
+    streetAddress: string;
     zipcode: string;
+    homeType: string;
+    bedroomCount: string;
+    bathroomCount: string;
+    grossFloorArea: string;
   };
   timeline: string;
   budget: string;
@@ -89,7 +92,7 @@ export interface SurveyJobPayload
 
 const JobDescStep = () =>
 {
-  const { control } = useFormContext<SurveyJobPayload>();
+  const { control } = useFormContext<ProjectsSurveyFormPayload>();
 
 
   return (
@@ -123,7 +126,7 @@ const JobDescStep = () =>
 
 const LocationStep = () =>
 {
-  const { register, formState: { errors } } = useFormContext<SurveyJobPayload>();
+  const { register, formState: { errors } } = useFormContext<ProjectsSurveyFormPayload>();
 
   return (
     <div>
@@ -147,7 +150,7 @@ const LocationStep = () =>
 
 const TimelineStep = () =>
 {
-  const { control } = useFormContext<SurveyJobPayload>();
+  const { control } = useFormContext<ProjectsSurveyFormPayload>();
 
   return (
     <div>
@@ -160,13 +163,13 @@ const TimelineStep = () =>
             control={ control }
             name={ 'timeline' }
             rules={ {
-              required: 'Please select date'
+              required: 'Please select timeline'
             } }
             render={ ( { field, formState: { errors } } ) => (
               <>
                 <Select value={ field.value } onValueChange={ ( v ) => field.onChange( v ) }>
                   <SelectTrigger name={ field.name } disabled={ field.disabled }>
-                    <SelectValue placeholder='Select Timeline'/>
+                    <SelectValue placeholder='Select Timeline' />
                   </SelectTrigger>
                   <SelectContent ref={ field.ref }>
                     <SelectItem value='immediately'>Immediately</SelectItem>
@@ -174,7 +177,7 @@ const TimelineStep = () =>
                     <SelectItem value='in 3-4 months'>In 3-4 months</SelectItem>
                     <SelectItem value='in 6-12 months'>In 6-12 months</SelectItem>
                     <SelectItem value='1 year or later'>1 year or later</SelectItem>
-                    <SelectItem value='just exploring'>Just exporing</SelectItem>
+                    <SelectItem value='just exploring'>Just exploring</SelectItem>
                   </SelectContent>
                 </Select>
                 <InputError errors={ errors } name={ 'timeline' } />
@@ -190,7 +193,7 @@ const TimelineStep = () =>
 const BudgetStep = () =>
 {
 
-  const { register, formState: { errors }, watch } = useFormContext<SurveyJobPayload>();
+  const { register, formState: { errors }, watch } = useFormContext<ProjectsSurveyFormPayload>();
 
   const currentBudget = watch( 'budget' );
 
@@ -206,7 +209,7 @@ const BudgetStep = () =>
         <h2 className='font-medium text-zinc-800 flex items-center'>What is your budget range?</h2>
       </div>
       <div>
-        <div className='grid md:grid-flow-col auto-cols-fr grid-cols-2 gap-2.5 h-full w-full'>
+        <div className='grid md:grid-cols-2 auto-cols-fr grid-cols-2 gap-2.5 h-full w-full'>
           {
             BUDGET_RANGE.map( b => (
               <label
@@ -242,7 +245,7 @@ const ContactStep = () =>
 
   if ( !recaptchaKey ) throw new Error( 'google recaptcha key is missing' );
 
-  const { register, formState: { errors }, control } = useFormContext<SurveyJobPayload>();
+  const { register, formState: { errors }, control } = useFormContext<ProjectsSurveyFormPayload>();
 
   return (
     <div>
@@ -318,7 +321,7 @@ const ContactStep = () =>
           />
         </div>
         <div>
-          <Textarea placeholder='Enter any additional information here' { ...register( 'comments' ) } />
+          <Textarea placeholder='Tell us more about your project' { ...register( 'comments' ) } />
         </div>
       </div>
       <Script src='https://www.google.com/recaptcha/api.js'
@@ -364,15 +367,93 @@ const ContactStep = () =>
   );
 };
 
-export function SurveyForm( { category }: { category: Categories; } )
+const HomeDetailsStep = () =>
+{
+  const { control,register, formState: { errors } } = useFormContext<ProjectsSurveyFormPayload>();
+
+  const homeTypes = [ 'Single Story', 'Two Story', 'Apartment/Condo' ];
+
+
+  return (
+    <div>
+      <div>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Tell us a little bit about your home.</h2>
+      </div>
+      <div className='space-y-6'>
+        <div>
+          <Input type='text' placeholder='Street Address*' { ...register( 'location.streetAddress', {
+            required: 'Please enter street address'
+          } ) } />
+          <InputError errors={ errors } name={ 'location.streetAddress' } />
+        </div>
+        <div>
+          <Controller
+            control={ control }
+            name={ 'location.homeType' }
+            rules={ {
+              required: 'Please select home type'
+            } }
+            render={ ( { field, formState: { errors } } ) => (
+              <>
+                <div className='grid grid-flow-col'>
+                  {
+                    homeTypes.map( h => (
+                      <div key={ h } className='space-x-1' ref={ field.ref }>
+                        <input
+                          type={ 'radio' }
+                          { ...field }
+                          id={ h } value={ h }
+                        />
+                        <label htmlFor={ h } className='text-sm'> { h }</label>
+                      </div>
+                    ) )
+                  }
+                </div>
+                <InputError errors={ errors } name={ 'location.homeType' } />
+              </>
+            ) }
+          />
+        </div>
+        <div>
+          <Input placeholder='Number of Bedrooms*' id='survey_home-details__bedrooms' { ...register( 'location.bedroomCount', {
+            required: 'Please enter number of bedrooms',
+            validate: v => !Number.isNaN( parseInt(v)) || 'Input must be a number'
+          } ) } />
+          <InputError errors={ errors } name='location.bedroomCount' />
+        </div>
+        <div>
+          <Input placeholder='Number of Bathrooms*' id='survey_home-details__bathrooms' { ...register( 'location.bathroomCount', {
+            required: 'Please enter number of bathrooms',
+            validate: v => !Number.isNaN( parseInt(v)) || 'Input must be a number'
+          } ) } />
+          <InputError errors={ errors } name='location.bathroomCount' />
+        </div>
+        <div>
+          <Input placeholder='Size of home(sq ft)*' id='survey_home-details__home-size' { ...register( 'location.grossFloorArea', {
+            required: 'Please enter size of home',
+            validate: v => !Number.isNaN( parseFloat(v)) || 'Input must be a number'
+          } ) } />
+          <InputError errors={ errors } name='location.grossFloorArea' />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export function ProjectsSurveyForm( { category }: { category: Categories; } )
 {
   const [ step, setStep ] = useState<STEPS>( STEPS.FIRST );
   const [ submissionStatus, setSubmissionStatus ] = useState<STATUS>( STATUS.IDLE );
-  const methods = useForm<SurveyJobPayload>( {
+  const methods = useForm<ProjectsSurveyFormPayload>( {
     defaultValues: {
       budget: BUDGET_RANGE.at( 0 ) ?? '',
       location: {
-        zipcode: ''
+        streetAddress: '',
+        zipcode: '',
+        homeType: '',
+        bedroomCount: '',
+        bathroomCount: '',
+        grossFloorArea: ''
       },
       timeline: '',
       comments: '',
@@ -408,7 +489,7 @@ export function SurveyForm( { category }: { category: Categories; } )
     setStep( STEPS.FIRST );
   };
 
-  const submitHandler: SubmitHandler<SurveyJobPayload> = async ( data ) =>
+  const submitHandler: SubmitHandler<ProjectsSurveyFormPayload> = async ( data ) =>
   {
     setIsFetching( true );
 
@@ -423,7 +504,7 @@ export function SurveyForm( { category }: { category: Categories; } )
 
       const recaptchaToken = recaptchaTokenRef.current.value;
 
-      const result = await fetch( `/get-quote?recaptcha-token=${ recaptchaToken }`, {
+      const result = await fetch( `/get-quote-projects?recaptcha-token=${ recaptchaToken }`, {
         method: 'POST',
         body: JSON.stringify( data )
       } );
@@ -467,7 +548,8 @@ export function SurveyForm( { category }: { category: Categories; } )
     2: <JobDescStep />,
     3: <TimelineStep />,
     4: <BudgetStep />,
-    5: <ContactStep />,
+    5: <HomeDetailsStep />,
+    6: <ContactStep />
   };
 
 

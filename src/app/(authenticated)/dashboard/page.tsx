@@ -1,5 +1,6 @@
 import { Dashboard } from './(components)/layout/main';
 import { MarketplacePortal } from './(components)/marketplace-portal';
+import { ProsPortal } from './(components)/add-vendor';
 import { ListAllPromos } from './(components)/list-all-promos';
 import { ProfilePortal } from './(components)/profile-portal';
 import { Suspense } from 'react';
@@ -22,28 +23,34 @@ export default async function DashboardPage()
 
   return (
     <Suspense fallback={ <Loading /> }>
-      <Dashboard.Main>
-        {/* @ts-expect-error haven't figured out how to add properties to session type yet */ }
-        { session.user && session.user.role === 'admin' ?
-          (
+      {/* @ts-expect-error haven't figured out how to add properties to session type yet */ }
+      { session.user && session.user.role === 'admin' ?
+        (
+          <Dashboard.Main>
             <Dashboard.Portal name='Dashboard'>
               <ListAllPromos />
-            </Dashboard.Portal> )
-          :
-          (
+            </Dashboard.Portal>
+            <Dashboard.Portal name='Marketplace'>
+              <MarketplacePortal />
+            </Dashboard.Portal>
+            <Dashboard.Portal name='Pros'>
+              <ProsPortal/>
+            </Dashboard.Portal>
+          </Dashboard.Main>
+        )
+        :
+        (
+          <Dashboard.Main>
             <Dashboard.Portal name='Profile'>
               <ProfilePortal />
             </Dashboard.Portal>
-          )
+            <Dashboard.Portal name='Add Promo'>
+              <MarketplacePortal />
+            </Dashboard.Portal>
+          </Dashboard.Main>
+        )
 
-        }
-        <Dashboard.Portal name='Add Promo'>
-          <MarketplacePortal />
-        </Dashboard.Portal>
-        <Dashboard.Portal name='Add Vendor'>
-          <></>
-        </Dashboard.Portal>
-      </Dashboard.Main>
+      }
     </Suspense>
   );
 }

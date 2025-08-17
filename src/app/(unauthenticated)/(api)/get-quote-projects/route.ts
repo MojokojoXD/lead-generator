@@ -1,21 +1,28 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { mailTransport } from '../../../(authenticated)/_lib/smtp/nodemailer';
-import type { SurveyJobPayload } from '../../survey/components/SurveryForm';
+import type { ProjectsSurveyFormPayload } from '../../survey-projects/components/ProjectsSurveryForm';
 
 const RECAPTCHA_SECRET =
   process.env.NODE_ENV === 'development'
     ? process.env.RECAPTCHA_SECRET_DEV
     : process.env.RECAPTCHA_SECRET;
 
-const formatSurveyData = ( raw: SurveyJobPayload ) => `Budget: ${ raw.budget }
-Location: ${ raw.location.zipcode }
-Timeline: ${ raw.timeline }
-Job Desc: ${ raw.desc }
-First Name: ${ raw.contacts.firstName }
-Last Name: ${ raw.contacts.lastName }
-Email: ${ raw.contacts.email }
-Phone: ${ raw.contacts.phone }
-Contact Method: ${ raw.contacts.method }`;
+const formatSurveyData = (
+  raw: ProjectsSurveyFormPayload
+) => `Budget: ${raw.budget}
+Location: ${raw.location.zipcode}
+Timeline: ${raw.timeline}
+Job Desc: ${raw.desc}
+Address: ${ raw.location.streetAddress }
+Home Type: ${ raw.location.homeType }
+Number of Bedrooms: ${ raw.location.bedroomCount }
+Number of Bathrooms: ${ raw.location.bathroomCount }
+Size of Home: ${ raw.location.grossFloorArea }
+First Name: ${raw.contacts.firstName}
+Last Name: ${raw.contacts.lastName}
+Email: ${raw.contacts.email}
+Phone: ${raw.contacts.phone}
+Contact Method: ${raw.contacts.method}`;
 export async function POST(req: NextRequest) {
   try {
     if (!RECAPTCHA_SECRET) throw new Error('recaptcha failure');
@@ -28,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!recaptchaToken)
       throw new Error('recaptcha token missing in url');
 
-    const body = <SurveyJobPayload>await req.json();
+    const body = <ProjectsSurveyFormPayload>await req.json();
 
     const testURL = new URL(
       'https://www.google.com/recaptcha/api/siteverify'
@@ -60,7 +67,7 @@ export async function POST(req: NextRequest) {
       },
       to: 'dollarmasters@gmail.com',
       subject: 'lead',
-      text: formatSurveyData( body ),
+      text: formatSurveyData(body),
     });
 
     console.log(result);
