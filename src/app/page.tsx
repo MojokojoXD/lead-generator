@@ -13,17 +13,17 @@ export default function Home()
               <p className='max-w-lg'>Congratulations! We&apos;ll help setup your new home in minutes. Pick a Service -  <strong>It&apos;s Free</strong>.</p>
             </div>
             <Link href={ '/marketplace' } className='block mb-4'>
-              <Button className='w-full max-w-[200px]'>Save on Home Items</Button>
+              <Button className='w-full max-w-[180px] text-base justify-start'>Save on Home Items</Button>
               {/* <h2 className='text-primary text-2xl font-medium p-2.5 border rounded w-fit bg-primary'>Save on Home Items</h2> */}
               <p className='leading-normal max-w-md'>Get Deals on furniture, décor and essentials nearby.</p>
             </Link>
             <Link href={ '/survey-projects/base' } className='block mb-4'>
-              <Button className='w-full max-w-[200px]'>Get project quotes</Button>
+              <Button className='w-full max-w-[180px] text-base justify-start'>Get project quotes</Button>
               <p className='leading-normal max-w-md'>Planning a big job like pools, HVAC, pest control or landscaping? Get bids from top-rated pros.
               </p>
             </Link>
             <Link href={ '/handyman' } className='block mb-4'>
-              <Button className='w-full max-w-[200px]'>Hire Handymans</Button>
+              <Button className='w-full max-w-[180px] text-base justify-start'>Hire Handymans</Button>
               <p className='leading-normal max-w-md'>Need help with a small job e.g. mount tv, clean home, install fans or blinds, movers? Connect with our highly rated pros.
               </p>
             </Link>
