@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from './components/shadcnUI/button';
 export default function Home()
 {
   return (
@@ -7,22 +8,23 @@ export default function Home()
       <section className='h-full w-full max-w-7xl mx-auto pt-16 sm:pt-24 xl:grid grid-cols-2'>
         <div className='pb-24 space-y-8'>
           <div className='leading-loose text-base'>
-            <h1 className='text-6xl sm:text-8xl md:text-9xl lg:text-7xl font-bold tracking-tighter text-zinc-800 mb-4'>Just Moved?</h1>
+            <h1 className='text-6xl sm:text-8xl md:text-9xl lg:text-7xl font-bold tracking-tighter text-zinc-800 mb-4'>Just Moved to Arizona?</h1>
             <div className='leading-normal mb-4'>
-              <p className='max-w-lg'>Congratulations! We&apos;ll help setup your new home in minutes. Pick a Service - It&apos;s Free.</p>
+              <p className='max-w-lg'>Congratulations! We&apos;ll help setup your new home in minutes. Pick a Service -  <strong>It&apos;s Free</strong>.</p>
             </div>
             <Link href={ '/marketplace' } className='block mb-4'>
-              <h2 className='text-primary text-2xl font-semibold'>Save on Home Items</h2>
+              <Button className='w-full max-w-[200px]'>Save on Home Items</Button>
+              {/* <h2 className='text-primary text-2xl font-medium p-2.5 border rounded w-fit bg-primary'>Save on Home Items</h2> */}
               <p className='leading-normal max-w-md'>Get Deals on furniture, décor and essentials nearby.</p>
             </Link>
             <Link href={ '/survey-projects/base' } className='block mb-4'>
-              <h2 className='text-primary text-2xl font-semibold'>Get project quotes</h2>
+              <Button className='w-full max-w-[200px]'>Get project quotes</Button>
               <p className='leading-normal max-w-md'>Planning a big job like pools, HVAC, pest control or landscaping? Get bids from top-rated pros.
               </p>
             </Link>
             <Link href={ '/handyman' } className='block mb-4'>
-              <h2 className='text-primary text-2xl font-semibold'>Hire Handyman</h2>
-              <p className='leading-normal max-w-md'>Need help with a small job e.g. mount tv, clean home, install fans or blinds, movers? Connect with our vetted and highly rated vendors
+              <Button className='w-full max-w-[200px]'>Hire Handymans</Button>
+              <p className='leading-normal max-w-md'>Need help with a small job e.g. mount tv, clean home, install fans or blinds, movers? Connect with our highly rated pros.
               </p>
             </Link>
           </div>
