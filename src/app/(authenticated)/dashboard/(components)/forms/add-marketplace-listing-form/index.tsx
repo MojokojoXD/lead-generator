@@ -32,7 +32,7 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
     setValue,
     setError,
     getValues,
-    watch,
+    // watch,
     formState: { errors } } = useForm<ListingPayload>( {
       defaultValues: {
         _metadata: {
@@ -70,7 +70,7 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
   }
 
   const fileName = getValues( 'promo_img.filename' );
-  const currentExpirationValue = watch( 'expiration' );
+  // const currentExpirationValue = watch( 'expiration' );
 
 
 
