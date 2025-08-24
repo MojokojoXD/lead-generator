@@ -12,20 +12,20 @@ export default function Home()
             <div className='leading-normal mb-4'>
               <p className='max-w-lg'>Congratulations! We&apos;ll help setup your new home in minutes. Pick a Service -  <strong>It&apos;s Free</strong>.</p>
             </div>
-            <Link href={ '/marketplace' } className='block mb-4'>
-              <Button className='w-full max-w-[180px] text-base justify-start'>Save on Home Items</Button>
-              {/* <h2 className='text-primary text-2xl font-medium p-2.5 border rounded w-fit bg-primary'>Save on Home Items</h2> */}
-              <p className='leading-normal max-w-md'>Get Deals on furniture, décor and essentials nearby.</p>
-            </Link>
             <Link href={ '/survey-projects/base' } className='block mb-4'>
-              <Button className='w-full max-w-[180px] text-base justify-start'>Get project quotes</Button>
+              <Button className='w-full max-w-[180px] text-base justify-start'>Get Project Quotes</Button>
               <p className='leading-normal max-w-md'>Planning a big job like pools, HVAC, pest control or landscaping? Get bids from top-rated pros.
               </p>
             </Link>
             <Link href={ '/handyman' } className='block mb-4'>
-              <Button className='w-full max-w-[180px] text-base justify-start'>Hire Handymans</Button>
+              <Button className='w-full max-w-[180px] text-base justify-start'>Hire Handymen</Button>
               <p className='leading-normal max-w-md'>Need help with a small job e.g. mount tv, clean home, install fans or blinds, movers? Connect with our highly rated pros.
               </p>
+            </Link>
+            <Link href={ '/marketplace' } className='block mb-4'>
+              <Button className='w-full max-w-[180px] text-base justify-start'>Save on Home Items and Accessories</Button>
+              {/* <h2 className='text-primary text-2xl font-medium p-2.5 border rounded w-fit bg-primary'>Save on Home Items</h2> */ }
+              <p className='leading-normal max-w-md'>Get Deals on furniture, décor and essentials nearby.</p>
             </Link>
           </div>
           <div className='lg:hidden grid grid-cols-2 auto-cols-fr gap-2.5 mb-8 sm:mb-3.5'>

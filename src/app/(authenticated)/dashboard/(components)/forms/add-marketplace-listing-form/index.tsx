@@ -53,12 +53,8 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
       }
     } );
 
-  register( 'promo_img.filename', {
-    required: 'Please upload promo image'
-  } );
-  register( 'expiration', {
-    required: 'Please select expiration',
-  } );
+  register( 'promo_img.filename');
+  // register( 'expiration');
 
   let categoryRef: RefCallBack | undefined;
   let categoryName: string | undefined;
@@ -232,12 +228,13 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
         </div>
         <div className='grid grid-cols-2 gap-2.5'>
           <div>
-            <DatePicker
+            {/* <DatePicker
               placeholder='Expiration'
               currentDate={ currentExpirationValue }
               onDateChange={
                 date => setValue( 'expiration', date ) }
-            />
+            /> */}
+            <Input type='date' {...register('expiration')}/>
             <InputError errors={ errors } name={ 'expiration' } />
           </div>
         </div>

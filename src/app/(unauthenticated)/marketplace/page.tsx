@@ -52,7 +52,7 @@ export default async function Marketplace()
   return (
     <Suspense fallback={ <Loading/> }>
       <div className='px-[5%] lg:px-[6.5%] py-10 space-y-12 min-h-screen bg-stone-50'>
-        <h1 className='text-2xl font-medium tracking-wide text-prose'>Marketplace</h1>
+        <h1 className='text-3xl font-medium tracking-wide text-prose text-center'>Welcome To The Neighborhood</h1>
         <div className='grid grid-cols-[repeat(auto-fit,minmax(350px,25rem))] gap-3 w-full h-full'>
           {
             listings.map( l =>
