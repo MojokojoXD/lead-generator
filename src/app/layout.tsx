@@ -35,8 +35,8 @@ export default async function RootLayout( props: LayoutProps )
           className={`${libreFranklin.className} ${dm_serif.variable} antialiased text-slate-500`}
         >
           <main className='relative h-screen overflow-hidden'>
-            <Navbar />
-            <div className='w-full h-[calc(100vh-96px)] sm:h-[calc(100vh-160px)] overflow-y-auto text- ring'>
+            <Navbar/>
+            <div className='w-full h-[calc(100vh-96px)] sm:h-[calc(100vh-160px)] overflow-y-auto text-prose'>
                 {props.children}
             </div>
           </main>

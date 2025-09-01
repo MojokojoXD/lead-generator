@@ -34,7 +34,7 @@ export function ListingCard( {
         <div className='absolute -left-20 -bottom-16 h-32 w-48 rounded-full bg-secondary'>
           <span className='absolute top-4 right-8 text-lg font-semibold text-secondary-foreground'>{ discount }<span className='text-sm'>% Off</span></span>off          
         </div>
-        <span className='absolute right-5 bottom-5 text-sm font-medium border border-dashed border-secondary px-2 py-1'>Valid until: { expiration }</span>
+        {expiration && <span className='absolute right-5 bottom-5 text-sm font-medium border border-dashed border-secondary px-2 py-1'>Valid until: { expiration }</span>}
       </div>
     </a>
   );

@@ -60,7 +60,9 @@ async function isFileAvailable( fileName: string )
 
     // If the object exists, return true
     return true;
-  } catch (err) {
+  } catch ( err )
+  {
+    console.log( err )
     if (err instanceof S3ServiceException && err.name === 'NotFound') {
       // File not found in AWS bucket, return false
       return false;

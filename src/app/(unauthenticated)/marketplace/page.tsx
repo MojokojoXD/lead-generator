@@ -24,10 +24,10 @@ const getAllListings = async () =>
 
     const transformedData = data.map( async l =>
     {
-      const url = await generatePromoImgURL( `promo-images/${ l.promo_img.filename }` );
-
-      l.promo_img.filename = url;
-
+      if ( l.promo_img.filename )
+      {
+        l.promo_img.filename = await generatePromoImgURL( `promo-images/${ l.promo_img.filename }` )
+      }
       return l;
     } );
 

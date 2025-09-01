@@ -36,7 +36,7 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
     formState: { errors } } = useForm<ListingPayload>( {
       defaultValues: {
         _metadata: {
-          status: 'REVIEW'
+          status: role === 'admin' ? 'LISTED' : 'REVIEW'
         },
 
         title: '',

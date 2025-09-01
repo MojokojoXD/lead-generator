@@ -35,7 +35,7 @@ export function PromosTable( { promos }: PromosTableProps )
           promos.map( p =>(
             <tr key={ p._id.toString() }>
               <td>{ p._id.toString() }</td>
-              <td>{ new Date().toLocaleDateString() }</td>
+              <td>{ p.uploaded ?? 'n/a' }</td>
               <td>{ p.businessName }</td>
               <td>{ p.title }</td>
               <td>
