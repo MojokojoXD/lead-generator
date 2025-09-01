@@ -110,6 +110,8 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
     //form data
     const form = new FormData();
 
+    data.uploaded = new Date().toISOString()
+
     form.append( 'vendorJSON', JSON.stringify( data ) );
     form.append( 'promoImg', promoImgFile as File );
 
