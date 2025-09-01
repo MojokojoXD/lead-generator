@@ -16,7 +16,7 @@ interface ListingPayload {
   desc: string;
   promo_img: {
     upload_time: number | null | undefined;
-    filename: string;
+    filename: string | null | undefined;
   };
 
   businessName?: string;

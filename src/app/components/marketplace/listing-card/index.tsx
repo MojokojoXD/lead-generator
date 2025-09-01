@@ -16,7 +16,7 @@ export function ListingCard( {
     <a href={ 'http://' + url_website } target='_blank'>
       <div className='relative shadow rounded-2xl flex flex-col bg-white h-[25.95rem] w-full text-zinc-700 overflow-hidden border'>
         <div className='relative basis-2/5 shadow-inner border-b'>
-          <Image src={ promo_img.filename } alt='random image' fill className='object-cover object-position-center' />
+          { promo_img.filename && <Image src={ promo_img.filename } alt='random image' fill className='object-cover object-position-center' /> }
         </div>
         <div className='p-5 space-y-2.5'>
           <div className='relative'>

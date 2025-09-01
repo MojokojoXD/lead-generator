@@ -12,6 +12,10 @@ const ADMIN_SECRET = process.env.ADMIN_CREATION_SECRET;
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
+  const headers = new Headers( req.headers );
+
+  headers.set('X-CURRENT-PATH', path)
+
   if (path.startsWith('/survey'))
     return ALLOWED_SURVEY_CATEGORIES.includes(
       path.split('/').pop() ?? ''
@@ -33,11 +37,11 @@ export function middleware(req: NextRequest) {
       urlParams.has('email') || urlParams.has('token');
 
     return hasCorrectAdminSecret && hasEmailOrCreationToken
-      ? NextResponse.next()
+      ? NextResponse.next({ headers })
       : NextResponse.error();
   }
 
-  return NextResponse.next();
+  return NextResponse.next( { headers } );
 }
 
 // export const config = {

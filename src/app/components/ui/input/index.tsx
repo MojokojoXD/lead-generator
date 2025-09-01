@@ -7,7 +7,7 @@ import { ErrorMessage, type FieldValuesFromFieldErrors } from '@hookform/error-m
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   wrapperClx?: string;
-  fileName?: string;
+  fileName?: string | null;
 };
 
 interface InputErrorProps<T extends FieldValues = FieldValues>

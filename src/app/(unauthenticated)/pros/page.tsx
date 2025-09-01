@@ -66,6 +66,7 @@ export default async function Marketplace()
 
   const allClient = await getAllClients();
 
+  console.log( allClient )
   return (
     <Suspense fallback={ <Loading /> }>
       <div className='px-[5%] lg:px-[6.5%] py-10 space-y-12 min-h-screen bg-stone-50'>

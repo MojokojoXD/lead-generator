@@ -49,8 +49,8 @@ type AuthStatus = 'authenticated' | 'loading' | 'unauthenticated';
 function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 {
 
-  const emphasizedBtnClsx = clsx( isOnSideMenu ? 'max-w-[6.5rem] w-full' : 'text-lg' );
-  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit font-normal text-lg' );
+  const emphasizedBtnClsx = clsx( isOnSideMenu ? 'max-w-[6.5rem] w-full' : 'text-lg lg:text-2xl lg:py-6' );
+  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit text-lg lg:text-2xl' );
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = ( ev ) =>
   {
@@ -115,7 +115,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           id='__sign-out-btn'
           variant={ 'link' }
           size={ 'lg' }
-          className={ unemphasizedBtnClsx + ' ml-1.5 max-w-[3.5rem] w-full' }
+          className={ unemphasizedBtnClsx + ' ml-3 max-w-[3.5rem] w-full' }
           onClick={ handleClick }
         >
           Log Out
@@ -203,7 +203,7 @@ export function Navlinks( { path }: NavlinksProps )
                 <Button
                   asChild
                   variant={ 'ghost' }
-                  className={ clsx( 'font-normal text-lg',path === l.href && 'text-primary hover:text-primary font-medium' ) }
+                  className={ clsx( 'relative text-lg lg:text-2xl',path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
                 >
                   <Link href={ l.href }> { l.label } </Link>
                 </Button>

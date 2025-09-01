@@ -46,7 +46,7 @@ export function AddMarketplaceListingForm( { role }: { role: Role; } )
         desc: '',
         promo_img: {
           upload_time: null,
-          filename: ''
+          filename: null,
         },
         businessName: searchParams.get( BUSINESS_NAME_PARAM ) ?? '',
         category: searchParams.get( CATEGORY_PARAM ) ?? ''

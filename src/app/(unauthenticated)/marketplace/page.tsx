@@ -15,7 +15,7 @@ const getAllListings = async () =>
 
     const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.LISTINGS );
 
-    const cursor = await collection.find<WithId<ListingPayload>>( {'_metadata.status': 'LISTED'} );
+    const cursor = await collection.find<WithId<ListingPayload>>( { '$or': [ { '_metadata.status': 'LISTED' }, { '_metadata.status': 'ADMIN' } ]} );
 
 
     let data = await cursor.toArray();

@@ -1,31 +1,30 @@
-'use client';
-
 import { Navlinks } from './Navlinks';
-import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import Image from 'next/image';
 import Link from 'next/link';
+import { headers } from 'next/headers';
 
 
 const HIDE_NAV_ON_ROUTES = [ '/login', '/dashboard', '/sign-up' ];
 
-export default function Navbar()
+export default async function Navbar()
 {
-  const path = usePathname();
-
+  const headerList = Object.fromEntries( await headers() );
+  const currentPath = headerList[ 'x-current-path' ] ?? '';
+  
   return (
     <>
       <nav
-        className={ twMerge( 'relative bg-white flex items-center h-24 sm:h-32 border-b border-zinc-200', HIDE_NAV_ON_ROUTES.includes( path ) && 'hidden' ) }
+        className={ twMerge( 'relative bg-white flex items-center h-24 sm:h-40 border-b border-zinc-200', HIDE_NAV_ON_ROUTES.includes( currentPath ) && 'hidden' ) }
       >
-        <div className='h-fit w-full px-[5%] sm:px-0 max-w-7xl mx-auto flex items-center justify-between'>
+        <div className='container h-full mx-auto px-5 sm:px-0 flex justify-between items-center'>
           {/* logo */ }
           <Link href={ '/' }>
             <span>
               <Image src={ '/prosfinder.svg' } alt='site logo' height={ 250 } width={ 250 } className='h-[20px] sm:h-[30px] w-auto' />
             </span>
           </Link>
-          <Navlinks path={ path } />
+          <Navlinks path={ currentPath } />
         </div>
       </nav>
     </>

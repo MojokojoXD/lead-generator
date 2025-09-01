@@ -114,6 +114,7 @@ const JobDescStep = () =>
                 <SelectItem value='pool'> Pools </SelectItem>
                 <SelectItem value='landscaping'> Landscaping </SelectItem>
                 <SelectItem value='pest control'> Pest Control </SelectItem>
+                <SelectItem value='hvac & plumbing'> HVAC & Plumbing </SelectItem>
               </SelectContent>
             </Select>
             <InputError errors={ errors } name={ 'desc' } />
@@ -131,7 +132,7 @@ const LocationStep = () =>
   return (
     <div>
       <div>
-        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Location</h2>
+        <h2 className='font-medium mb-5 text-zinc-800 flex items-center'>Zipcode</h2>
       </div>
       <div className='space-y-6'>
         <div>
@@ -172,12 +173,11 @@ const TimelineStep = () =>
                     <SelectValue placeholder='Select Timeline' />
                   </SelectTrigger>
                   <SelectContent ref={ field.ref }>
-                    <SelectItem value='immediately'>Immediately</SelectItem>
-                    <SelectItem value='in 1-2 months'>In 1-2 months</SelectItem>
-                    <SelectItem value='in 3-4 months'>In 3-4 months</SelectItem>
-                    <SelectItem value='in 6-12 months'>In 6-12 months</SelectItem>
-                    <SelectItem value='1 year or later'>1 year or later</SelectItem>
-                    <SelectItem value='just exploring'>Just exploring</SelectItem>
+                    <SelectItem value='in 30 days'>Ready to start in the next 30 days</SelectItem>
+                    <SelectItem value='in 1-3 months'>1-3 months
+                    </SelectItem>
+                    <SelectItem value='6+ months / No rush'>6+ months / No rush</SelectItem>
+                    <SelectItem value='Just exploring / Getting ideas'>Just exploring / Getting ideas</SelectItem>
                   </SelectContent>
                 </Select>
                 <InputError errors={ errors } name={ 'timeline' } />
@@ -369,7 +369,7 @@ const ContactStep = () =>
 
 const HomeDetailsStep = () =>
 {
-  const { control,register, formState: { errors } } = useFormContext<ProjectsSurveyFormPayload>();
+  const { control, register, formState: { errors } } = useFormContext<ProjectsSurveyFormPayload>();
 
   const homeTypes = [ 'Single Story', 'Two Story', 'Apartment/Condo' ];
 
@@ -417,21 +417,21 @@ const HomeDetailsStep = () =>
         <div>
           <Input placeholder='Number of Bedrooms*' id='survey_home-details__bedrooms' { ...register( 'location.bedroomCount', {
             required: 'Please enter number of bedrooms',
-            validate: v => !Number.isNaN( parseInt(v)) || 'Input must be a number'
+            validate: v => !Number.isNaN( parseInt( v ) ) || 'Input must be a number'
           } ) } />
           <InputError errors={ errors } name='location.bedroomCount' />
         </div>
         <div>
           <Input placeholder='Number of Bathrooms*' id='survey_home-details__bathrooms' { ...register( 'location.bathroomCount', {
             required: 'Please enter number of bathrooms',
-            validate: v => !Number.isNaN( parseInt(v)) || 'Input must be a number'
+            validate: v => !Number.isNaN( parseInt( v ) ) || 'Input must be a number'
           } ) } />
           <InputError errors={ errors } name='location.bathroomCount' />
         </div>
         <div>
           <Input placeholder='Size of home(sq ft)*' id='survey_home-details__home-size' { ...register( 'location.grossFloorArea', {
             required: 'Please enter size of home',
-            validate: v => !Number.isNaN( parseFloat(v)) || 'Input must be a number'
+            validate: v => !Number.isNaN( parseFloat( v ) ) || 'Input must be a number'
           } ) } />
           <InputError errors={ errors } name='location.grossFloorArea' />
         </div>

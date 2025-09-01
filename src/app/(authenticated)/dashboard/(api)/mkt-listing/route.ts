@@ -14,26 +14,34 @@ export async function POST( req: NextRequest )
   if (!token) return NextResponse.json({ message: 'unauthorized user' }, { status: 401 });
 
   //parsing multipart form
-
   const promoForm = await req.formData();
 
-  const promoInfo: ListingPayload = JSON.parse(<string>promoForm.get('vendorJSON')); // vendor info is sent as a JSON string
-  const promoImgFile = <File>promoForm.get('promoImg');
+  const promoInfo: ListingPayload = JSON.parse( <string> promoForm.get( 'vendorJSON' ) ); // vendor info is sent as a JSON string
+  const hasPromoImg = promoInfo.promo_img.filename !== null;
 
-  //rename promo image file
-  const fileExt = promoImgFile.type.split('/').pop()!;
 
-  const formattedPromoImgFilename = `${token.sub}_${promoInfo.promo_img.upload_time}.${fileExt}`;
-  promoInfo.promo_img.filename = formattedPromoImgFilename;
+  try
+  {
+    
+    if ( hasPromoImg )
+    {
+      const promoImgFile = <File>promoForm.get('promoImg');
 
-  const fileBuffer = await promoImgFile.arrayBuffer();
+      //rename promo image file
+      const fileExt = promoImgFile.type.split('/').pop()!;
 
-  const buffer = Buffer.from(fileBuffer);
+      const formattedPromoImgFilename = `${token.sub}_${promoInfo.promo_img.upload_time}.${fileExt}`;
+      promoInfo.promo_img.filename = formattedPromoImgFilename;
 
-  try {
-    const isUploaded = await uploadFileToAWS(`promo-images/${formattedPromoImgFilename}`, buffer);
+      const fileBuffer = await promoImgFile.arrayBuffer();
 
-    if (!isUploaded) throw new Error('failed to upload file to aws');
+      const buffer = Buffer.from( fileBuffer );
+      
+      // store in S3 bucket
+      const isUploaded = await uploadFileToAWS(`promo-images/${formattedPromoImgFilename}`, buffer);
+  
+      if (!isUploaded) throw new Error('failed to upload file to aws');
+    }
 
     const connection = await client.connect();
 
