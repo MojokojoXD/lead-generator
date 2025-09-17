@@ -136,7 +136,8 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
                     <Button
                       asChild
                       variant={ 'default' }
-                      size={ isOnSideMenu || isBetweenSMAndXL ? 'default' : 'lg' }
+                    size={ isOnSideMenu || isBetweenSMAndXL ? 'default' : 'lg' }
+                    className='2xl:text-xl'
                       onClick={ handleClick }
                     >
                       <Link href={ '/sign-up' }>
@@ -147,9 +148,9 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropDownArrow/>
-                    <DropdownMenuItem onSelect={ () => router.push('/sign-up') }>Add your Business</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={ () => router.push('/sign-up') } className='2xl:text-lg'>Add your Business</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={ () => router.push( '/sign-up' ) }>Claim your Business for Free</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={ () => router.push( '/sign-up' ) } className='2xl:text-lg'>Claim your Business for Free</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </li>
@@ -158,7 +159,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
                   asChild
                   variant={ 'link' }
                   size={ isBetweenSMAndXL ? 'default' : 'lg' }
-                  className='px-0'
+                  className='px-0 2xl:text-xl'
                   onClick={ handleClick }
                 >
                   <Link href={ '/login' }>
@@ -177,6 +178,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           asChild
           variant={ 'default' }
           size={ isOnSideMenu ? 'default' : 'lg' }
+          className='2xl:text-xl'
           onClick={ handleClick }
         >
           <Link href={ '/dashboard' }> Dashboard </Link>
@@ -187,7 +189,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           id='__sign-out-btn'
           variant={ 'link' }
           size={ isBetweenSMAndXL ? 'default' : 'lg' }
-          className='px-0'
+          className='px-0 2xl:text-xl'
           onClick={ handleClick }
         >
           Log Out
@@ -260,7 +262,7 @@ export function Navlinks()
                 <Button
                   asChild
                   variant={ 'ghost' }
-                  className={ clsx( 'relative', path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
+                  className={ clsx( 'relative 2xl:text-xl', path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
                 >
                   <Link href={ '/' + l.href }> { l.label } </Link>
                 </Button>
