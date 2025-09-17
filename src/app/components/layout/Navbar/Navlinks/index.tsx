@@ -5,6 +5,11 @@ import { Button } from '@/app/components/shadcnUI/button';
 import clsx from 'clsx';
 import { MenuIcon, X } from 'lucide-react';
 import { useState, useEffect, MouseEventHandler } from 'react';
+import { useWindowSize } from '@uidotdev/usehooks';
+
+
+const SM_SCREEN_BREAKPOINT = 640;
+const XL_SCREEN_BREAKPOINT = 1280;
 
 
 const NAV_LINKS_DATA = {
@@ -49,6 +54,11 @@ type AuthStatus = 'authenticated' | 'loading' | 'unauthenticated';
 function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 {
 
+  const { width } = useWindowSize();
+
+  const isBetweenSMAndXL =
+    Boolean(width && ( width > SM_SCREEN_BREAKPOINT && width <= XL_SCREEN_BREAKPOINT ));
+
   const emphasizedBtnClsx = clsx( isOnSideMenu ? 'max-w-[6.5rem] w-full' : 'text-lg lg:text-2xl lg:py-6' );
   const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit text-lg lg:text-2xl' );
 
@@ -66,14 +76,13 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
     closeMenu?.call( undefined );
   };
 
-
   return status === 'unauthenticated' ?
     <>
       <li>
         <Button
           asChild
           variant={ 'default' }
-          size={ isOnSideMenu ? 'default' : 'lg' }
+          size={ isOnSideMenu || isBetweenSMAndXL ? 'default' : 'lg' }
           className={ emphasizedBtnClsx }
           onClick={ handleClick }
         >
@@ -86,7 +95,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
         <Button
           asChild
           variant={ 'link' }
-          size={ 'lg' }
+          size={ isBetweenSMAndXL ? 'default' : 'lg' }
           className={ unemphasizedBtnClsx + ' ml-1.5 max-w-[3.5rem] w-full' }
           onClick={ handleClick }
         >
@@ -114,7 +123,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
         <Button
           id='__sign-out-btn'
           variant={ 'link' }
-          size={ 'lg' }
+          size={ isBetweenSMAndXL ? 'default' : 'lg' }
           className={ unemphasizedBtnClsx + ' ml-3 max-w-[3.5rem] w-full' }
           onClick={ handleClick }
         >
@@ -129,9 +138,9 @@ export function Navlinks( { path }: NavlinksProps )
 
   const { status } = useSession();
   const [ toggleSideMenu, setToggleSideMenu ] = useState( false );
-  const [ windowWidth, setWindowWidth ] = useState<number | null>(  null   );
+  const [ windowWidth, setWindowWidth ] = useState<number | null>( null );
 
-  const isOverWidthThreshold = Boolean(windowWidth && windowWidth >= 1024);
+  const isOverWidthThreshold = Boolean( windowWidth && windowWidth >= 1024 );
 
   const sideMenuPortalClsx = clsx( 'fixed top-24 sm:top-32 inset-x-0 bottom-0 h-full bg-white/90 backdrop-contrast-90 z-10 transition-[z-index,opacity] duration-150 ease-in',
     toggleSideMenu ? 'z-[999] opacity-100 translate-x-0' : '-z-[999] opacity-0 -translate-x-[9999px]'
@@ -145,14 +154,14 @@ export function Navlinks( { path }: NavlinksProps )
     {
       const clickTarget = ev.target as Node;
 
-      if ( sidebarPortal.isSameNode(clickTarget))
-        setToggleSideMenu( false )
-    }
+      if ( sidebarPortal.isSameNode( clickTarget ) )
+        setToggleSideMenu( false );
+    };
 
     if ( open || !toggleSideMenu )
     {
       sidebarPortal.addEventListener( 'click', sidebarPortalClickHandler );
-    }else sidebarPortal.removeEventListener( 'click', sidebarPortalClickHandler );
+    } else sidebarPortal.removeEventListener( 'click', sidebarPortalClickHandler );
 
     if ( open )
     {
@@ -193,8 +202,8 @@ export function Navlinks( { path }: NavlinksProps )
   return (
 
     <>
-      {/* main menu */}
-      <div className='h-full flex flex-nowrap items-center md:space-x-2.5 text-secondary'>
+      {/* main menu */ }
+      <div className='h-full flex flex-nowrap items-center 2xl:space-x-2.5 text-secondary'>
 
         <ul className='tracking-wide text-sm hidden lg:flex w-full'>
           {
@@ -203,7 +212,7 @@ export function Navlinks( { path }: NavlinksProps )
                 <Button
                   asChild
                   variant={ 'ghost' }
-                  className={ clsx( 'relative text-lg lg:text-2xl',path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
+                  className={ clsx( 'relative text-lg 2xl:text-2xl', path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
                 >
                   <Link href={ l.href }> { l.label } </Link>
                 </Button>

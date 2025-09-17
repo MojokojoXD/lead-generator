@@ -36,7 +36,7 @@ export default async function RootLayout( props: LayoutProps )
         >
           <main className='relative h-screen overflow-hidden'>
             <Navbar/>
-            <div className='w-full h-[calc(100vh-96px)] sm:h-[calc(100vh-160px)] overflow-y-auto text-prose'>
+            <div className='w-full h-[calc(100vh-96px)] sm:h-[calc(100vh-128px)] 2xl:h-[calc(100vh-160px)] overflow-y-auto text-prose'>
                 {props.children}
             </div>
           </main>
