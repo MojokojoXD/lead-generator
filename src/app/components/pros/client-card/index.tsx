@@ -1,4 +1,4 @@
-import type { PublicVendorAccount, VendorAccount } from '@/app/types/account';
+import type { PublicVendorAccount } from '@/app/types/account';
 import { Globe, Mail, Phone } from 'lucide-react';
 import Image from 'next/image';
 
