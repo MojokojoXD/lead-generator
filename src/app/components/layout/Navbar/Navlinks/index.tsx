@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { MenuIcon, X } from 'lucide-react';
 import { useState, useEffect, MouseEventHandler } from 'react';
 import { useWindowSize } from '@uidotdev/usehooks';
+import { usePathname } from 'next/navigation';
 
 
 const SM_SCREEN_BREAKPOINT = 640;
@@ -17,22 +18,22 @@ const NAV_LINKS_DATA = {
     {
       id: 0,
       label: 'Home',
-      href: '/',
+      href: '',
     },
     {
       id: 1,
       label: 'Meet the Pros',
-      href: '/pros'
+      href: 'pros'
     },
     {
       id: 2,
       label: 'Marketplace',
-      href: '/marketplace'
+      href: 'marketplace'
     },
     {
       id: 3,
       label: 'About',
-      href: '/about'
+      href: 'about'
     }
   ],
 };
@@ -59,8 +60,6 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
   const isBetweenSMAndXL =
     Boolean(width && ( width > SM_SCREEN_BREAKPOINT && width <= XL_SCREEN_BREAKPOINT ));
 
-  const emphasizedBtnClsx = clsx( isOnSideMenu ? 'max-w-[6.5rem] w-full' : 'text-lg lg:text-2xl lg:py-6' );
-  const unemphasizedBtnClsx = clsx( isOnSideMenu ? 'px-0' : 'text-inherit text-lg lg:text-2xl' );
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = ( ev ) =>
   {
@@ -83,7 +82,6 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           asChild
           variant={ 'default' }
           size={ isOnSideMenu || isBetweenSMAndXL ? 'default' : 'lg' }
-          className={ emphasizedBtnClsx }
           onClick={ handleClick }
         >
           <Link href={ '/sign-up' }>
@@ -96,7 +94,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           asChild
           variant={ 'link' }
           size={ isBetweenSMAndXL ? 'default' : 'lg' }
-          className={ unemphasizedBtnClsx + ' ml-1.5 max-w-[3.5rem] w-full' }
+          className='px-0'
           onClick={ handleClick }
         >
           <Link href={ '/login' }>
@@ -113,7 +111,6 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           asChild
           variant={ 'default' }
           size={ isOnSideMenu ? 'default' : 'lg' }
-          className={ emphasizedBtnClsx }
           onClick={ handleClick }
         >
           <Link href={ '/dashboard' }> Dashboard </Link>
@@ -124,7 +121,7 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
           id='__sign-out-btn'
           variant={ 'link' }
           size={ isBetweenSMAndXL ? 'default' : 'lg' }
-          className={ unemphasizedBtnClsx + ' ml-3 max-w-[3.5rem] w-full' }
+          className='px-0'
           onClick={ handleClick }
         >
           Log Out
@@ -133,12 +130,13 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
     </>;
 }
 
-export function Navlinks( { path }: NavlinksProps )
+export function Navlinks()
 {
 
+  const path = usePathname().split( '/' ).at( 1 );
   const { status } = useSession();
   const [ toggleSideMenu, setToggleSideMenu ] = useState( false );
-  const [ windowWidth, setWindowWidth ] = useState<number | null>( null );
+  const { width: windowWidth } = useWindowSize()
 
   const isOverWidthThreshold = Boolean( windowWidth && windowWidth >= 1024 );
 
@@ -173,20 +171,6 @@ export function Navlinks( { path }: NavlinksProps )
 
   const closeSideMenu = () => setToggleSideMenu( false );
 
-  useEffect( () =>
-  {
-    if ( !window ) return;
-
-    const scrollHandler = () => setWindowWidth( window.innerWidth );
-
-    window.addEventListener( 'resize', scrollHandler );
-
-
-    return () =>
-    {
-      window.removeEventListener( 'resize', scrollHandler );
-    };
-  } );
 
   useEffect( () =>
   {
@@ -197,13 +181,11 @@ export function Navlinks( { path }: NavlinksProps )
   }, [ isOverWidthThreshold ] );
 
 
-  if ( windowWidth === 0 ) return null;
-
   return (
 
     <>
       {/* main menu */ }
-      <div className='h-full flex flex-nowrap items-center 2xl:space-x-2.5 text-secondary'>
+      <div className='h-full flex flex-nowrap items-center space-x-1.5 2xl:space-x-2.5 text-secondary'>
 
         <ul className='tracking-wide text-sm hidden lg:flex w-full'>
           {
@@ -212,15 +194,15 @@ export function Navlinks( { path }: NavlinksProps )
                 <Button
                   asChild
                   variant={ 'ghost' }
-                  className={ clsx( 'relative text-lg 2xl:text-2xl', path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
+                  className={ clsx( 'relative', path === l.href && 'before:content-[""] before:w-1/4 before:border-b-2 before:border-primary before:absolute before:bottom-1 before:left-4' ) }
                 >
-                  <Link href={ l.href }> { l.label } </Link>
+                  <Link href={ '/' + l.href }> { l.label } </Link>
                 </Button>
               </li>
             ) )
           }
         </ul>
-        <ul className='hidden lg:flex w-full space-x-2.5'>
+        <ul className='hidden lg:flex w-full lg:space-x-5'>
           <AuthLinks status={ status } isOnSideMenu={ isOverWidthThreshold } />
         </ul>
         <div className='block lg:hidden'>
@@ -255,7 +237,7 @@ export function Navlinks( { path }: NavlinksProps )
                     className={ clsx( 'text-base px-0 ml-4', path === l.href && 'text-primary' ) }
                     onClick={ closeSideMenu }
                   >
-                    <Link href={ l.href }>{ l.label }</Link>
+                    <Link href={ '/' + l.href }>{ l.label }</Link>
                   </Button>
                 </li>
               ) ) }

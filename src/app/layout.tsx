@@ -1,10 +1,9 @@
+import { ReactNode } from 'react';
 import type { Metadata } from "next";
 import { Libre_Franklin, DM_Serif_Display } from "next/font/google";
-import Navbar from './components/layout/Navbar';
 import { ClientSessionProvider } from './components/layout/sessionProvider';
 import { auth } from './api/auth';
 import "./globals.css";
-import { LayoutProps } from '../../.next/types/app/page';
 
 
 const libreFranklin = Libre_Franklin( {
@@ -24,7 +23,15 @@ export const metadata: Metadata = {
   description: "Find home professionals around you!",
 };
 
-export default async function RootLayout( props: LayoutProps )
+export default async function RootLayout( {
+  children,
+  authenticated,
+  unauthenticated
+}: {
+    children: ReactNode,
+    authenticated: ReactNode,
+    unauthenticated: ReactNode
+} )
 {
   const session = await auth();
 
@@ -34,12 +41,7 @@ export default async function RootLayout( props: LayoutProps )
         <body
           className={`${libreFranklin.className} ${dm_serif.variable} antialiased text-slate-500`}
         >
-          <main className='relative h-screen overflow-hidden'>
-            <Navbar/>
-            <div className='w-full h-[calc(100vh-96px)] sm:h-[calc(100vh-128px)] 2xl:h-[calc(100vh-160px)] overflow-y-auto text-prose'>
-                {props.children}
-            </div>
-          </main>
+              { children }
         </body>
       </html>
     </ClientSessionProvider>

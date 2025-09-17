@@ -4,27 +4,27 @@ import { getToken } from 'next-auth/jwt';
 import { uploadFileToAWS } from '@/app/(authenticated)/_lib/storage/s3';
 
 const secret = process.env.NEXTAUTH_SECRET;
-export async function POST( req: NextRequest )
-{
-  
+export async function POST(req: NextRequest) {
   //jwt token verification
 
-  const token = await getToken( { req, secret } );
-  
-  if (!token) return NextResponse.json({ message: 'unauthorized user' }, { status: 401 });
+  const token = await getToken({ req, secret });
+
+  if (!token)
+    return NextResponse.json(
+      { message: 'unauthorized user' },
+      { status: 401 }
+    );
 
   //parsing multipart form
   const promoForm = await req.formData();
 
-  const promoInfo: ListingPayload = JSON.parse( <string> promoForm.get( 'vendorJSON' ) ); // vendor info is sent as a JSON string
+  const promoInfo: ListingPayload = JSON.parse(
+    <string>promoForm.get('vendorJSON')
+  ); // vendor info is sent as a JSON string
   const hasPromoImg = promoInfo.promo_img.filename !== null;
 
-
-  try
-  {
-    
-    if ( hasPromoImg )
-    {
+  try {
+    if (hasPromoImg) {
       const promoImgFile = <File>promoForm.get('promoImg');
 
       //rename promo image file
@@ -35,26 +35,36 @@ export async function POST( req: NextRequest )
 
       const fileBuffer = await promoImgFile.arrayBuffer();
 
-      const buffer = Buffer.from( fileBuffer );
-      
+      const buffer = Buffer.from(fileBuffer);
+
       // store in S3 bucket
-      const isUploaded = await uploadFileToAWS(`promo-images/${formattedPromoImgFilename}`, buffer);
-  
-      if (!isUploaded) throw new Error('failed to upload file to aws');
+      const isUploaded = await uploadFileToAWS(
+        `promo-images/${formattedPromoImgFilename}`,
+        buffer
+      );
+
+      if (!isUploaded)
+        throw new Error('failed to upload file to aws');
     }
 
     const connection = await client.connect();
 
-    const collection = connection.db(DBs.CLIENT_DATA).collection(COLLECTIONS.LISTINGS);
+    const collection = connection
+      .db(DBs.CLIENT_DATA)
+      .collection(COLLECTIONS.LISTINGS);
 
     const result = await collection.insertOne(promoInfo);
 
-    if (result.acknowledged) return NextResponse.json({ message: 'listing added' });
+    if (result.acknowledged)
+      return NextResponse.json({ message: 'listing added' });
 
     throw result;
   } catch (error) {
     console.log(error);
 
-    return NextResponse.json({ message: 'operation failed' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'operation failed' },
+      { status: 500 }
+    );
   }
 }

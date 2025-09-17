@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     const tokenInfo: TokenSchema = {
       id: 'ADMIN_CREATION',
       token: hashedCreationToken,
-      expiry: add( new Date(), { minutes: 10 } ),
+      expiry: add(new Date(), { minutes: 10 }),
       email,
     };
 
@@ -39,9 +39,7 @@ export async function GET(req: NextRequest) {
       .db(DBs.CLIENT_DATA)
       .collection(COLLECTIONS.TOKENS);
 
-    const dbResult = await collection.insertOne(
-      tokenInfo
-    );
+    const dbResult = await collection.insertOne(tokenInfo);
 
     if (!dbResult.acknowledged)
       throw new Error('failed to insert partial admin');

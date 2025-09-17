@@ -49,25 +49,26 @@ export async function POST(req: NextRequest) {
     const result = await accountsCollection.insertOne({
       _metadata: {
         createdAt: new Date(),
-        role: 'admin'
+        role: 'admin',
       },
       firstName,
       lastName,
       email,
       pwd: {
         content: pwdHash,
-        salt: pwdSalt
-      }
-    } );
-    
-    const deletedResult = await tokenCollection.deleteMany( { email } ) 
+        salt: pwdSalt,
+      },
+    });
+
+    const deletedResult = await tokenCollection.deleteMany({
+      email,
+    });
 
     if (deletedResult.acknowledged) await dbConnection.close();
 
     console.log(result);
 
-    return NextResponse.json( { message: 'done' } );
-    
+    return NextResponse.json({ message: 'done' });
   } catch (error) {
     console.log(error);
 

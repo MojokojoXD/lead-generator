@@ -48,10 +48,10 @@ interface PortalViewProps
   title?: string;
 }
 
-type DashboardContextParams = ReturnType<typeof useTaskQueue> & {}
+type DashboardContextParams = ReturnType<typeof useTaskQueue> & {};
 
 export const DashboardContext =
-  createContext< DashboardContextParams | null>( null );
+  createContext<DashboardContextParams | null>( null );
 
 function Main( { children }: MainProps )
 {
@@ -117,7 +117,7 @@ function Main( { children }: MainProps )
             </span>
           </div>
           { renderPortal() }
-          
+
         </section>
       </main>
     </DashboardContext.Provider>
@@ -135,7 +135,7 @@ function Menu( {
     <nav className='h-full w-[80vw] sm:w-full sm:max-w-[20rem] py-16 bg-inherit float-left flex justify-center'>
       <div className='relative h-full w-fit flex flex-col space-y-16'>
         <div className='h-40'>
-          <Link href={'/'}>
+          <Link href={ '/' }>
             <Image src={ '/prosfinder-white.svg' } height={ 200 } width={ 200 } alt='site logo' className='h-[30px] w-auto' />
           </Link>
         </div>

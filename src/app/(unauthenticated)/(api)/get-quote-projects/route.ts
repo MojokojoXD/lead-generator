@@ -13,11 +13,11 @@ const formatSurveyData = (
 Location: ${raw.location.zipcode}
 Timeline: ${raw.timeline}
 Job Desc: ${raw.desc}
-Address: ${ raw.location.streetAddress }
-Home Type: ${ raw.location.homeType }
-Number of Bedrooms: ${ raw.location.bedroomCount }
-Number of Bathrooms: ${ raw.location.bathroomCount }
-Size of Home: ${ raw.location.grossFloorArea }
+Address: ${raw.location.streetAddress}
+Home Type: ${raw.location.homeType}
+Number of Bedrooms: ${raw.location.bedroomCount}
+Number of Bathrooms: ${raw.location.bathroomCount}
+Size of Home: ${raw.location.grossFloorArea}
 First Name: ${raw.contacts.firstName}
 Last Name: ${raw.contacts.lastName}
 Email: ${raw.contacts.email}

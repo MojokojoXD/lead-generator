@@ -56,15 +56,19 @@ export async function POST(req: NextRequest) {
         newVendor.business.logo.uploadAt +
         '.' +
         logoFileExt;
-        
+
       newVendor.business.logo.filename = filename;
 
-      const fileBuffer = await vendorLogoFile.arrayBuffer()
-      const buffer = Buffer.from( fileBuffer )
+      const fileBuffer = await vendorLogoFile.arrayBuffer();
+      const buffer = Buffer.from(fileBuffer);
 
-      const isUploaded = await uploadFileToAWS( `vendors/${ filename }`, buffer );
+      const isUploaded = await uploadFileToAWS(
+        `vendors/${filename}`,
+        buffer
+      );
 
-      if ( !isUploaded ) throw new Error( 'failed to upload logo file' );
+      if (!isUploaded)
+        throw new Error('failed to upload logo file');
     }
 
     const connection = await client.connect();

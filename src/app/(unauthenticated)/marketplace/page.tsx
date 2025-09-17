@@ -15,18 +15,18 @@ const getAllListings = async () =>
 
     const collection = connection.db( DBs.CLIENT_DATA ).collection( COLLECTIONS.LISTINGS );
 
-    const cursor = await collection.find<WithId<ListingPayload>>( { '$or': [ { '_metadata.status': 'LISTED' }, { '_metadata.status': 'ADMIN' } ]} );
+    const cursor = await collection.find<WithId<ListingPayload>>( { '$or': [ { '_metadata.status': 'LISTED' }, { '_metadata.status': 'ADMIN' } ] } );
 
 
     let data = await cursor.toArray();
-    
+
     if ( data ) await connection.close();
 
     const transformedData = data.map( async l =>
     {
       if ( l.promo_img.filename )
       {
-        l.promo_img.filename = await generatePromoImgURL( `promo-images/${ l.promo_img.filename }` )
+        l.promo_img.filename = await generatePromoImgURL( `promo-images/${ l.promo_img.filename }` );
       }
       return l;
     } );
@@ -50,7 +50,7 @@ export default async function Marketplace()
   const listings = await getAllListings();
 
   return (
-    <Suspense fallback={ <Loading/> }>
+    <Suspense fallback={ <Loading /> }>
       <div className='px-[5%] lg:px-[6.5%] py-10 space-y-12 min-h-screen bg-stone-50'>
         <h1 className='text-3xl font-medium tracking-wide text-prose text-center'>Welcome To The Neighborhood</h1>
         <div className='grid grid-cols-[repeat(auto-fit,minmax(350px,25rem))] gap-3 w-full h-full'>
