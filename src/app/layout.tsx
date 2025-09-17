@@ -25,12 +25,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout( {
   children,
-  authenticated,
-  unauthenticated
 }: {
     children: ReactNode,
-    authenticated: ReactNode,
-    unauthenticated: ReactNode
 } )
 {
   const session = await auth();

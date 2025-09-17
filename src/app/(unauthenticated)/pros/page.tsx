@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { client, DBs, COLLECTIONS } from '@/app/_db/mongodb';
 import { ClientCard } from '@/app/components/pros/client-card';
 import { WithId } from 'mongodb';
-import { VendorAccount } from '@/app/types/account';
+import { PublicVendorAccount, VendorAccount } from '@/app/types/account';
 import { Loading } from '@/app/components/ui/loading';
 import { generatePromoImgURL } from '@/app/(authenticated)/_lib/storage/s3';
 
@@ -17,14 +17,15 @@ const getAllClients = async () =>
       .collection<VendorAccount>( COLLECTIONS.ACCOUNTS );
 
     const cursor = await collection
-      .find<WithId<VendorAccount>>( { '_metadata.role': 'vendor' } );
+      .find<WithId<PublicVendorAccount>>( { '_metadata.role': 'vendor' },
+        { projection: { 'pwd': 0, '_metadata': 0 } } );
 
 
     let data = await cursor.toArray();
 
     if ( data ) await connection.close();
 
-    const transformedData: WithId<VendorAccount>[] = [];
+    const transformedData: WithId<PublicVendorAccount>[] = [];
 
     for ( const v of data )
     {
@@ -66,7 +67,8 @@ export default async function Marketplace()
 
   const allClient = await getAllClients();
 
-  console.log( allClient );
+  console.log( allClient[0] )
+
   return (
     <Suspense fallback={ <Loading /> }>
       <div className='px-[5%] lg:px-[6.5%] py-10 space-y-12 min-h-screen bg-stone-50'>

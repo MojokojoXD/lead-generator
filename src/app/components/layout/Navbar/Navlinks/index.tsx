@@ -13,7 +13,6 @@ import
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropDownArrow
@@ -48,11 +47,6 @@ const NAV_LINKS_DATA = {
     }
   ],
 };
-
-interface NavlinksProps
-{
-  path: string;
-}
 
 interface AuthLinksProps
 {

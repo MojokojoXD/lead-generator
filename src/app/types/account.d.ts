@@ -39,6 +39,8 @@ interface VendorAccount extends BaseAccount {
   };
 }
 
+type PublicVendorAccount = Omit<VendorAccount, 'pwd' | '_metadata'>
+
 interface TokenSchema {
   id: 'ADMIN_CREATION' | 'PASSWORD_RESET';
   token: string;
