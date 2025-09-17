@@ -1,12 +1,23 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { Button } from '@/app/components/shadcnUI/button';
 import clsx from 'clsx';
-import { MenuIcon, X } from 'lucide-react';
+import { MenuIcon, X, ChevronDown } from 'lucide-react';
 import { useState, useEffect, MouseEventHandler } from 'react';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { usePathname } from 'next/navigation';
+import
+{
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropDownArrow
+} from '@/app/components/shadcnUI/dropdown-menu';
 
 
 const SM_SCREEN_BREAKPOINT = 640;
@@ -57,9 +68,11 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 
   const { width } = useWindowSize();
 
-  const isBetweenSMAndXL =
-    Boolean(width && ( width > SM_SCREEN_BREAKPOINT && width <= XL_SCREEN_BREAKPOINT ));
+  const router = useRouter();
 
+  const isBetweenSMAndXL =
+    Boolean( width && ( width > SM_SCREEN_BREAKPOINT && width <= XL_SCREEN_BREAKPOINT ) );
+  
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = ( ev ) =>
   {
@@ -77,31 +90,90 @@ function AuthLinks( { status, isOnSideMenu, closeMenu }: AuthLinksProps )
 
   return status === 'unauthenticated' ?
     <>
-      <li>
-        <Button
-          asChild
-          variant={ 'default' }
-          size={ isOnSideMenu || isBetweenSMAndXL ? 'default' : 'lg' }
-          onClick={ handleClick }
-        >
-          <Link href={ '/sign-up' }>
-            Pro Sign Up
-          </Link>
-        </Button>
-      </li>
-      <li >
-        <Button
-          asChild
-          variant={ 'link' }
-          size={ isBetweenSMAndXL ? 'default' : 'lg' }
-          className='px-0'
-          onClick={ handleClick }
-        >
-          <Link href={ '/login' }>
-            Login
-          </Link>
-        </Button>
-      </li>
+      {
+        width && width < SM_SCREEN_BREAKPOINT
+          ?
+          <>
+            <li >
+              <Button
+                asChild
+                variant={ 'link' }
+                size={ 'default' }
+                className='px-0 underline'
+                onClick={ handleClick }
+              >
+                <Link href={ '/sign-up' }>
+                  Add a Business
+                </Link>
+              </Button>
+            </li>
+            <li >
+              <Button
+                asChild
+                variant={ 'link' }
+                size={ 'default' }
+                className='px-0 underline'
+                onClick={ handleClick }
+              >
+                <Link href={ '/sign-up' }>
+                  Claim your business for free
+                </Link>
+              </Button>
+            </li>
+            <li >
+              <Button
+                asChild
+                variant={ 'link' }
+                size={ isBetweenSMAndXL ? 'default' : 'lg' }
+                className='px-0'
+                onClick={ handleClick }
+              >
+                <Link href={ '/login' }>
+                  Login
+                </Link>
+              </Button>
+            </li>
+          </>
+          :
+            <>
+              <li>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      asChild
+                      variant={ 'default' }
+                      size={ isOnSideMenu || isBetweenSMAndXL ? 'default' : 'lg' }
+                      onClick={ handleClick }
+                    >
+                      <Link href={ '/sign-up' }>
+                        Pro Sign Up
+                        <ChevronDown />
+                      </Link>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropDownArrow/>
+                    <DropdownMenuItem onSelect={ () => router.push('/sign-up') }>Add your Business</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onSelect={ () => router.push( '/sign-up' ) }>Claim your Business for Free</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </li>
+              <li >
+                <Button
+                  asChild
+                  variant={ 'link' }
+                  size={ isBetweenSMAndXL ? 'default' : 'lg' }
+                  className='px-0'
+                  onClick={ handleClick }
+                >
+                  <Link href={ '/login' }>
+                    Login
+                  </Link>
+                </Button>
+              </li>
+            </>
+      }
     </>
     :
 
@@ -136,7 +208,7 @@ export function Navlinks()
   const path = usePathname().split( '/' ).at( 1 );
   const { status } = useSession();
   const [ toggleSideMenu, setToggleSideMenu ] = useState( false );
-  const { width: windowWidth } = useWindowSize()
+  const { width: windowWidth } = useWindowSize();
 
   const isOverWidthThreshold = Boolean( windowWidth && windowWidth >= 1024 );
 
@@ -220,14 +292,14 @@ export function Navlinks()
       <div id='__side-menu-portal' className={ sideMenuPortalClsx }>
         <div className='h-full w-full sm:max-w-xs bg-white shadow-sm overflow-x-hidden px-[5%] py-10 border-r border-zinc-200'>
           <div>
-            <ul className='mb-6 flex justify-between items-center'>
+            <ul className='space-y-3.5 text-base ml-4 mb-4'>
               <AuthLinks
                 status={ status }
                 isOnSideMenu={ !isOverWidthThreshold }
                 closeMenu={ closeSideMenu }
               />
             </ul>
-            <hr className='mb-6' />
+            <hr className='mb-4'/>
             <ul className='space-y-3.5'>
               { NAV_LINKS_DATA.main.map( l => (
                 <li key={ l.id }>
