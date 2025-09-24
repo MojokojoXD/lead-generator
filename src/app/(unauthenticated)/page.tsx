@@ -3,9 +3,9 @@ export default function Home()
 {
   return (
     <div className="min-h-full lg:h-full w-full home-categories bg-cover flex items-center">
-      <section className='container mx-auto px-5 sm:px-0 sm:grid sm:grid-cols-3 h-full py-16 sm:py-0 lg:h-1/2'>
+      <section className='container mx-auto px-5 sm:px-0 sm:grid sm:grid-cols-3 h-full py-16 sm:py-0 lg:h-1/2 2xl:h-2/3'>
         <div className='text-lg 2xl:text-2xl'>
-          <h1 className='relative font-dm-serif sm:max-w-sm lg:max-w-md text-6xl sm:text-7xl 2xl:text-8xl font-semibold text-zinc-800 mb-6 leading-tight 2xl:leading-loose'>
+          <h1 className='relative font-dm-serif sm:max-w-sm lg:max-w-md text-6xl sm:text-7xl 2xl:text-8xl font-semibold text-zinc-800 mb-6 2xl:leading-1'>
             Just Moved to Arizona?
             <span className='absolute left-0 -bottom-2 w-20 border-2 border-primary rounded'></span>
           </h1>
